@@ -39,19 +39,6 @@ space.add(segment_shape)
 segment_shape.elasticity = 0.8
 segment_shape.friction = 1.0
 
-body = pymunk.Body()
-def create_square(space, pos):
-    square_mass, square_size = 300, (60, 100)
-    square_moment = pymunk.moment_for_box(square_mass, square_size)
-    square_body = pymunk.Body(square_mass, square_moment)
-    square_body.position = pos
-    square_shape = pymunk.Poly.create_box(square_body, square_size)
-    square_shape.elasticity = 1.0
-    square_shape.friction = 1.0
-    square_shape.color = [randrange(256) for i in range(4)]
-    square_shape.body.velocity = (0, 0)    
-    space.add(square_body, square_shape)
-
 car_mass = 0.5
 
 car_shape = pymunk.Poly.create_box(None, size=(100, 60))
