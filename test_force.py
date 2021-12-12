@@ -53,9 +53,8 @@ motion2 = STOP
 
 translation = pymunk.Transform()
 scaling = 1
-rotation = 0
 
-old = oldi = 100
+old_position_x = old_position_y = 100
 
 turn, move = 0, 0
 while True:
@@ -103,19 +102,21 @@ while True:
                 motion2 = STOP
                 move = 0
 
+# позиция камеры
     translation = translation.translated(
-        old - car_shape.body.position.x,
-        oldi - car_shape.body.position.y,
+        old_position_x - car_shape.body.position.x,
+        old_position_y - car_shape.body.position.y,
     )
-    scaling = 1
+    old_position_x = car_shape.body.position.x
+    old_position_y = car_shape.body.position.y
 
-    old = car_shape.body.position.x
-    oldi = car_shape.body.position.y
+# зум камеры
+    scaling = 1
 
     draw_options.transform = (
         pymunk.Transform.translation(300, 300)
         @ pymunk.Transform.scaling(scaling)
         @ translation
-        @ pymunk.Transform.rotation(rotation)
+        @ pymunk.Transform.rotation(0)
         @ pymunk.Transform.translation(-300, -300)
     )
