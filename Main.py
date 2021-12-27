@@ -1,8 +1,7 @@
 import sys
 import pygame as pg
-
+from Boat.levelBuilder import SandBox
 import Game
-
 
 class Main:
     def __init__(self, w, h, GAME_FPS):
@@ -11,7 +10,7 @@ class Main:
 
     def run_game(self, is_debug=False):
         pg.init()
-        game = Game.Game(self.w, self.h, self.FPS, is_debug)
+        game = Game.Game(self.w, self.h, self.FPS, SandBox(), is_debug)
         exit_code = game.run()
         pg.quit()
         return exit_code
