@@ -6,17 +6,22 @@ from random import randrange
 from Utills.utils import load_image
 
 class BaseBoat:
-    def __init__(self, space):
-        car_mass = 0.5
-        self.old_position_x, self.old_position_y = 0, 0
+    def __init__(self, space, settings):
+        mass, im, elasticity, friction = settings
+
+        car_mass = mass
         self.turn, self.move = 0, 0
-        self.logo_img = load_image("yacht.png")
+        self.logo_img = load_image(im)
 
         self.car_shape = pymunk.Poly.create_box(None, size=(100, 73))
-        self.car_shape.color = [255, 0, 0, 0]
+        self.car_shape.color = [0, 0, 0, 0]
+        self.car_shape.elasticity = elasticity
+        self.car_shape.friction = friction
+
         car_moment = pymunk.moment_for_poly(car_mass / 5, self.car_shape.get_vertices())
         self.car_shape.body = pymunk.Body(car_mass, car_moment)        
         self.car_shape.body.angle = 0
+        
         space.add(self.car_shape, self.car_shape.body)
 
     def set_position(self, x, y):

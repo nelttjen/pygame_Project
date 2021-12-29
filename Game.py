@@ -24,11 +24,11 @@ class Game:
         self.space = pymunk.Space()
         self.space.gravity = 0, 0
 
-        self.player = PlayerBoat(self.space, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN)
-        self.c2 = PlayerBoat(self.space, "a", "d", "w", "s")
+        self.player = PlayerBoat(self.space, (0.5, "yacht.png", 0.5, 0.61), pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN)
+        self.c2 = PlayerBoat(self.space, (0.5, "yacht.png", 0.5, 0.61), "a", "d", "w", "s")
 
         self.level = level
-        level.build(self.space)
+        level.build(self.space, (100, 73))
         level.arrangeBoats([self.player, self.c2])
 
     def init_window(self):

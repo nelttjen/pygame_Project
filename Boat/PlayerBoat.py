@@ -2,8 +2,8 @@ import pygame as pg
 from Boat.BaseBoat import BaseBoat
 
 class PlayerBoat(BaseBoat):
-    def __init__(self, space, left, right, up, down):
-        super().__init__(space)
+    def __init__(self, space, settings, left, right, up, down):
+        super().__init__(space, settings)
         self.left, self.right, self.up, self.down = left, right, up, down
 
     def update(self):
