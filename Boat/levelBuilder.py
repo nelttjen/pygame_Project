@@ -11,17 +11,30 @@ class SandBox:
             segment_shape.elasticity = 0.8
             segment_shape.friction = 1.0
 
-    def build(self, space):
+    def build(self, space, size):
+        self.x, self.y = size
+
         self.space = space
-        WIDTH, HEIGHT = 4000, 2000
+        WIDTH, HEIGHT = self.x * 40, self.y * 30
         self.draw_wall(0, 0, WIDTH, HEIGHT)
-        self.draw_wall(0, 0, (WIDTH - 600) // 3, HEIGHT - 300)
-        self.draw_wall((WIDTH - 600) // 3 + 300, 300, (WIDTH - 600) // 3 * 2 + 300, HEIGHT)
-        self.draw_wall((WIDTH - 600) // 3 * 2 + 600, 0, WIDTH, HEIGHT - 300)
+        self.draw_wall(0, 0, self.x * 10, HEIGHT - self.y * 4)
+        self.draw_wall(self.x * 10 + self.y * 4, self.y * 4, self.x * 20 + self.y * 4, HEIGHT)
+        self.draw_wall(self.x * 20 + self.y * 8, 0, WIDTH, HEIGHT - self.y * 4)
     
-    def get_next_checkpoint(self, x, y):
-        return 1,1
+    def get_next_checkpoint(self, pos_x, pos_y):
+        if pos_x < self.x * 10:
+            return self.x * 10, self.y * 37
+        elif pos_x < self.x * 13 and pos_y > self.y * 4:
+            return self.x * 11, self.y * 2
+        elif pos_x < self.x * 20 + self.y * 4:
+            return self.x * 20 + self.y * 6, self.y * 2
+        elif pos_y < self.y * 26:
+            return self.x * 20 + self.y * 6, self.y * 28
+        else:
+            if pos_x > self.x * 38:
+                return 0, 0
+            return self.x * 36 + self.y * 6, self.y * 28
 
     def arrangeBoats(self, boats):
-        boats[0].set_position(50, 1800)
-        boats[1].set_position(50, 1900)
+        boats[0].set_position(50, self.y * 27)
+        boats[1].set_position(50, self.y * 28)
