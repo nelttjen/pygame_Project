@@ -1,10 +1,17 @@
 import pygame as pg
+from pymunk.vec2d import Vec2d
 from Boat.BaseBoat import BaseBoat
+import pymunk
 
 class PlayerBoat(BaseBoat):
-    def __init__(self, space, settings, left, right, up, down):
+    def __init__(self, space, radarManager, settings, left, right, up, down):
         super().__init__(space, settings)
         self.left, self.right, self.up, self.down = left, right, up, down
+
+        radarManager.createRadar(self.car_shape, self.radarCallback)
+
+    def radarCallback(self, distance, tag):
+        print(tag, distance)
 
     def update(self):
         return super().update(self.move, self.turn)
