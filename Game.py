@@ -4,35 +4,31 @@ from Boat.Camera import Camera
 import pymunk.pygame_util
 from Boat.PlayerBoat import PlayerBoat
 
-
 class Game:
-    def __init__(self,  w, h, FPS, level, debug=False):
-        self.w, self.h, self.FPS = w, h, FPS
-        self.size = self.w, self.h
+    def __init__(self,  space, surface, radarManager, boats, FPS, level, debug=False):
+        self.space = space
+        self.surface = surface
+        self.boats = boats
+        self.radarManager = radarManager
+
+        self.FPS =FPS        
         self.debug_mode = debug
         self.screen, self.clock = self.init_window()
 
         self.time_delta = 0
 
-        pg.init()
-        pymunk.pygame_util.positive_y_is_up = False
-
-        self.surface = pg.display.set_mode((w, h))
         self.draw_options = pymunk.pygame_util.DrawOptions(self.surface)
         self.camera = Camera()
 
-        self.space = pymunk.Space()
         self.space.gravity = 0, 0
-
-        self.player = PlayerBoat(self.space, (0.5, "yacht.png", 0.5, 0.61), pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN)
-        self.c2 = PlayerBoat(self.space, (0.5, "yacht.png", 0.5, 0.61), "a", "d", "w", "s")
-
+  
         self.level = level
         level.build(self.space, (100, 73))
-        level.arrangeBoats([self.player, self.c2])
+        level.arrangeBoats(boats)
+        self.player = self.boats.pop(0)
 
     def init_window(self):
-        screen = pg.display.set_mode(self.size)
+        screen = pg.display.set_mode(self.surface.get_size())
         clock = pg.time.Clock()
         return screen, clock
 
@@ -47,7 +43,10 @@ class Game:
 
     def update(self):
         playerX, playerY, playerVelocity = self.player.update()
-        self.c2.update()
+        for boat in self.boats:
+            boat.update(self.level)
+        self.radarManager.updateSensors()
+
         cx, cy, scaling = self.camera.update(playerX-300, playerY-300, playerVelocity)
         self.space.step(1 /self.FPS)
         self.draw_options.transform = (
@@ -56,7 +55,8 @@ class Game:
         )
         self.space.debug_draw(self.draw_options)
         self.player.updateImage(self.surface, cx, cy, scaling)
-        self.c2.updateImage(self.surface, cx, cy, scaling)
+        for boat in self.boats:
+            boat.updateImage(self.surface, cx, cy, scaling)
         pg.display.flip()
         self.screen.fill('black')
         self.render_fps(str(int(self.clock.get_fps())), (0, 0))
@@ -69,7 +69,6 @@ class Game:
             if event.type == pg.QUIT:
                 return False
             self.player.processEvent(event)
-            self.c2.processEvent(event)
         return True
 
     def render_fps(self, text, pos):
