@@ -216,19 +216,15 @@ class Startscreen:
             mp = pygame.mouse.get_pos()
             if 661 < mp[0] < 661 + 29 and 55 < mp[1] < 55 + 51:
                 if int(self.mn_p[0][1].split()[1]) != max_map:
-                    print(max_map, self.mn_p[0][1].split()[1])
                     select = 0
             if 221 < mp[0] < 221 + 29 and 55 < mp[1] < 55 + 51:
                 if int(self.mn_p[0][1].split()[1]) != 1:
-                    print(1, self.mn_p[0][1].split()[1])
                     select = 0
             if 661 < mp[0] < 661 + 29 and 185 < mp[1] < 185 + 51:
                 if int(self.mn_p[1][1].split('_')[1][:-4]) != max_boat:
-                    print(max_boat, self.mn_p[1][1].split('_')[1][:-4])
                     select = 1
             if 211 < mp[0] < 211 + 29 and 185 < mp[1] < 185 + 51:
                 if int(self.mn_p[1][1].split('_')[1][:-4]) != 1:
-                    print(1, self.mn_p[1][1].split('_')[1][:-4])
                     select = 1
             self.render(screen, font_menu, select)
 
