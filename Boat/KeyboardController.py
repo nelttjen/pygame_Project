@@ -1,20 +1,14 @@
 import pygame as pg
-from pymunk.vec2d import Vec2d
-from Boat.BaseBoat import BaseBoat
-import pymunk
 
-class PlayerBoat(BaseBoat):
-    def __init__(self, space, radarManager, settings, left, right, up, down):
-        super().__init__(space, settings)
+class KeyboardController:
+    def __init__(self, boat, left, right, up, down):
         self.left, self.right, self.up, self.down = left, right, up, down
-
-        radarManager.createRadar(self.car_shape, self.radarCallback)
-
-    def radarCallback(self, collisionType, distance, tag):
-        print(collisionType, tag, distance)
-
+        self.turn = 0
+        self.move = 0
+        self.boat = boat
+    
     def update(self):
-        return super().update(self.move, self.turn)
+        self.boat.update(self.move, self.turn)
 
     def processEvent(self, event):
         if event.type == pg.KEYDOWN:

@@ -1,14 +1,16 @@
+from Boat.BaseBoat import BaseBoat
+from Boat.KeyboardController import KeyboardController
 import pygame as pg
 import pymunk
 from Boat.Camera import Camera
 import pymunk.pygame_util
-from Boat.PlayerBoat import PlayerBoat
 
 class Game:
-    def __init__(self,  space, surface, radarManager, boats, FPS, level, debug=False):
+    def __init__(self,  space, surface, radarManager, boats, controllers, FPS, level, debug=False):
         self.space = space
         self.surface = surface
         self.boats = boats
+        self.controllers = controllers
         self.radarManager = radarManager
 
         self.FPS =FPS        
@@ -21,11 +23,10 @@ class Game:
         self.camera = Camera()
 
         self.space.gravity = 0, 0
-  
+
         self.level = level
         level.build(self.space, (100, 73))
-        level.arrangeBoats(boats)
-        self.player = self.boats.pop(0)
+        level.arrangeBoats(self.boats)
 
     def init_window(self):
         screen = pg.display.set_mode(self.surface.get_size())
@@ -42,21 +43,22 @@ class Game:
                 return 0
 
     def update(self):
-        playerX, playerY, playerVelocity = self.player.update()
-        for boat in self.boats:
-            boat.update(self.level)
+        for controller in self.controllers:
+            controller.update()
         self.radarManager.updateSensors()
 
-        cx, cy, scaling = self.camera.update(playerX-300, playerY-300, playerVelocity)
+        playerX, playerY = self.boats[0].get_position()
+        cx, cy, scaling = self.camera.update(playerX-300, playerY-300, self.boats[0].get_velocity())
+
         self.space.step(1 /self.FPS)
         self.draw_options.transform = (
             pymunk.Transform.scaling(scaling)
             @ pymunk.Transform(tx=cx, ty=cy)
         )
         self.space.debug_draw(self.draw_options)
-        self.player.updateImage(self.surface, cx, cy, scaling)
         for boat in self.boats:
             boat.updateImage(self.surface, cx, cy, scaling)
+        
         pg.display.flip()
         self.screen.fill('black')
         self.render_fps(str(int(self.clock.get_fps())), (0, 0))
@@ -68,7 +70,8 @@ class Game:
         for event in events:
             if event.type == pg.QUIT:
                 return False
-            self.player.processEvent(event)
+            for controller in self.controllers:
+                controller.processEvent(event)
         return True
 
     def render_fps(self, text, pos):

@@ -44,8 +44,10 @@ class BaseBoat:
         self.car_shape.body.apply_force_at_local_point(
             (10 * move, 3 * turn), (-50, 0)
         )
-        return self.car_shape.body.position.x, self.car_shape.body.position.y, self.velocity.length
-    
+
+    def get_position(self):
+        return self.car_shape.body.position.x, self.car_shape.body.position.y
+
     def get_velocity(self):
         return self.velocity.length
 
