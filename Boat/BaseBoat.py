@@ -27,7 +27,7 @@ class BaseBoat:
     def set_position(self, x, y):
         self.car_shape.body.position = (x, y)
     
-    def update(self, move, turn):
+    def update(self):
         angularForce = 1 * self.car_shape.body.angular_velocity
         # компенсация вращения
         self.car_shape.body.apply_force_at_local_point((0, angularForce), (-50, 0))
@@ -40,7 +40,7 @@ class BaseBoat:
         self.car_shape.body.apply_force_at_local_point((0.1 * -self.velocity.x, 0))
         # мотор
         self.car_shape.body.apply_force_at_local_point(
-            (10 * move, 3 * turn), (-50, 0)
+            (10 * self.move, 3 * self.turn), (-50, 0)
         )
         return self.car_shape.body.position.x, self.car_shape.body.position.y, self.velocity.length
     
