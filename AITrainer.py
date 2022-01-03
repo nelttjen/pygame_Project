@@ -26,11 +26,11 @@ class Main:
         surface = pg.display.set_mode((self.w, self.h))
 
         boats = [
-            BaseBoat(space, (0.5, "yacht.png", 0.5, 0.61)),
-            BaseBoat(space, (0.5, "yacht.png", 0.5, 0.61))
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61)),
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61))
         ]
         controllers = [
-            AIController(radarManager, boats[0]),
+            AIController(boats[0]),
             KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
             KeyboardController(boats[1], "a", "d", "w", "s")
         ]
