@@ -1,3 +1,4 @@
+from config import Collisiontypes
 import pymunk
 
 class SandBox:
@@ -7,6 +8,7 @@ class SandBox:
             segment_shape = pymunk.Segment(
                 self.space.static_body, (i[0], i[1]), (i[2], i[3]), 26
             )
+            segment_shape.collision_type = Collisiontypes.SHORE
             self.space.add(segment_shape)
             segment_shape.elasticity = 0.8
             segment_shape.friction = 1.0

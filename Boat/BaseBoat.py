@@ -1,4 +1,5 @@
 import math
+from config import Collisiontypes
 import pymunk
 import pygame as pg
 from random import randrange
@@ -17,6 +18,7 @@ class BaseBoat:
         self.car_shape.color = [0, 0, 0, 0]
         self.car_shape.elasticity = elasticity
         self.car_shape.friction = friction
+        self.car_shape.collision_type =Collisiontypes.BOAT
 
         car_moment = pymunk.moment_for_poly(car_mass / 5, self.car_shape.get_vertices())
         self.car_shape.body = pymunk.Body(car_mass, car_moment)        

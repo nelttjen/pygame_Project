@@ -10,8 +10,8 @@ class PlayerBoat(BaseBoat):
 
         radarManager.createRadar(self.car_shape, self.radarCallback)
 
-    def radarCallback(self, distance, tag):
-        print(tag, distance)
+    def radarCallback(self, collisionType, distance, tag):
+        print(collisionType, tag, distance)
 
     def update(self):
         return super().update(self.move, self.turn)

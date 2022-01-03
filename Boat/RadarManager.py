@@ -13,7 +13,7 @@ class RadarManager:
         angle: float
         tag: int
 
-        def __init__(self, space: pymunk.Space, originalShape: pymunk.Shape, angle: float, distance:float, callback, tag: int):
+        def __init__(self, space: pymunk.Space, originalShape: pymunk.Shape, angle: float, distance:float, collisionType:int, callback, tag: int):
             self.originalShape = originalShape
             self.angle = angle
             self.distance = distance
@@ -24,7 +24,7 @@ class RadarManager:
 
             start_point = (0, 0)
             self.shape = pymunk.Segment(self.body, start_point, start_point, 0.0)
-            self.shape.collision_type = RadarManager.COLLISION_TYPE
+            self.shape.collision_type = collisionType
             self.shape.color = THECOLORS["white"]
             self.shape.sensor = True
 
@@ -46,17 +46,22 @@ class RadarManager:
 
     COLLISION_TYPE = 7
   
-    def __init__(self, space):
+    def __init__(self, space, sensorCollisionType):
         self.space = space
+        self.collisionType = sensorCollisionType
         self.radars = defaultdict()
         self.sensor_range = 100
         pi=3.14
 
         self.sensor_angles = [0, pi / 6, -pi / 6, pi / 3, -pi / 3]
-        collision_handler = self.space.add_wildcard_collision_handler(self.COLLISION_TYPE)
-        collision_handler.pre_solve = self.onCollision
+    
+    def registerCollisionType(self, collisionType):
+#        collision_handler = self.space.add_wildcard_collision_handler(self.CollisionType)
+        collision_handler = self.space.add_collision_handler(self.collisionType, collisionType)
+        collision_handler.pre_solve = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
 
-    def onCollision(self, arbiter, space, data):
+
+    def onCollision(self, arbiter, space, data, collisionType):
         radar = self.radars[arbiter.shapes[0]]
         if not radar:
             radar = self.radars[arbiter.shapes[1]]
@@ -67,13 +72,13 @@ class RadarManager:
             for point in [cp.point_a, cp.point_b]:
                 v = radar.body.position - point
                 length = min(length, v.length)
-        radar.callback(length/radar.distance, radar.tag)
+        radar.callback(collisionType, length/radar.distance, radar.tag)
 
         return False
 
     def createRadar(self, shape, callback):
         for i in range(len(self.sensor_angles)):
-            sensor = self.Radar(space=self.space, originalShape=shape, angle=self.sensor_angles[i], distance=self.sensor_range, callback=callback, tag=i)
+            sensor = self.Radar(space=self.space, originalShape=shape, angle=self.sensor_angles[i], distance=self.sensor_range, collisionType = self.collisionType, callback=callback, tag=i)
             sensor.update()
             self.radars[sensor.shape] = sensor
 
