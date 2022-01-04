@@ -4,6 +4,10 @@ import pymunk
 
 
 class SandBox:
+    def __init__(self):
+        self.tag = 0
+        self.dict_checkpoint = dict()
+
     def draw_wall(self, x, y, x2, y2):
         c = [[x, y, x2, y], [x2, y, x2, y2], [x2, y2, x, y2], [x, y2, x, y]]
         for i in c:
@@ -14,8 +18,6 @@ class SandBox:
             self.space.add(segment_shape)
             segment_shape.elasticity = 0.8
             segment_shape.friction = 1.0
-        self.tag = 0
-        self.dict_checkpoint = dict()
 
     def draw_checkpoint(self, x, y, x2, y2, tag):
         self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
