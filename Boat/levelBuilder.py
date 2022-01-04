@@ -1,3 +1,4 @@
+from collections import defaultdict
 from config import Collisiontypes
 from pygame.colordict import THECOLORS
 import pymunk
@@ -6,7 +7,7 @@ import pymunk
 class SandBox:
     def __init__(self):
         self.tag = 0
-        self.dict_checkpoint = dict()
+        self.dict_checkpoint = defaultdict()
 
     def draw_wall(self, x, y, x2, y2):
         c = [[x, y, x2, y], [x2, y, x2, y2], [x2, y2, x, y2], [x, y2, x, y]]

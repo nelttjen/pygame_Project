@@ -62,7 +62,7 @@ class RadarManager:
         collision_handler = self.space.add_collision_handler(self.collisionType, collisionType)
         collision_handler.pre_solve = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
         for radar in self.radars.values():
-            radar.callback(collisionType, 0, radar.tag)
+            radar.callback(collisionType, 0, radar.tag, None)
 
 
     def onCollision(self, arbiter, space, data, collisionType):

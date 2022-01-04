@@ -19,23 +19,25 @@ class Main:
         pymunk.pygame_util.positive_y_is_up = False
         space = pymunk.Space()
         radarManager = RadarManager(space, Collisiontypes.SENSOR)
-        radarManager.registerCollisionType(Collisiontypes.BOAT)
-        radarManager.registerCollisionType(Collisiontypes.SHORE)
-        radarManager.registerCollisionType(Collisiontypes.CHECKPOINT)
-
         surface = pg.display.set_mode((self.w, self.h))
+        level = SandBox()
+        level.build(space, (100, 73))
 
         boats = [
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61)),
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61))
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), level),
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), level)
         ]
         controllers = [
-            AIController(boats[0]),
+            AIController(boats[0], level),
             KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
             KeyboardController(boats[1], "a", "d", "w", "s")
         ]
 
-        game = Game(space, surface, radarManager, boats, controllers, self.FPS, SandBox(), is_debug)
+        radarManager.registerCollisionType(Collisiontypes.BOAT)
+        radarManager.registerCollisionType(Collisiontypes.SHORE)
+        radarManager.registerCollisionType(Collisiontypes.CHECKPOINT)
+
+        game = Game(space, surface, radarManager, boats, controllers, self.FPS, level, is_debug)
         exit_code = game.run()
         pg.quit()
         return exit_code

@@ -26,7 +26,6 @@ class Game:
         self.space.gravity = 0, 0
 
         self.level = level
-        level.build(self.space, (100, 73))
         level.arrangeBoats(self.boats)
 
     def init_window(self):
