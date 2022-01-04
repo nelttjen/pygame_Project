@@ -62,8 +62,8 @@ class Game:
         pg.display.flip()
         self.screen.fill('black')
         self.render_fps(str(int(self.clock.get_fps())), (0, 0))
-        if self.level.get_next_checkpoint(playerX, playerY) == (0,0):
-            return False
+#        if self.level.get_next_checkpoint(playerX, playerY) == (0,0):
+#            return False
         return True
 
     def events(self, events):

@@ -48,23 +48,30 @@ class RadarManager:
   
     def __init__(self, space, sensorCollisionType):
         self.space = space
+        self.collisionTypes = []
         self.collisionType = sensorCollisionType
         self.radars = defaultdict()
         self.sensor_range = 100
         pi=3.14
 
-        self.sensor_angles = [0, pi / 6, -pi / 6, pi / 3, -pi / 3]
+        self.sensor_angles = [0, pi / 3, -pi / 3]
     
     def registerCollisionType(self, collisionType):
 #        collision_handler = self.space.add_wildcard_collision_handler(self.CollisionType)
+        self.collisionTypes.append(collisionType)
         collision_handler = self.space.add_collision_handler(self.collisionType, collisionType)
         collision_handler.pre_solve = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
+        for radar in self.radars.values():
+            radar.callback(collisionType, 0, radar.tag)
 
 
     def onCollision(self, arbiter, space, data, collisionType):
         radar = self.radars[arbiter.shapes[0]]
         if not radar:
             radar = self.radars[arbiter.shapes[1]]
+            collideShape = arbiter.shapes[0]
+        else:
+            collideShape = arbiter.shapes[1]
         if not radar:
             return False
         length = radar.distance
@@ -72,7 +79,7 @@ class RadarManager:
             for point in [cp.point_a, cp.point_b]:
                 v = radar.body.position - point
                 length = min(length, v.length)
-        radar.callback(collisionType, length/radar.distance, radar.tag)
+        radar.callback(collisionType, length/radar.distance, radar.tag, collideShape)
 
         return False
 
@@ -80,6 +87,8 @@ class RadarManager:
         for i in range(len(self.sensor_angles)):
             sensor = self.Radar(space=self.space, originalShape=shape, angle=self.sensor_angles[i], distance=self.sensor_range, collisionType = self.collisionType, callback=callback, tag=i)
             sensor.update()
+            for collisionType in self.collisionTypes:
+                sensor.callback(collisionType, 0, sensor.tag, None)
             self.radars[sensor.shape] = sensor
 
     def updateSensors(self):

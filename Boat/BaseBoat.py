@@ -29,11 +29,14 @@ class BaseBoat:
         space.add(self.car_shape, self.car_shape.body)
 
         radarManager.createRadar(self.car_shape, self.radarCallback)
+        self.radarCallbacks[Collisiontypes.CHECKPOINT].append(self.passCheckpoint)
 
-    def radarCallback(self, collisionType, distance, tag):
+    def radarCallback(self, collisionType, distance, tag, collideShape):
         for callback in self.radarCallbacks[collisionType]:
-            callback(distance, tag)
-        print(collisionType, tag, distance)
+            callback(distance, tag, collideShape)
+    
+    def passCheckpoint(self, distance, tag, collideShape):
+        pass
 
     def set_position(self, x, y):
         self.car_shape.body.position = (x, y)
