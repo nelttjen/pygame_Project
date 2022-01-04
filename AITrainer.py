@@ -1,9 +1,10 @@
 import sys
+from Boat.AIController import AIController
+from Boat.BaseBoat import BaseBoat
+from Boat.KeyboardController import KeyboardController
 from Game import Game
 import pygame as pg
 import pymunk
-from Boat.AIBoat import AIBoat
-from Boat.PlayerBoat import PlayerBoat
 from Boat.levelBuilder import SandBox
 from Boat.RadarManager import RadarManager
 from config import Collisiontypes
@@ -24,10 +25,17 @@ class Main:
 
         surface = pg.display.set_mode((self.w, self.h))
 
-        boats =   [PlayerBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-                   AIBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61))]
+        boats = [
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61)),
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61))
+        ]
+        controllers = [
+            AIController(boats[0]),
+            KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
+            KeyboardController(boats[1], "a", "d", "w", "s")
+        ]
 
-        game = Game(space, surface, radarManager, boats, self.FPS, SandBox(), is_debug)
+        game = Game(space, surface, radarManager, boats, controllers, self.FPS, SandBox(), is_debug)
         exit_code = game.run()
         pg.quit()
         return exit_code
