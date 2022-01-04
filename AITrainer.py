@@ -6,6 +6,7 @@ from Game import Game
 import pygame as pg
 import pymunk
 from Boat.levelBuilder import SandBox
+from Boat.levelBuilder2 import SandBox2
 from Boat.RadarManager import RadarManager
 from config import Collisiontypes
 
@@ -20,7 +21,7 @@ class Main:
         space = pymunk.Space()
         radarManager = RadarManager(space, Collisiontypes.SENSOR)
         surface = pg.display.set_mode((self.w, self.h))
-        level = SandBox()
+        level = SandBox2()
         level.build(space, (100, 73))
 
         boats = [

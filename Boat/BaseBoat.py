@@ -41,13 +41,14 @@ class BaseBoat:
             callback(distance, tag, collideShape)
     
     def passCheckpoint(self, distance, tag, collideShape):
-        if collideShape:           
+        if collideShape:
+            print(self.level.get_tag(collideShape), self.next_checkpoint)
             if self.level.get_tag(collideShape) == self.next_checkpoint:
                 self.next_checkpoint += 1
-            if self.next_checkpoint == 13:
+            if self.next_checkpoint == 2:
                 self.next_checkpoint = 0
                 self.lap += 1
-        self.next_checkpoint_x, self.next_checkpoint_y = self.level.get_coords(max(self.next_checkpoint - 1, 0))
+        self.next_checkpoint_x, self.next_checkpoint_y = self.level.get_coords(self.next_checkpoint)
         print(self.next_checkpoint_x, self.next_checkpoint_y)
 
     def set_position(self, x, y):

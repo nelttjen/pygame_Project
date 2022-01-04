@@ -45,7 +45,7 @@ class Game:
     def update(self):
         for controller in self.controllers:
             lap = controller.update()
-            if lap == 2:
+            if lap == 78:
                 sys.exit()
         self.radarManager.updateSensors()
 
