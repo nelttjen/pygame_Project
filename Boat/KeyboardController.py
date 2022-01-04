@@ -8,7 +8,8 @@ class KeyboardController:
         self.boat = boat
     
     def update(self):
-        self.boat.update(self.move, self.turn)
+        lap = self.boat.update(self.move, self.turn)
+        return lap
 
     def processEvent(self, event):
         if event.type == pg.KEYDOWN:

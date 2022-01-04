@@ -1,3 +1,4 @@
+import sys
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 import pygame as pg
@@ -44,7 +45,9 @@ class Game:
 
     def update(self):
         for controller in self.controllers:
-            controller.update()
+            lap = controller.update()
+            if lap == 2:
+                sys.exit()
         self.radarManager.updateSensors()
 
         playerX, playerY = self.boats[0].get_position()

@@ -84,23 +84,23 @@ class SandBox:
             0, self.y * 15, self.x * 5,
             self.y * 15, 0)
     
-    def get_coords(self, tag):
+    def get_coords(self, checkpoint):
         c = [(self.x * 2.5, self.x * 2.5), (self.x * 12.5, self.x * 2.5), (self.x * 12.5, self.y * 13.5),
              (self.x * 29.5, self.y * 13.5), (self.x * 29.5, self.x * 2.5), (self.x * 39.5, self.x * 2.5),
              (self.x * 39.5, self.y * 30 - self.x * 2.5), (self.x * 29.5, self.y * 30 - self.x * 2.5),
              (self.x * 29.5, self.y * 16.5), (self.x * 12.5, self.y * 16.5), (self.x * 12.5, self.y * 30 - self.x * 2.5),
              (self.x * 2.5, self.y * 30 - self.x * 2.5), (self.x * 2.5, self.y * 15)]
-        return c[tag]
+        return c[checkpoint]
     
     def get_tag(self, shape):
         return self.dict_checkpoint[shape]
 
     def arrangeBoats(self, boats):
         c = [
-            (self.x * 2, self.y * 14),
-            (self.x * 3, self.y * 15),
-            (self.x * 2, self.y * 16),
-            (self.x * 3, self.y * 17),
-            (self.x * 2, self.y * 18)]
+            (self.x * 2, self.y * 18),
+            (self.x * 3, self.y * 19),
+            (self.x * 2, self.y * 20),
+            (self.x * 3, self.y * 21),
+            (self.x * 2, self.y * 22)]
         for i in range(len(boats)):
             boats[i].set_position(c[i][0], c[i][1])

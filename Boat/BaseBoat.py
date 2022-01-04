@@ -5,15 +5,19 @@ from config import Collisiontypes
 import pymunk
 import pygame as pg
 from random import randrange
+from Boat.levelBuilder import SandBox
 
 from Utills.utils import load_image
 
 class BaseBoat:
-    def __init__(self, space, radarManager, settings):
+    def __init__(self, space, radarManager, settings, level):
         mass, im, elasticity, friction = settings
         self.radarCallbacks = defaultdict(list)
         car_mass = mass
         self.turn, self.move = 0, 0
+        self.level = level
+        self.next_checkpoint = 0
+        self.lap = 1
         self.logo_img = load_image(im)
 
         self.car_shape = pymunk.Poly.create_box(None, size=(100, 73))
@@ -36,7 +40,12 @@ class BaseBoat:
             callback(distance, tag, collideShape)
     
     def passCheckpoint(self, distance, tag, collideShape):
-        pass
+        if self.level.get_tag(collideShape) == self.next_checkpoint:
+            self.next_checkpoint += 1
+        if self.next_checkpoint == 13:
+            self.next_checkpoint = 0
+            self.lap += 1
+        self.next_checkpoint_x, self.next_checkpoint_y = self.level.get_coords(self.next_checkpoint)
 
     def set_position(self, x, y):
         self.car_shape.body.position = (x, y)
@@ -57,6 +66,7 @@ class BaseBoat:
         self.car_shape.body.apply_force_at_local_point(
             (10 * move, 3 * turn), (-50, 0)
         )
+        return self.lap
 
     def get_position(self):
         return self.car_shape.body.position.x, self.car_shape.body.position.y
