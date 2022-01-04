@@ -3,7 +3,7 @@ from config import Collisiontypes
 from pymunk.vec2d import Vec2d
 
 class AIController:
-    action2command = [(1,1), (-1,1), (1,-1), (-1,-1)]
+    action2command = [(1,1), (-1,1), (1,-1), (-1,-1), (1,0)]
     def __init__(self, boat, level):        
         self.boatsSensors = {}
         self.shoreSensors = {}
@@ -13,7 +13,7 @@ class AIController:
         self.lastDistance = 1e6
         boat.radarCallbacks[Collisiontypes.BOAT].append(self.updateBoatSensors)
         boat.radarCallbacks[Collisiontypes.SHORE].append(self.updateShoreSensors)
-        self.brain = Dqn(9, 4, 0.9)
+        self.brain = Dqn(9, 5, 0.9)
     
     def updateBoatSensors(self, distance, tag, _):
         self.boatsSensors[tag] = distance
@@ -26,13 +26,15 @@ class AIController:
         dx, dy = self.boat.next_checkpoint_x - x, self.boat.next_checkpoint_y - y
         dxy = Vec2d(dx,dy)
 
-        shoreContact = next(filter(lambda x:x < 0.2, self.shoreSensors), None)
+        shoreContact = next(filter(lambda x:x < 0.2, self.shoreSensors.values()), None)
         reward = 0
         if dxy.length < self.lastDistance:
-            reward = 10
-            self.lastDistance = dxy.length
-        if shoreContact:
+            reward = 10 
+        if dxy.length > self.lastDistance:
+            reward = -10     
+        if shoreContact != None:
             reward -= 5
+        self.lastDistance = dxy.length
 
         body = self.boat.car_shape.body
         orientationV = body.velocity.get_angle_between(dxy)
