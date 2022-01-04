@@ -15,12 +15,12 @@ from torch.autograd import Variable
 
 class Network(nn.Module):
     
-    def __init__(self, input_size, nb_action):
+    def __init__(self, input_size, nb_action, internal_size):
         super(Network, self).__init__()
         self.input_size = input_size
         self.nb_action = nb_action
-        self.fc1 = nn.Linear(input_size, 30)
-        self.fc2 = nn.Linear(30, nb_action)
+        self.fc1 = nn.Linear(input_size, internal_size)
+        self.fc2 = nn.Linear(internal_size, nb_action)
     
     def forward(self, state):
         x = F.relu(self.fc1(state))
@@ -48,10 +48,10 @@ class ReplayMemory(object):
 
 class Dqn():
     
-    def __init__(self, input_size, nb_action, gamma):
+    def __init__(self, input_size, nb_action, internal_size, gamma):
         self.gamma = gamma
         self.reward_window = []
-        self.model = Network(input_size, nb_action)
+        self.model = Network(input_size, nb_action, internal_size)
         self.memory = ReplayMemory(100000)
         self.optimizer = optim.Adam(self.model.parameters(), lr = 0.001)
         self.last_state = torch.Tensor(input_size).unsqueeze(0)

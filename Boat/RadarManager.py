@@ -37,11 +37,17 @@ class RadarManager:
                 vertices.append(vertex)
             return vertices
 
+        def runCallback(self, collisionType, distance, collideShape):
+            if distance>0.3:
+                self.shape.color = THECOLORS["white"]
+            else:
+                self.shape.color = THECOLORS["red"]
+            self.callback(collisionType, distance, self.tag, collideShape)
+
         def update(self):
             vertices = self.getVertices(self.originalShape)
             self.body.position = ((vertices[1] + vertices[0]) / 2)
             direction = Vec2d(1, 0).rotated(self.originalShape.body.angle + self.angle)
-            end_point = self.distance * direction
             self.shape.unsafe_set_endpoints(5 * direction, (self.distance + 5) * direction)
 
     COLLISION_TYPE = 7
@@ -61,8 +67,9 @@ class RadarManager:
         self.collisionTypes.append(collisionType)
         collision_handler = self.space.add_collision_handler(self.collisionType, collisionType)
         collision_handler.pre_solve = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
+        collision_handler.separate = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
         for radar in self.radars.values():
-            radar.callback(collisionType, 1, radar.tag, None)
+            radar.runCallback(collisionType, 1, None)
 
 
     def onCollision(self, arbiter, space, data, collisionType):
@@ -79,17 +86,17 @@ class RadarManager:
             for point in [cp.point_a, cp.point_b]:
                 v = radar.body.position - point
                 length = min(length, v.length)
-        radar.callback(collisionType, length/radar.distance, radar.tag, collideShape)
+        radar.runCallback(collisionType, length/radar.distance, collideShape)
 
         return False
 
     def createRadar(self, shape, callback):
         for i in range(len(self.sensor_angles)):
-            sensor = self.Radar(space=self.space, originalShape=shape, angle=self.sensor_angles[i], distance=self.sensor_range, collisionType = self.collisionType, callback=callback, tag=i)
-            sensor.update()
+            radar = self.Radar(space=self.space, originalShape=shape, angle=self.sensor_angles[i], distance=self.sensor_range, collisionType = self.collisionType, callback=callback, tag=i)
+            radar.update()
             for collisionType in self.collisionTypes:
-                sensor.callback(collisionType, 1, sensor.tag, None)
-            self.radars[sensor.shape] = sensor
+                radar.runCallback(collisionType, 1, None)
+            self.radars[radar.shape] = radar
 
     def updateSensors(self):
         for sensor in self.radars.values():

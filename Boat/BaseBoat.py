@@ -67,7 +67,7 @@ class BaseBoat:
         self.car_shape.body.apply_force_at_local_point((0.1 * -self.velocity.x, 0))
         # мотор
         self.car_shape.body.apply_force_at_local_point(
-            (10 * move, 3 * turn), (-50, 0)
+            (30 * move, 9 * turn), (-50, 0)
         )
         return self.lap
 
