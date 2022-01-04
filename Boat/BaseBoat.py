@@ -28,6 +28,7 @@ class BaseBoat:
 
     def set_position(self, x, y):
         self.car_shape.body.position = (x, y)
+        self.car_shape.body.angle = 11
     
     def update(self, move, turn):
         angularForce = 1 * self.car_shape.body.angular_velocity
