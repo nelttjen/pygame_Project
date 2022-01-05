@@ -27,14 +27,15 @@ class BaseBoat:
         self.car_shape.friction = friction
         self.car_shape.collision_type =Collisiontypes.BOAT
 
-        car_moment = pymunk.moment_for_poly(car_mass / 5, self.car_shape.get_vertices())
-        self.car_shape.body = pymunk.Body(car_mass, car_moment)        
+        car_moment = pymunk.moment_for_poly(car_mass / 50, self.car_shape.get_vertices())
+        self.car_shape.body = pymunk.Body(car_mass, car_moment)
         self.car_shape.body.angle = 0
         
         space.add(self.car_shape, self.car_shape.body)
 
         radarManager.createRadar(self.car_shape, self.radarCallback)
         self.radarCallbacks[Collisiontypes.CHECKPOINT].append(self.passCheckpoint)
+
 
     def radarCallback(self, collisionType, distance, tag, collideShape):
         for callback in self.radarCallbacks[collisionType]:
@@ -58,8 +59,8 @@ class BaseBoat:
     def update(self, move, turn):
         angularForce = 1 * self.car_shape.body.angular_velocity
         # компенсация вращения
-        self.car_shape.body.apply_force_at_local_point((0, angularForce), (-50, 0))
-        self.car_shape.body.apply_force_at_local_point((0, -angularForce), (50, 0))
+        self.car_shape.body.apply_force_at_local_point((0, angularForce), (-150, 0))
+        self.car_shape.body.apply_force_at_local_point((0, -angularForce), (150, 0))
         # компенсация заноса
         angle = self.car_shape.body.angle
         self.velocity = self.car_shape.body.velocity.rotated(-angle)

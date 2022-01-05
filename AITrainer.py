@@ -2,6 +2,7 @@ import sys
 from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
+from Boat.SimpleController import SimpleController
 from Game import Game
 import pygame as pg
 import pymunk
@@ -29,9 +30,10 @@ class Main:
             BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), level)
         ]
         controllers = [
-            AIController(boats[0], level),
-            KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-            KeyboardController(boats[1], "a", "d", "w", "s")
+            SimpleController(boats[0], level),
+            AIController(boats[1], level),
+            KeyboardController(boats[1], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
+#            KeyboardController(boats[1], "a", "d", "w", "s")
         ]
 
         radarManager.registerCollisionType(Collisiontypes.BOAT)

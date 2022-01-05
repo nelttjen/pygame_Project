@@ -5,20 +5,36 @@ from pymunk import vec2d
 from pymunk.vec2d import Vec2d
 from collections import defaultdict
 
+class Radar:
+    LEFT = 0
+    FRONT = 1
+    RIGTH = 2
+    BACKLEFT = 3
+    BACKRIGTH = 4
+
 class RadarManager:
-    class Radar:
+    pi = 3.14
+    RADARS = [
+        (Radar.LEFT, -pi/4, [0, 0]), 
+        (Radar.FRONT, 0, [0, 1]), 
+        (Radar.RIGTH, pi/4, [1, 1]),
+        (Radar.BACKRIGTH, pi - pi/4, [2, 2]),
+        (Radar.BACKLEFT, pi + pi/4, [3, 3]),
+        ]
+    class RadarSensor:
         originalShape: pymunk.Shape
         shape: pymunk.Shape
         body: pymunk.Body
         angle: float
         tag: int
 
-        def __init__(self, space: pymunk.Space, originalShape: pymunk.Shape, angle: float, distance:float, collisionType:int, callback, tag: int):
+        def __init__(self, space: pymunk.Space, originalShape: pymunk.Shape, angle: float, distance:float, vertices:list, collisionType:int, callback, tag: int):
             self.originalShape = originalShape
             self.angle = angle
             self.distance = distance
             self.callback = callback
             self.tag = tag
+            self.vertices = vertices
 
             self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 
@@ -29,6 +45,7 @@ class RadarManager:
             self.shape.sensor = True
 
             space.add(self.body, self.shape)
+            self.update()
 
         def getVertices(self, shape):
             vertices = []
@@ -46,24 +63,18 @@ class RadarManager:
 
         def update(self):
             vertices = self.getVertices(self.originalShape)
-            self.body.position = ((vertices[1] + vertices[0]) / 2)
+            self.body.position = ((vertices[self.vertices[1]] + vertices[self.vertices[0]]) / 2)
             direction = Vec2d(1, 0).rotated(self.originalShape.body.angle + self.angle)
-            self.shape.unsafe_set_endpoints(5 * direction, (self.distance + 5) * direction)
-
-    COLLISION_TYPE = 7
-  
+            offset = 5
+            self.shape.unsafe_set_endpoints(offset * direction, (self.distance + offset) * direction)
+ 
     def __init__(self, space, sensorCollisionType):
         self.space = space
         self.collisionTypes = []
         self.collisionType = sensorCollisionType
         self.radars = defaultdict()
-        self.sensor_range = 100
-        pi=3.14
-
-        self.sensor_angles = [0, pi / 3, -pi / 3]
     
     def registerCollisionType(self, collisionType):
-#        collision_handler = self.space.add_wildcard_collision_handler(self.CollisionType)
         self.collisionTypes.append(collisionType)
         collision_handler = self.space.add_collision_handler(self.collisionType, collisionType)
         collision_handler.pre_solve = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
@@ -91,9 +102,10 @@ class RadarManager:
         return False
 
     def createRadar(self, shape, callback):
-        for i in range(len(self.sensor_angles)):
-            radar = self.Radar(space=self.space, originalShape=shape, angle=self.sensor_angles[i], distance=self.sensor_range, collisionType = self.collisionType, callback=callback, tag=i)
-            radar.update()
+        distance = 50
+      
+        for tag, angle, vertices in RadarManager.RADARS:
+            radar = self.RadarSensor(space=self.space, originalShape=shape, angle=angle, vertices=vertices, distance=distance, collisionType = self.collisionType, callback=callback, tag=tag)        
             for collisionType in self.collisionTypes:
                 radar.runCallback(collisionType, 1, None)
             self.radars[radar.shape] = radar
