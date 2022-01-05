@@ -25,8 +25,8 @@ class Main:
         level.build(space, (100, 73))
 
         boats = [
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), level),
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), level)
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level),
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level)
         ]
         controllers = [
             AIController(boats[0], level),
