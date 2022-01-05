@@ -5,6 +5,7 @@ from Game import Game
 import pygame as pg
 import pymunk
 from Boat.levelBuilder import SandBox
+from Boat.levelBuilder2 import SandBox2
 from Boat.RadarManager import RadarManager
 from config import Collisiontypes
 
@@ -27,8 +28,8 @@ class Main:
         level = SandBox()
 
         boats = [
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), level),
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 0.5, 0.61), level)
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level),
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level)
         ]
         controllers = [
             KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),

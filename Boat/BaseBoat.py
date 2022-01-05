@@ -12,9 +12,14 @@ from Utills.utils import load_image
 
 class BaseBoat:
     def __init__(self, space, radarManager, settings, level):
-        mass, im, elasticity, friction = settings
-        self.radarCallbacks = defaultdict(list)
+        mass, im, power, stability, streamlining = settings
+
         car_mass = mass
+        self.stability = stability
+        self.power = power
+        self.streamlining = streamlining
+        self.radarCallbacks = defaultdict(list)
+
         self.turn, self.move = 0, 0
         self.level = level
         self.next_checkpoint = 0
@@ -23,8 +28,8 @@ class BaseBoat:
 
         self.car_shape = pymunk.Poly.create_box(None, size=(100, 73))
         self.car_shape.color = [0, 0, 0, 0]
-        self.car_shape.elasticity = elasticity
-        self.car_shape.friction = friction
+        self.car_shape.elasticity = 0.5
+        self.car_shape.friction = 0.61
         self.car_shape.collision_type =Collisiontypes.BOAT
 
         car_moment = pymunk.moment_for_poly(car_mass / 50, self.car_shape.get_vertices())
@@ -57,19 +62,19 @@ class BaseBoat:
         self.car_shape.body.angle = 11
     
     def update(self, move, turn):
-        angularForce = 1 * self.car_shape.body.angular_velocity
+        angularForce = self.stability * self.car_shape.body.angular_velocity
         # компенсация вращения
         self.car_shape.body.apply_force_at_local_point((0, angularForce), (-150, 0))
         self.car_shape.body.apply_force_at_local_point((0, -angularForce), (150, 0))
         # компенсация заноса
         angle = self.car_shape.body.angle
         self.velocity = self.car_shape.body.velocity.rotated(-angle)
-        self.car_shape.body.apply_force_at_local_point((0, 1 * -self.velocity.y))
+        self.car_shape.body.apply_force_at_local_point((0, self.stability * -self.velocity.y))
         # естественное торможение
-        self.car_shape.body.apply_force_at_local_point((0.1 * -self.velocity.x, 0))
+        self.car_shape.body.apply_force_at_local_point((self.streamlining * -self.velocity.x, 0))
         # мотор
         self.car_shape.body.apply_force_at_local_point(
-            (30 * move, 9 * turn), (-50, 0)
+            (self.power * move, self.power / 3 * turn), (-50, 0)
         )
         return self.lap
 
