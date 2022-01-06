@@ -2,7 +2,6 @@ import math
 import pymunk
 import pygame as pg
 from random import randrange
-from pymunk.vec2d import Vec2d
 
 from Utills.utils import load_image
 
@@ -12,9 +11,6 @@ class BaseBoat:
 
         car_mass = mass
         self.turn, self.move = 0, 0
-        self.level = level
-        self.next_checkpoint = 0
-        self.lap = 0
         self.logo_img = load_image(im)
 
         self.car_shape = pymunk.Poly.create_box(None, size=(100, 73))
@@ -27,25 +23,6 @@ class BaseBoat:
         self.car_shape.body.angle = 0
         
         space.add(self.car_shape, self.car_shape.body)
-
-        radarManager.createRadar(self.car_shape, self.radarCallback)
-        self.radarCallbacks[Collisiontypes.CHECKPOINT].append(self.passCheckpoint)
-
-
-    def radarCallback(self, collisionType, distance, tag, collideShape):
-        for callback in self.radarCallbacks[collisionType]:
-            callback(distance, tag, collideShape)
-    
-    def passCheckpoint(self, distance, tag, collideShape):
-        if collideShape:
-            #print(self.level.get_tag(collideShape), self.next_checkpoint)
-            current, next = self.level.get_checkpoint_info(collideShape) 
-            if current == self.next_checkpoint:
-                self.next_checkpoint = next
-                if current == 0:
-                    self.lap += 1
-        self.next_checkpoint_x, self.next_checkpoint_y = self.level.get_coords(self.next_checkpoint)
-        print(self.next_checkpoint_x, self.next_checkpoint_y)
 
     def set_position(self, x, y):
         self.car_shape.body.position = (x, y)
@@ -65,19 +42,10 @@ class BaseBoat:
         self.car_shape.body.apply_force_at_local_point(
             (10 * self.move, 3 * self.turn), (-50, 0)
         )
-
-    def get_position(self):
-        return self.car_shape.body.position.x, self.car_shape.body.position.y
-
+        return self.car_shape.body.position.x, self.car_shape.body.position.y, self.velocity.length
+    
     def get_velocity(self):
         return self.velocity.length
-    
-    def get_info(self):
-        x, y = self.get_position()
-        dx, dy = self.next_checkpoint_x - x, self.next_checkpoint_y - y
-        dxy = Vec2d(dx,dy)
-
-        return (self.lap, self.next_checkpoint, dxy.length)
 
     def updateImage(self, surface, tx, ty, scaling):
         angle_degrees = math.degrees(self.car_shape.body.angle)

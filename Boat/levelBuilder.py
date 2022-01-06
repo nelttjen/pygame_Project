@@ -21,18 +21,19 @@ class SandBox:
         self.draw_wall(self.x * 10 + self.y * 4, self.y * 4, self.x * 20 + self.y * 4, HEIGHT)
         self.draw_wall(self.x * 20 + self.y * 8, 0, WIDTH, HEIGHT - self.y * 4)
     
-    def get_coords(self, checkpoint):
-        c = [(self.x * 2.5, self.x * 2.5), (self.x * 12.5, self.x * 2.5), (self.x * 12.5, self.y * 13.5),
-             (self.x * 29.5, self.y * 13.5), (self.x * 29.5, self.x * 2.5), (self.x * 39.5, self.x * 2.5),
-             (self.x * 39.5, self.y * 30 - self.x * 2.5), (self.x * 29.5, self.y * 30 - self.x * 2.5),
-             (self.x * 29.5, self.y * 16.5), (self.x * 12.5, self.y * 16.5), (self.x * 12.5, self.y * 30 - self.x * 2.5),
-             (self.x * 2.5, self.y * 30 - self.x * 2.5), (self.x * 2.5, self.y * 15)]
-        if checkpoint == 0:
-            return c[checkpoint]
-        return c[checkpoint - 1]
-    
-    def get_checkpoint_info(self, shape):
-        return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 13
+    def get_next_checkpoint(self, pos_x, pos_y):
+        if pos_x < self.x * 10:
+            return self.x * 10, self.y * 37
+        elif pos_x < self.x * 13 and pos_y > self.y * 4:
+            return self.x * 11, self.y * 2
+        elif pos_x < self.x * 20 + self.y * 4:
+            return self.x * 20 + self.y * 6, self.y * 2
+        elif pos_y < self.y * 26:
+            return self.x * 20 + self.y * 6, self.y * 28
+        else:
+            if pos_x > self.x * 38:
+                return 0, 0
+            return self.x * 36 + self.y * 6, self.y * 28
 
     def arrangeBoats(self, boats):
         boats[0].set_position(50, self.y * 27)
