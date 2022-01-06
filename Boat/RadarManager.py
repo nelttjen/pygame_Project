@@ -10,16 +10,18 @@ class Radar:
     FRONT = 1
     RIGTH = 2
     BACKLEFT = 3
-    BACKRIGTH = 4
+    BACK = 4
+    BACKRIGTH = 5
 
 class RadarManager:
     pi = 3.14
     RADARS = [
-        (Radar.LEFT, -pi/4, [0, 0]), 
-        (Radar.FRONT, 0, [0, 1]), 
-        (Radar.RIGTH, pi/4, [1, 1]),
-        (Radar.BACKRIGTH, pi - pi/4, [2, 2]),
-        (Radar.BACKLEFT, pi + pi/4, [3, 3]),
+        (Radar.LEFT, -pi/4, [0, 0], 50), 
+        (Radar.FRONT, 0, [0, 1], 50), 
+        (Radar.RIGTH, pi/4, [1, 1], 50),
+        (Radar.BACKRIGTH, pi - pi/4, [2, 2], 25),
+        (Radar.BACK, pi, [2, 3], 25),
+        (Radar.BACKLEFT, pi + pi/4, [3, 3], 25)
         ]
     class RadarSensor:
         originalShape: pymunk.Shape
@@ -101,10 +103,8 @@ class RadarManager:
 
         return False
 
-    def createRadar(self, shape, callback):
-        distance = 50
-      
-        for tag, angle, vertices in RadarManager.RADARS:
+    def createRadar(self, shape, callback):     
+        for tag, angle, vertices, distance in RadarManager.RADARS:
             radar = self.RadarSensor(space=self.space, originalShape=shape, angle=angle, vertices=vertices, distance=distance, collisionType = self.collisionType, callback=callback, tag=tag)        
             for collisionType in self.collisionTypes:
                 radar.runCallback(collisionType, 1, None)

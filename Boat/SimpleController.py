@@ -30,10 +30,7 @@ class SimpleController:
             body = self.boat.car_shape.body
             orientationV = body.velocity.get_angle_between(dxy)
             orientationA = body.rotation_vector.get_angle_between(dxy)
-            if(orientationA>0):
-                self.turn = -1
-            if(orientationA<0):
-                self.turn = 1
+            self.turn = -orientationA
             if(abs(orientationA)<1.5):
                 self.move = 1
             else:
@@ -41,6 +38,10 @@ class SimpleController:
             if self.move == 1:
                 self.turn+= 2*(1-self.shoreSensors[Radar.RIGTH])
                 self.turn-= 2*(1-self.shoreSensors[Radar.LEFT])
+                self.move -= 2*(1-self.shoreSensors[Radar.FRONT])
+                self.turn+= 2*(1-self.boatsSensors[Radar.RIGTH])
+                self.turn-= 2*(1-self.boatsSensors[Radar.LEFT])
+                self.move -= 2*(1-self.boatsSensors[Radar.FRONT])
 
         self.boat.update(self.move, self.turn)
 

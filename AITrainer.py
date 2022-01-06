@@ -22,18 +22,19 @@ class Main:
         space = pymunk.Space()
         radarManager = RadarManager(space, Collisiontypes.SENSOR)
         surface = pg.display.set_mode((self.w, self.h))
-        level = SandBox2()
+        level = SandBox()
         level.build(space, (100, 73))
 
         boats = [
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level),
             BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level),
             BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level)
         ]
         controllers = [
             SimpleController(boats[0], level),
             AIController(boats[1], level),
-            KeyboardController(boats[1], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-#            KeyboardController(boats[1], "a", "d", "w", "s")
+            AIController(boats[2], level),
+            KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
         ]
 
         radarManager.registerCollisionType(Collisiontypes.BOAT)
