@@ -33,7 +33,7 @@ class BaseBoat:
         self.car_shape.friction = 0.61
         self.car_shape.collision_type =Collisiontypes.BOAT
 
-        car_moment = pymunk.moment_for_poly(car_mass / 50, self.car_shape.get_vertices())
+        car_moment = pymunk.moment_for_poly(car_mass, self.car_shape.get_vertices())
         self.car_shape.body = pymunk.Body(car_mass, car_moment)
         self.car_shape.body.angle = 0
         
@@ -63,19 +63,20 @@ class BaseBoat:
         self.car_shape.body.angle = 11
     
     def update(self, move, turn):
-        angularForce = self.stability * self.car_shape.body.angular_velocity
+        angularForce = self.stability * self.car_shape.body.angular_velocity / 2
         # компенсация вращения
         self.car_shape.body.apply_force_at_local_point((0, angularForce), (-150, 0))
         self.car_shape.body.apply_force_at_local_point((0, -angularForce), (150, 0))
         # компенсация заноса
         angle = self.car_shape.body.angle
         self.velocity = self.car_shape.body.velocity.rotated(-angle)
-        self.car_shape.body.apply_force_at_local_point((0, self.stability * -self.velocity.y))
+        self.car_shape.body.apply_force_at_local_point((0, 2 * self.stability * -self.velocity.y))
         # естественное торможение
         self.car_shape.body.apply_force_at_local_point((self.streamlining * -self.velocity.x, 0))
         # мотор
+        motor_power = Vec2d(self.power * move,0).rotated(turn)
         self.car_shape.body.apply_force_at_local_point(
-            (self.power * move, self.power / 3 * turn), (-50, 0)
+            (motor_power.x, motor_power.y), (-50, 0)
         )
 
     def get_position(self):

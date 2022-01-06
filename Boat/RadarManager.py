@@ -16,12 +16,12 @@ class Radar:
 class RadarManager:
     pi = 3.14
     RADARS = [
-        (Radar.LEFT, -pi/4, [0, 0], 50), 
-        (Radar.FRONT, 0, [0, 1], 50), 
-        (Radar.RIGTH, pi/4, [1, 1], 50),
-        (Radar.BACKRIGTH, pi - pi/4, [2, 2], 25),
-        (Radar.BACK, pi, [2, 3], 25),
-        (Radar.BACKLEFT, pi + pi/4, [3, 3], 25)
+        (Radar.LEFT, -pi/4, [0, 0], 50, 3), 
+        (Radar.FRONT, 0, [0, 1], 50, 4), 
+        (Radar.RIGTH, pi/4, [1, 1], 50, 3),
+        (Radar.BACKRIGTH, pi - pi/4, [2, 2], 25, 3),
+        (Radar.BACK, pi, [2, 3], 25, 4),
+        (Radar.BACKLEFT, pi + pi/4, [3, 3], 25, 3)
         ]
     class RadarSensor:
         originalShape: pymunk.Shape
@@ -30,13 +30,14 @@ class RadarManager:
         angle: float
         tag: int
 
-        def __init__(self, space: pymunk.Space, originalShape: pymunk.Shape, angle: float, distance:float, vertices:list, collisionType:int, callback, tag: int):
+        def __init__(self, space: pymunk.Space, originalShape: pymunk.Shape, angle: float, distance:float, offset: float, vertices:list, collisionType:int, callback, tag: int):
             self.originalShape = originalShape
             self.angle = angle
             self.distance = distance
             self.callback = callback
             self.tag = tag
             self.vertices = vertices
+            self.offset = offset
 
             self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 
@@ -67,8 +68,7 @@ class RadarManager:
             vertices = self.getVertices(self.originalShape)
             self.body.position = ((vertices[self.vertices[1]] + vertices[self.vertices[0]]) / 2)
             direction = Vec2d(1, 0).rotated(self.originalShape.body.angle + self.angle)
-            offset = 5
-            self.shape.unsafe_set_endpoints(offset * direction, (self.distance + offset) * direction)
+            self.shape.unsafe_set_endpoints(self.offset * direction, (self.distance + self.offset) * direction)
  
     def __init__(self, space, sensorCollisionType):
         self.space = space
@@ -104,8 +104,8 @@ class RadarManager:
         return False
 
     def createRadar(self, shape, callback):     
-        for tag, angle, vertices, distance in RadarManager.RADARS:
-            radar = self.RadarSensor(space=self.space, originalShape=shape, angle=angle, vertices=vertices, distance=distance, collisionType = self.collisionType, callback=callback, tag=tag)        
+        for tag, angle, vertices, distance, offset in RadarManager.RADARS:
+            radar = self.RadarSensor(space=self.space, originalShape=shape, angle=angle, vertices=vertices, distance=distance, offset = offset, collisionType = self.collisionType, callback=callback, tag=tag)        
             for collisionType in self.collisionTypes:
                 radar.runCallback(collisionType, 1, None)
             self.radars[radar.shape] = radar

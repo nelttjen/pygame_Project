@@ -28,20 +28,23 @@ class SimpleController:
             dxy = Vec2d(dx,dy)
 
             body = self.boat.car_shape.body
-            orientationV = body.velocity.get_angle_between(dxy)
             orientationA = body.rotation_vector.get_angle_between(dxy)
             self.turn = -orientationA
             if(abs(orientationA)<1.5):
                 self.move = 1
             else:
                 self.move = 0
-            if self.move == 1:
+
+            if self.move > 0:
                 self.turn+= 2*(1-self.shoreSensors[Radar.RIGTH])
                 self.turn-= 2*(1-self.shoreSensors[Radar.LEFT])
                 self.move -= 2*(1-self.shoreSensors[Radar.FRONT])
                 self.turn+= 2*(1-self.boatsSensors[Radar.RIGTH])
                 self.turn-= 2*(1-self.boatsSensors[Radar.LEFT])
                 self.move -= 2*(1-self.boatsSensors[Radar.FRONT])
+            if self.move < 0:
+                self.move += 2*(1-self.shoreSensors[Radar.BACK])
+                self.move += 2*(1-self.boatsSensors[Radar.BACK])
 
         self.boat.update(self.move, self.turn)
 
