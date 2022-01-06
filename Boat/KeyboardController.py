@@ -4,6 +4,9 @@ class KeyboardController:
     def __init__(self, boat, left, right, up, down):
         self.left, self.right, self.up, self.down = left, right, up, down
         self.boat = boat
+    
+    def update(self):
+        self.boat.update(self.move, self.turn)
 
     def processEvent(self, event):
         if event.type == pg.KEYDOWN:
