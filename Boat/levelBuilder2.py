@@ -52,8 +52,8 @@ class SandBox2:
         c = [(self.x * 8.75, self.x * 7.5), (self.x * 2.5, self.x * 1.25)]
         return c[checkpoint]
     
-    def get_tag(self, shape):
-        return self.dict_checkpoint[shape]
+    def get_checkpoint_info(self, shape):
+        return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 2
 
     def arrangeBoats(self, boats):
         c = [

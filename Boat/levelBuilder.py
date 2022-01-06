@@ -93,10 +93,12 @@ class SandBox:
              (self.x * 39.5, self.y * 30 - self.x * 2.5), (self.x * 29.5, self.y * 30 - self.x * 2.5),
              (self.x * 29.5, self.y * 16.5), (self.x * 12.5, self.y * 16.5), (self.x * 12.5, self.y * 30 - self.x * 2.5),
              (self.x * 2.5, self.y * 30 - self.x * 2.5), (self.x * 2.5, self.y * 15)]
-        return c[checkpoint]
+        if checkpoint == 0:
+            return c[checkpoint]
+        return c[checkpoint - 1]
     
-    def get_tag(self, shape):
-        return self.dict_checkpoint[shape]
+    def get_checkpoint_info(self, shape):
+        return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 13
 
     def arrangeBoats(self, boats):
         c = [

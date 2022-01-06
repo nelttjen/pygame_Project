@@ -7,6 +7,7 @@ import pygame as pg
 from random import randrange
 from Boat.levelBuilder import SandBox
 import sys
+from pymunk.vec2d import Vec2d
 
 from Utills.utils import load_image
 
@@ -23,7 +24,7 @@ class BaseBoat:
         self.turn, self.move = 0, 0
         self.level = level
         self.next_checkpoint = 0
-        self.lap = 1
+        self.lap = 0
         self.logo_img = load_image(im)
 
         self.car_shape = pymunk.Poly.create_box(None, size=(100, 73))
@@ -48,12 +49,12 @@ class BaseBoat:
     
     def passCheckpoint(self, distance, tag, collideShape):
         if collideShape:
-            print(self.level.get_tag(collideShape), self.next_checkpoint)
-            if self.level.get_tag(collideShape) == self.next_checkpoint:
-                self.next_checkpoint += 1
-            if self.next_checkpoint == 2:
-                self.next_checkpoint = 0
-                self.lap += 1
+            #print(self.level.get_tag(collideShape), self.next_checkpoint)
+            current, next = self.level.get_checkpoint_info(collideShape) 
+            if current == self.next_checkpoint:
+                self.next_checkpoint = next
+                if current == 0:
+                    self.lap += 1
         self.next_checkpoint_x, self.next_checkpoint_y = self.level.get_coords(self.next_checkpoint)
         print(self.next_checkpoint_x, self.next_checkpoint_y)
 
@@ -76,13 +77,19 @@ class BaseBoat:
         self.car_shape.body.apply_force_at_local_point(
             (self.power * move, self.power / 3 * turn), (-50, 0)
         )
-        return self.lap
 
     def get_position(self):
         return self.car_shape.body.position.x, self.car_shape.body.position.y
 
     def get_velocity(self):
         return self.velocity.length
+    
+    def get_info(self):
+        x, y = self.get_position()
+        dx, dy = self.next_checkpoint_x - x, self.next_checkpoint_y - y
+        dxy = Vec2d(dx,dy)
+
+        return (self.lap, self.next_checkpoint, dxy.length)
 
     def updateImage(self, surface, tx, ty, scaling):
         angle_degrees = math.degrees(self.car_shape.body.angle)
