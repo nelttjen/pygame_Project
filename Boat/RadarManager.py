@@ -17,10 +17,10 @@ class RadarManager:
     pi = 3.14
     RADARS = [
         (Radar.LEFT, -pi/4, [0, 0], 50, 3), 
-        (Radar.FRONT, 0, [0, 1], 50, 4), 
+        (Radar.FRONT, 0, [0, 1], 50, 5), 
         (Radar.RIGTH, pi/4, [1, 1], 50, 3),
         (Radar.BACKRIGTH, pi - pi/4, [2, 2], 25, 3),
-        (Radar.BACK, pi, [2, 3], 25, 4),
+        (Radar.BACK, pi, [2, 3], 25, 5),
         (Radar.BACKLEFT, pi + pi/4, [3, 3], 25, 3)
         ]
     class RadarSensor:
@@ -92,6 +92,8 @@ class RadarManager:
             collideShape = arbiter.shapes[0]
         else:
             collideShape = arbiter.shapes[1]
+        if collideShape == radar.originalShape:
+            return False
         if not radar:
             return False
         length = radar.distance

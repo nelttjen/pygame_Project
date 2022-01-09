@@ -63,20 +63,22 @@ class BaseBoat:
         self.car_shape.body.angle = 11
     
     def update(self, move, turn):
-        angularForce = self.stability * self.car_shape.body.angular_velocity / 2
+        R = 150
+        angularForce = self.stability * R * self.car_shape.body.angular_velocity / 2
         # компенсация вращения
-        self.car_shape.body.apply_force_at_local_point((0, angularForce), (-150, 0))
-        self.car_shape.body.apply_force_at_local_point((0, -angularForce), (150, 0))
+        self.car_shape.body.apply_force_at_local_point((0, angularForce), (-R, 0))
+        self.car_shape.body.apply_force_at_local_point((0, -angularForce), (R, 0))
         # компенсация заноса
         angle = self.car_shape.body.angle
         self.velocity = self.car_shape.body.velocity.rotated(-angle)
-        self.car_shape.body.apply_force_at_local_point((0, 2 * self.stability * -self.velocity.y))
+        self.car_shape.body.apply_force_at_local_point((0, 2 * R * self.stability * -self.velocity.y))
         # естественное торможение
         self.car_shape.body.apply_force_at_local_point((self.streamlining * -self.velocity.x, 0))
         # мотор
-        motor_power = Vec2d(self.power * move,0).rotated(turn)
+        motor_power = Vec2d(move * self.power,turn*self.power)
+        K = max(1, motor_power.length/self.power)
         self.car_shape.body.apply_force_at_local_point(
-            (motor_power.x, motor_power.y), (-50, 0)
+            (motor_power.x/K, motor_power.y/K), (-50, 0)
         )
 
     def get_position(self):

@@ -19,12 +19,15 @@ class Network(nn.Module):
         super(Network, self).__init__()
         self.input_size = input_size
         self.nb_action = nb_action
-        self.fc1 = nn.Linear(input_size, internal_size)
-        self.fc2 = nn.Linear(internal_size, nb_action)
+        self.input = nn.Linear(input_size, internal_size)
+        self.hidden1 = nn.Linear(internal_size, internal_size)
+        self.output = nn.Linear(internal_size, nb_action)
+
     
     def forward(self, state):
-        x = F.relu(self.fc1(state))
-        q_values = self.fc2(x)
+        x = F.relu(self.input(state))
+        x = F.relu(self.hidden1(x))
+        q_values = self.output(x)
         return q_values
 
 # Implementing Experience Replay
@@ -47,7 +50,8 @@ class ReplayMemory(object):
 # Implementing Deep Q Learning
 
 class Dqn():
-    
+    loss_func = nn.MSELoss()
+    #loss_func = F.smooth_l1_loss
     def __init__(self, gamma, learnBuffer, model):
         self.gamma = gamma
         self.learnBuffer = learnBuffer
@@ -70,7 +74,7 @@ class Dqn():
         outputs = self.model(batch_state).gather(1, batch_action.unsqueeze(1)).squeeze(1)
         next_outputs = self.model(batch_next_state).detach().max(1)[0]
         target = self.gamma*next_outputs + batch_reward
-        td_loss = F.smooth_l1_loss(outputs, target)
+        td_loss = self.loss_func(outputs, target)
         self.optimizer.zero_grad()
         td_loss.backward(retain_graph = True)
         self.optimizer.step()
