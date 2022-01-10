@@ -57,7 +57,7 @@ class Test_MapGenerator(TestCase):
         for point in map.track:
             delta = abs(point[0]-last_point[0]) + abs(point[1]-last_point[1])
             self.assertEqual(delta < 1 or delta > 2, False)
-            self.assertEqual(map.map[point[1]][point[0]], 1)
+            self.assertEqual(map.map[point[1]][point[0]] in[1, 'c', 'x'], True)
             last_point = point
         map.track.insert(0, first_point)
 

@@ -177,17 +177,31 @@ class MapGenerator:
             return sign(point2[0] - point1[0]), sign(point2[1] - point1[1])
 
         first_point = self.track.pop(0)
+        straight_start = 0
         second_point = self.track[0]
         self.track.append(first_point)
         self.track.append(second_point)
         last_direction = get_direction(second_point, first_point)
+        (cpx, cpy) = last_direction
         last_point = first_point
         skip = True
+        straight_paths = []
         borders = [0, 0]
         corners = {(1, 1): ('q', 'a'), (-1, 1): ('w', 's'),
                    (1, -1): ('e', 'd'), (-1, -1): ('r', 'f')}
-        for point in self.track:
+        for point_n in range(len(self.track)):
+            point = self.track[point_n]
             direction = get_direction(point, last_point)
+            
+            if abs(cpx-direction[0]) + abs(cpy-direction[1]) < 3:
+                if direction[0]!=0:
+                    cpx = direction[0]
+                if direction[1]!=0:
+                    cpy = direction[1]
+            else:
+                self.map[last_point[1]][last_point[0]] = 'c'
+                (cpx, cpy) = direction
+
             if (direction == last_direction):
                 if not skip:
                     self.map_set(last_point, self.rotate(
@@ -202,6 +216,8 @@ class MapGenerator:
                         borders = ['>', '<']
             else:
                 skip = True
+                straight_paths.append((straight_start, point_n))
+                straight_start = point_n
                 self.map_set(
                     last_point, (-direction[0], -direction[1]), borders[int((1 + direction[1] - direction[0])/2)])
                 if direction in [(1, 0), (-1, 0)]:
@@ -224,6 +240,16 @@ class MapGenerator:
 
         self.track.pop()
         self.track.pop()
+        max_length = 0
+        longest_path = None
+        for path in straight_paths:
+            length = path[1]-path[0]
+            if(length>max_length):
+                max_length = length
+                longest_path = path
+        for point_n in range(longest_path[0], longest_path[1]):
+            point = self.track[point_n]
+            self.map[point[1]][point[0]] = 'x'
 
     def __repr__(self):
         txt = ""
