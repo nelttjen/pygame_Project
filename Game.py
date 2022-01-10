@@ -1,11 +1,15 @@
 import sys
+
+from pygame.image import load
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 import pygame as pg
 import pymunk
 from Boat.Camera import Camera
 import pymunk.pygame_util
+import time
 
+from Utills.utils import load_image
 
 class Game:
     def __init__(self,  space, surface, radarManager, boats, controllers, FPS, level, debug=False):
@@ -29,8 +33,10 @@ class Game:
         self.level = level
         level.arrangeBoats(self.boats)
 
+        self.a = load_image("temp.png")
+
     def init_window(self):
-        screen = pg.display.set_mode(self.surface.get_size())
+        screen = pg.display.set_mode((920, 700))
         clock = pg.time.Clock()
         return screen, clock
 
@@ -61,12 +67,17 @@ class Game:
         cx, cy, scaling = self.camera.update(playerX-300, playerY-300, self.boats[0].get_velocity())
         if scaling < 0.5:
             scaling = 0.5
+        #scaling = 1
         self.space.step(1 /self.FPS)
         self.draw_options.transform = (
             pymunk.Transform.scaling(scaling)
             @ pymunk.Transform(tx=cx, ty=cy)
         )
+        cropped_image = self.a.subsurface(-cx, -cy, 920 * (2-scaling), 700 * (2-scaling))
+        cropped_image = pg.transform.scale(cropped_image, (920, 700))
+        self.screen.blit(cropped_image, (0, 0))
         self.space.debug_draw(self.draw_options)
+
         for boat in self.boats:
             boat.updateImage(self.surface, cx, cy, scaling)
         self.render_fps(str(int(self.clock.get_fps())), (0, 0))
@@ -74,8 +85,9 @@ class Game:
         self.render_speed(str(int(self.boats[0].get_velocity())), (300, 0))
         self.render_place(infoboat, (600, 0))
         pg.display.flip()
-        self.screen.fill('black')
-#        if self.level.get_next_checkpoint(playerX, playerY) == (0,0):
+        #self.screen.fill('black')
+        
+#        if self.level.get_next_checkpoint(pla4yerX, playerY) == (0,0):
 #            return False
         return True
 

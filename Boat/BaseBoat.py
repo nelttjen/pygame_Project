@@ -5,8 +5,6 @@ from config import Collisiontypes
 import pymunk
 import pygame as pg
 from random import randrange
-from Boat.levelBuilder import SandBox
-import sys
 from pymunk.vec2d import Vec2d
 
 from Utills.utils import load_image

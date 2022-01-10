@@ -1,5 +1,5 @@
 import sys
-from Boat.AIController import AIController
+#from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 from Boat.SimpleController import SimpleController
@@ -8,6 +8,7 @@ import pygame as pg
 import pymunk
 from Boat.levelBuilder import SandBox
 from Boat.levelBuilder2 import SandBox2
+from Boat.levelBuilder3 import SandBox3
 from Boat.RadarManager import RadarManager
 from config import Collisiontypes
 
@@ -22,7 +23,7 @@ class Main:
         space = pymunk.Space()
         radarManager = RadarManager(space, Collisiontypes.SENSOR)
         surface = pg.display.set_mode((self.w, self.h))
-        level = SandBox2()
+        level = SandBox3()
         level.build(space, (100, 73))
 
         boats = [
@@ -30,9 +31,8 @@ class Main:
             BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level)
         ]
         controllers = [
-            SimpleController(boats[0], level),
-            AIController(boats[1], level),
-            KeyboardController(boats[1], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
+            #SimpleController(boats[0], level),
+            KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
 #            KeyboardController(boats[1], "a", "d", "w", "s")
         ]
 
@@ -42,12 +42,12 @@ class Main:
 
         game = Game(space, surface, radarManager, boats, controllers, self.FPS, level, is_debug)
         exit_code = game.run()
-        pg.quit()
+        pg.quit()  
         return exit_code
 
 
 if __name__ == '__main__':
-    FPS = 60
+    FPS = 60  
     DEBUG = False
 
     SIZE = WIGHT, HEIGHT = 900, 720

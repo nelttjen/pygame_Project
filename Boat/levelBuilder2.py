@@ -46,7 +46,6 @@ class SandBox2:
         self.draw_checkpoint(
             self.x * 7.5, self.x * 5, self.x * 7.5,
             HEIGHT, 0)
-
     
     def get_coords(self, checkpoint):
         c = [(self.x * 8.75, self.x * 7.5), (self.x * 2.5, self.x * 1.25)]
