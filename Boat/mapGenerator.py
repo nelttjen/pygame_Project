@@ -1,4 +1,5 @@
 import random
+import operator
 
 
 class MapGenerator:
@@ -41,12 +42,17 @@ class MapGenerator:
     def is_corner(self, point):
         return self.map[point[1]-1][point[0]] != self.map[point[1]+1][point[0]]
 
+    def rotate(self, shift, direction):
+        return (-shift[1]*direction, shift[0]*direction)
+
     def map_distance_to_corner(self, point, shift, direction):
-        rotated = (-shift[1]*direction, shift[0]*direction)
-        return self.map_distance_to(point, rotated, 0)
+        return self.map_distance_to(point, self.rotate(shift, direction), 0)
 
     def map_get(self, point, shift):
         return self.map[point[1]+shift[1]][point[0] + shift[0]]
+
+    def map_set(self, point, shift, c):
+        self.map[point[1]+shift[1]][point[0] + shift[0]] = c
 
     def track_set(self, point_n, c):
         point = self.track[point_n]
@@ -67,7 +73,7 @@ class MapGenerator:
         point2 = self.track[point_n2]
         point1 = self.track[point_n1]
         min_offset = max(self.track_height, self.track_width)
-        for point_n in range(point_n1, point_n2+1):
+        for point_n in range(point_n1-2, point_n2+3):
             offset = self.map_distance_to(self.track[point_n], shift, 1)
             if offset < 5:
                 return False
@@ -99,8 +105,6 @@ class MapGenerator:
             else:
                 self.track_set(point_d, 0)
                 self.track.pop(point_d)
-                # self.track.insert(
-                #    point_i, ((point2[0]+shift[0]*(offset-o - 1)*point_i_delta, point2[1]+shift[1]*(offset-o - 1)*point_i_delta)))
                 self.track.insert(
                     point_i, ((point2[0]+shift[0]*(o + 1)*point_i_delta, point2[1]+shift[1]*(o + 1)*point_i_delta)))
                 self.track_set(point_i, 1)
@@ -164,6 +168,62 @@ class MapGenerator:
                             shift = (-1, 0)
                     if self.flat_shift(point_n, shift):
                         break
+
+    def add_decorations(self):
+        def sign(x):
+            return max(-1, min(1, x))
+
+        def get_direction(point2, point1):
+            return sign(point2[0] - point1[0]), sign(point2[1] - point1[1])
+
+        first_point = self.track.pop(0)
+        second_point = self.track[0]
+        self.track.append(first_point)
+        self.track.append(second_point)
+        last_direction = get_direction(second_point, first_point)
+        last_point = first_point
+        skip = True
+        borders = [0, 0]
+        corners = {(1, 1): ('q', 'a'), (-1, 1): ('w', 's'),
+                   (1, -1): ('e', 'd'), (-1, -1): ('r', 'f')}
+        for point in self.track:
+            direction = get_direction(point, last_point)
+            if (direction == last_direction):
+                if not skip:
+                    self.map_set(last_point, self.rotate(
+                        direction, 1), borders[int((1 - direction[0] - direction[1])/2)])
+                    self.map_set(last_point, self.rotate(
+                        direction, -1),  borders[int((1 + direction[0] + direction[1])/2)])
+                else:
+                    skip = False
+                    if direction in [(1, 0), (-1, 0)]:
+                        borders = ['^', 'v']
+                    else:
+                        borders = ['>', '<']
+            else:
+                skip = True
+                self.map_set(
+                    last_point, (-direction[0], -direction[1]), borders[int((1 + direction[1] - direction[0])/2)])
+                if direction in [(1, 0), (-1, 0)]:
+                    borders = ['^', 'v']
+                else:
+                    borders = ['>', '<']
+                border = borders[int(
+                    (1 + last_direction[0] - last_direction[1])/2)]
+                self.map_set(last_point, last_direction, border)
+                self.map_set(point, last_direction, border)
+                corner = corners[tuple(
+                    map(operator.sub, last_direction, direction))]
+                self.map_set(
+                    point, (-last_direction[0], -last_direction[1]), corner[0])
+                self.map_set(last_point, tuple(
+                    map(operator.sub, last_direction, direction)), corner[1])
+
+            last_point = point
+            last_direction = direction
+
+        self.track.pop()
+        self.track.pop()
 
     def __repr__(self):
         txt = ""
