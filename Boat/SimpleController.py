@@ -21,6 +21,7 @@ class SimpleController(BaseController):
         if self.move < 0:
             self.move += 2*(1-self.shoreSensors[Radar.BACK])
             self.move += 2*(1-self.boatsSensors[Radar.BACK])
+        
 
     def processEvent(self, event):
         pass

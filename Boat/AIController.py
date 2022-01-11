@@ -8,7 +8,7 @@ from pymunk.vec2d import Vec2d
 import curses
 
 ACTION2COMMAND = [1, -1]
-MODEL = Network(13, len(ACTION2COMMAND), 75)
+MODEL = Network(14, len(ACTION2COMMAND), 150)
 
 class AIController(BaseController):
     lastDistance = 0
@@ -41,15 +41,17 @@ class AIController(BaseController):
         self.angular_velocity = self.body.angular_velocity
 
         #state = [orientationA/3.14, body.angular_velocity/10, angular_axeleration, self.move, self.turn] + [*self.shoreSensors.values()] +  [*self.boatsSensors.values()]
-        state = [self.orientationA/3.14] + [*self.shoreSensors.values()] +  [*self.boatsSensors.values()]
-        self.action = self.brain.update(reward, state)
-        turn = ACTION2COMMAND[self.action]
 
         if self.shoreSensors[Radar.FRONT]<0.5 or self.boatsSensors[Radar.FRONT]<0.5: 
             self.move = -1
         else:
             self.move+=0.1
 
+        state = [self.orientationA/3.14, self.move] + [*self.shoreSensors.values()] +  [*self.boatsSensors.values()]
+        self.action = self.brain.update(reward, state)
+        turn = ACTION2COMMAND[self.action]
+
+      
         self.turn = turn
         self.move = min(max(self.move, -1), 1)
         self.turn = min(max(self.turn, -1), 1)

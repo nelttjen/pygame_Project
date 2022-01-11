@@ -1,6 +1,8 @@
 from collections import defaultdict
 import math
 from typing import DefaultDict
+
+from pymunk.shape_filter import ShapeFilter
 from config import Collisiontypes
 import pymunk
 import pygame as pg
@@ -11,10 +13,13 @@ from pymunk.vec2d import Vec2d
 
 from Utills.utils import load_image
 
+global BOAT_ID
+BOAT_ID = 0
+
 class BaseBoat:
     def __init__(self, space, radarManager, settings, level):
         mass, im, power, stability, streamlining = settings
-
+        global BOAT_ID
         car_mass = mass
         self.stability = stability
         self.power = power
@@ -26,8 +31,14 @@ class BaseBoat:
         self.next_checkpoint = 0
         self.lap = 0
         self.logo_img = load_image(im)
+        
+        self.width = 73
+        self.length = 100
 
-        self.car_shape = pymunk.Poly.create_box(None, size=(100, 73))
+        self.car_shape = pymunk.Poly.create_box(None, size=(self.length, self.width))
+
+        self.car_shape.filter = ShapeFilter(group = BOAT_ID)
+        BOAT_ID +=1
         self.car_shape.color = [0, 0, 0, 0]
         self.car_shape.elasticity = 0.5
         self.car_shape.friction = 0.61
@@ -63,8 +74,8 @@ class BaseBoat:
         self.car_shape.body.angle = 11
     
     def update(self, move, turn):
-        R = 150
-        angularForce = self.stability * R * self.car_shape.body.angular_velocity / 2
+        R = self.length / 2
+        angularForce = self.stability * R * R* self.car_shape.body.angular_velocity / 2
         # компенсация вращения
         self.car_shape.body.apply_force_at_local_point((0, angularForce), (-R, 0))
         self.car_shape.body.apply_force_at_local_point((0, -angularForce), (R, 0))
@@ -73,7 +84,7 @@ class BaseBoat:
         self.velocity = self.car_shape.body.velocity.rotated(-angle)
         self.car_shape.body.apply_force_at_local_point((0, 2 * R * self.stability * -self.velocity.y))
         # естественное торможение
-        self.car_shape.body.apply_force_at_local_point((self.streamlining * -self.velocity.x, 0))
+        self.car_shape.body.apply_force_at_local_point((self.streamlining * self.width * -self.velocity.x, 0))
         # мотор
         motor_power = Vec2d(move * self.power,turn*self.power)
         K = max(1, motor_power.length/self.power)
