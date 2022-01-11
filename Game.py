@@ -15,7 +15,7 @@ class Game:
         self.controllers = controllers
         self.radarManager = radarManager
 
-        self.FPS =FPS        
+        self.FPS = FPS
         self.debug_mode = debug
         self.screen, self.clock = self.init_window()
 
@@ -36,7 +36,7 @@ class Game:
 
     def run(self):
         while True:
-            self.time_delta = self.clock.tick(60) / 1000.0
+            self.time_delta = self.clock.tick(self.FPS) / 1000.0
             events = pg.event.get()
             if not self.events(events):
                 return 0
@@ -59,9 +59,9 @@ class Game:
 
         playerX, playerY = self.boats[0].get_position()
         cx, cy, scaling = self.camera.update(playerX-300, playerY-300, self.boats[0].get_velocity())
-        if scaling < 0.5:
-            scaling = 0.5
-        self.space.step(1 /self.FPS)
+        # if scaling < 0.5:
+        #     scaling = 0.5
+        self.space.step(1 / self.FPS)
         self.draw_options.transform = (
             pymunk.Transform.scaling(scaling)
             @ pymunk.Transform(tx=cx, ty=cy)
@@ -69,10 +69,12 @@ class Game:
         self.space.debug_draw(self.draw_options)
         for boat in self.boats:
             boat.updateImage(self.surface, cx, cy, scaling)
-        self.render_fps(str(int(self.clock.get_fps())), (0, 0))
-        self.render_lap(str(lap), (100, 0))
-        self.render_speed(str(int(self.boats[0].get_velocity())), (300, 0))
-        self.render_place(infoboat, (600, 0))
+        if self.debug_mode:
+
+            self.render_fps(str(int(self.clock.get_fps())), (0, 0))
+            self.render_lap(str(lap), (100, 0))
+            self.render_speed(str(int(self.boats[0].get_velocity())), (300, 0))
+            self.render_place(infoboat, (600, 0))
         pg.display.flip()
         self.screen.fill('black')
 #        if self.level.get_next_checkpoint(playerX, playerY) == (0,0):
@@ -109,3 +111,4 @@ class Game:
             if infoboat[i][3] == 'Яхта игрока':
                 render_text = font.render('Место' + str(i + 1), True, pg.Color('red'))
                 self.screen.blit(render_text, pos)
+                break

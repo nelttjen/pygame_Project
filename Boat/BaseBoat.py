@@ -11,6 +11,7 @@ from pymunk.vec2d import Vec2d
 
 from Utills.utils import load_image
 
+
 class BaseBoat:
     def __init__(self, space, radarManager, settings, level):
         mass, im, power, stability, streamlining = settings
@@ -31,7 +32,7 @@ class BaseBoat:
         self.car_shape.color = [0, 0, 0, 0]
         self.car_shape.elasticity = 0.5
         self.car_shape.friction = 0.61
-        self.car_shape.collision_type =Collisiontypes.BOAT
+        self.car_shape.collision_type = Collisiontypes.BOAT
 
         car_moment = pymunk.moment_for_poly(car_mass, self.car_shape.get_vertices())
         self.car_shape.body = pymunk.Body(car_mass, car_moment)
@@ -88,9 +89,9 @@ class BaseBoat:
     def get_info(self):
         x, y = self.get_position()
         dx, dy = self.next_checkpoint_x - x, self.next_checkpoint_y - y
-        dxy = Vec2d(dx,dy)
+        dxy = Vec2d(dx, dy)
 
-        return (self.lap, self.next_checkpoint, dxy.length)
+        return self.lap, self.next_checkpoint, dxy.length
 
     def updateImage(self, surface, tx, ty, scaling):
         angle_degrees = math.degrees(self.car_shape.body.angle)
