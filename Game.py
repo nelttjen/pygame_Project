@@ -67,13 +67,14 @@ class Game:
         cx, cy, scaling = self.camera.update(playerX-300, playerY-300, self.boats[0].get_velocity())
         if scaling < 0.5:
             scaling = 0.5
-        #scaling = 1
+
         self.space.step(1 /self.FPS)
         self.draw_options.transform = (
             pymunk.Transform.scaling(scaling)
             @ pymunk.Transform(tx=cx, ty=cy)
         )
-        cropped_image = self.a.subsurface(-cx, -cy, 920 * (2-scaling), 700 * (2-scaling))
+
+        cropped_image = self.a.subsurface(-cx, -cy, 920 /scaling, 700 /scaling)
         cropped_image = pg.transform.scale(cropped_image, (920, 700))
         self.screen.blit(cropped_image, (0, 0))
         self.space.debug_draw(self.draw_options)

@@ -47,7 +47,7 @@ class Test_MapGenerator(TestCase):
         map = self.create_map()
         map.add_deformations(2)
 
-        map.add_decorations()
+        cp, lp = map.add_decorations()
         print(map)
         self.validate_track(map)
 

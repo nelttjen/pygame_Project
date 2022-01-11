@@ -187,6 +187,7 @@ class MapGenerator:
         skip = True
         straight_paths = []
         borders = [0, 0]
+        check_points = []
         corners = {(1, 1): ('q', 'a'), (-1, 1): ('w', 's'),
                    (1, -1): ('e', 'd'), (-1, -1): ('r', 'f')}
         for point_n in range(len(self.track)):
@@ -200,6 +201,7 @@ class MapGenerator:
                     cpy = direction[1]
             else:
                 self.map[last_point[1]][last_point[0]] = 'c'
+                check_points.append((last_point, direction))
                 (cpx, cpy) = direction
 
             if (direction == last_direction):
@@ -250,6 +252,7 @@ class MapGenerator:
         for point_n in range(longest_path[0], longest_path[1]):
             point = self.track[point_n]
             self.map[point[1]][point[0]] = 'x'
+        return check_points, longest_path
 
     def __repr__(self):
         txt = ""
