@@ -240,6 +240,7 @@ class MapGenerator:
             last_point = point
             last_direction = direction
 
+        self.track.insert(0, first_point)
         self.track.pop()
         self.track.pop()
         max_length = 0

@@ -42,7 +42,7 @@ class Test_MapGenerator(TestCase):
                 self.validate_track(map)
 
     def test_deformations(self):
-        map = MapGenerator(20, 20, 25, 25, 18)
+        map = MapGenerator(23, 23, 27, 27, 14)
         map.add_deformations(2)
         #map = self.create_map()
         #map.add_deformations(2)
@@ -60,7 +60,7 @@ class Test_MapGenerator(TestCase):
             self.assertEqual(delta < 1 or delta > 2, False)
             self.assertEqual(map.map[point[1]][point[0]] in[1, 'c', 'x'], True)
             last_point = point
-        map.track.insert(0, first_point)
+        map.track.append(first_point)
 
 
 if __name__ == '__main__':

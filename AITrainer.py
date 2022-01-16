@@ -27,13 +27,14 @@ class Main:
         level.build(space, (100, 73))
 
         boats = [
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 1, 0.1), level),
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 10, 0.1), level),
-            BaseBoat(space, radarManager, (0.5, "yacht.png", 30, 10, 0.1), level)
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level),
+            BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level),
+            #BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level)
         ]
         controllers = [
             #SimpleController(boats[0], level),
-            KeyboardController(boats[0], pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
+            SimpleController(boats[1], level),
+            KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
 #            KeyboardController(boats[1], "a", "d", "w", "s")
         ]
 

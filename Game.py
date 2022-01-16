@@ -45,6 +45,8 @@ class Game:
         return screen, clock
 
     def run(self):
+        for boat in self.boats:
+            boat.update(0, 0)
         while True:
             self.time_delta = self.clock.tick(60) / 1000.0
             events = pg.event.get()

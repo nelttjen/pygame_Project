@@ -1,5 +1,7 @@
 from collections import defaultdict
 import sys
+
+from pymunk import space
 from Config import Collisiontypes
 from pygame.colordict import THECOLORS
 import pymunk
@@ -26,15 +28,23 @@ class SandBox3:
         segment_shape.friction = 1.0
         segment_shape.color = THECOLORS["white"]
 
+    colors = [THECOLORS["red"], THECOLORS["yellow"], THECOLORS["green"], THECOLORS["white"], THECOLORS["red"], THECOLORS["yellow"], THECOLORS["green"], THECOLORS["white"]]
+    def draw_coord(self, xy, color):
+        body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+        shape = pymunk.Circle(body, 20, xy)
+        shape.sensor=True
+        shape.color = color
+        self.space.add(body, shape)
+
     def draw_checkpoint(self, x, y, x2, y2, tag):
-        self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+        body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 
         segment_shape = pymunk.Segment(
-            self.body, (x, y), (x2, y2), 14.0
+            body, (x, y), (x2, y2), 14.0
         )
         segment_shape.collision_type = Collisiontypes.CHECKPOINT
         segment_shape.sensor = True
-        self.space.add(self.body, segment_shape)
+        self.space.add(body, segment_shape)
         self.dict_checkpoint[segment_shape] = tag
         segment_shape.color = THECOLORS["red"]
 
@@ -49,7 +59,6 @@ class SandBox3:
         track = level2.track
         self.lp = lp[1]
         self.track = track
-        print(lp)
         self.space = space
         self.draw_walls(level, cp, track)
         self.generate_image(level, track[lp[1]][0], track[lp[1]][1])
@@ -127,8 +136,9 @@ class SandBox3:
                                      (track[i[0]][1] - 0.5) * self.m,
                                      (track[i[0]][0] - 1) * self.m,
                                      (track[i[0]][1] - 0.5) * self.m, count)
-            self.coords.append(
-                [track[i[0]][0] * self.m + self.m // 2, track[i[0]][1] * self.m + self.m // 2])
+            cxy = ((track[i[0]][0] + i[1][0]) * self.m + self.m // 2, (track[i[0]][1] + i[1][1]) * self.m + self.m // 2)
+            self.coords.append(cxy)
+            self.draw_coord(cxy, self.colors[count])
             count += 1
 
     def load_images(self):
@@ -229,7 +239,7 @@ class SandBox3:
 
     def get_checkpoint_info(self, shape):
         return self.dict_checkpoint[shape], (
-            self.dict_checkpoint[shape] + 1) % 2
+            self.dict_checkpoint[shape] + 1) % len(self.dict_checkpoint)
 
     def arrangeBoats(self, boats):
         print(self.track[self.lp][0])
