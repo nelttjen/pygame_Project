@@ -1,7 +1,7 @@
 import math
 from random import randint
 from Boat.ai import Dqn, Network
-from config import Collisiontypes
+from Config import Collisiontypes
 from pymunk.vec2d import Vec2d
 import curses
 

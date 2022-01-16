@@ -10,7 +10,7 @@ from Boat.levelBuilder import SandBox
 from Boat.levelBuilder2 import SandBox2
 from Boat.levelBuilder3 import SandBox3
 from Boat.RadarManager import RadarManager
-from config import Collisiontypes
+from Config import Collisiontypes
 
 class Main:
     def __init__(self, w, h, GAME_FPS):

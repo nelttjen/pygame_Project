@@ -1,5 +1,5 @@
 from Boat.RadarManager import Radar
-from config import Collisiontypes
+from Config import Collisiontypes
 from pymunk.vec2d import Vec2d
 
 class SimpleController:

@@ -1,6 +1,6 @@
 from collections import defaultdict
 import sys
-from config import Collisiontypes
+from Config import Collisiontypes
 from pygame.colordict import THECOLORS
 import pymunk
 import pygame
@@ -10,6 +10,8 @@ from random import randrange
 
 
 class SandBox3:
+    size: tuple[int, int]
+
     def __init__(self):
         self.coords = []
         self.dict_checkpoint = defaultdict()
@@ -47,10 +49,6 @@ class SandBox3:
         track = level2.track
         self.lp = lp[1]
         self.track = track
-        for i in range(len(level)):
-            level[i] = level[i] + [0] * 15
-        for i in range(15):
-            level.append([0] * len(level[0]))
         print(lp)
         self.space = space
         self.draw_walls(level, cp, track)
@@ -111,9 +109,9 @@ class SandBox3:
         for i in cp:
             if i[1][0] == 1:
                 self.draw_checkpoint((track[i[0]][0] + 1.5) * self.m,
-                                     (track[i[0]][1] - 2) * self.m,
+                                     (track[i[0]][1] - 1) * self.m,
                                      (track[i[0]][0] + 1.5) * self.m,
-                                     (track[i[0]][1] + 1) * self.m, count)
+                                     (track[i[0]][1] + 2) * self.m, count)
             if i[1][0] == -1:
                 self.draw_checkpoint((track[i[0]][0] - 0.5) * self.m,
                                      (track[i[0]][1] - 1) * self.m,
@@ -165,10 +163,10 @@ class SandBox3:
         self.imageS = pygame.transform.scale(self.imageS, (self.m, self.m))
 
     def generate_image(self, level, x, y):
-        size = self.m * len(level), self.m * len(level[0])
+        self.size = self.m * len(level), self.m * len(level[0])
         count = 0
         print(x, y)
-        self.merged_image = pygame.display.set_mode(size)
+        self.merged_image = pygame.display.set_mode(self.size)
         for i in range(len(level)):
             for j in range(len(level[i])):
                 if level[i][j] == '>':

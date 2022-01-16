@@ -42,8 +42,8 @@ class Test_MapGenerator(TestCase):
                 self.validate_track(map)
 
     def test_deformations(self):
-        map = MapGenerator(20, 20, 25, 25, 17)
-        map.add_deformations(3)
+        map = MapGenerator(20, 20, 25, 25, 18)
+        map.add_deformations(2)
         #map = self.create_map()
         #map.add_deformations(2)
 

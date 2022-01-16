@@ -1,7 +1,7 @@
 from collections import defaultdict
 import math
 from typing import DefaultDict
-from config import Collisiontypes
+from Config import Collisiontypes
 import pymunk
 import pygame as pg
 from random import randrange
@@ -95,8 +95,8 @@ class BaseBoat:
         self.scaled_logo_img = pg.transform.scale(self.logo_img, (self.logo_img.get_size()[0] * scaling, self.logo_img.get_size()[1] * scaling))
         self.rotated_logo_img = pg.transform.rotate(self.scaled_logo_img, -angle_degrees)
         self.p = (
-            self.car_shape.body.position.x + tx,
-            self.car_shape.body.position.y + ty,
+            self.car_shape.body.position.x - tx,
+            self.car_shape.body.position.y - ty,
         )
         offset = pymunk.Vec2d(*self.rotated_logo_img.get_size()) / (2 * scaling)
         self.p = self.p - offset

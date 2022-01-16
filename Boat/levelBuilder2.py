@@ -1,5 +1,5 @@
 from collections import defaultdict
-from config import Collisiontypes
+from Config import Collisiontypes
 from pygame.colordict import THECOLORS
 import pymunk
 

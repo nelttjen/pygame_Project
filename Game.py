@@ -7,11 +7,15 @@ import pygame as pg
 import pymunk
 from Boat.Camera import Camera
 import pymunk.pygame_util
-import time
+import Config
+from Boat.levelBuilder3 import SandBox3
 
 from Utills.utils import load_image
 
 class Game:
+    level : SandBox3
+    camera: Camera
+    boats: list[BaseBoat]
     def __init__(self,  space, surface, radarManager, boats, controllers, FPS, level, debug=False):
         self.space = space
         self.surface = surface
@@ -26,7 +30,7 @@ class Game:
         self.time_delta = 0
 
         self.draw_options = pymunk.pygame_util.DrawOptions(self.surface)
-        self.camera = Camera()
+        self.camera = Camera(level.size, (Config.Screen.WIDTH, Config.Screen.HEIGHT))
 
         self.space.gravity = 0, 0
 
@@ -64,32 +68,27 @@ class Game:
         self.radarManager.updateSensors()
 
         playerX, playerY = self.boats[0].get_position()
-        cx, cy, scaling = self.camera.update(playerX-300, playerY-300, self.boats[0].get_velocity())
-        if scaling < 0.5:
-            scaling = 0.5
-
+        cxy, wxy, scaling = self.camera.update(playerX, playerY, self.boats[0].get_velocity())
+ 
         self.space.step(1 /self.FPS)
         self.draw_options.transform = (
             pymunk.Transform.scaling(scaling)
-            @ pymunk.Transform(tx=cx, ty=cy)
+            @ pymunk.Transform(tx=-cxy[0], ty=-cxy[1])
         )
 
-        cropped_image = self.a.subsurface(-cx, -cy, 920 /scaling, 700 /scaling)
-        cropped_image = pg.transform.scale(cropped_image, (920, 700))
+        cropped_image = self.a.subsurface(cxy[0], cxy[1], wxy[0], wxy[1])
+        cropped_image = pg.transform.scale(cropped_image, self.camera.screen_size)
         self.screen.blit(cropped_image, (0, 0))
         self.space.debug_draw(self.draw_options)
 
         for boat in self.boats:
-            boat.updateImage(self.surface, cx, cy, scaling)
+            boat.updateImage(self.surface, cxy[0], cxy[1], scaling)
         self.render_fps(str(int(self.clock.get_fps())), (0, 0))
         self.render_lap(str(lap), (100, 0))
         self.render_speed(str(int(self.boats[0].get_velocity())), (300, 0))
         self.render_place(infoboat, (600, 0))
         pg.display.flip()
-        #self.screen.fill('black')
-        
-#        if self.level.get_next_checkpoint(pla4yerX, playerY) == (0,0):
-#            return False
+
         return True
 
     def events(self, events):
