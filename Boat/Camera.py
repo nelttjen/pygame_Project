@@ -17,7 +17,7 @@ class Camera:
         (cy, _) = self.cameraYUpdate.update(y)
         if v > self.max_speed:
             self.max_speed = v
-        v=1000
+        #v=1000
         
         (scaling,_) = self.scalingUpdate.update(1 - (abs(v) / self.max_speed))
         scaling = max(self.min_scale, scaling)
