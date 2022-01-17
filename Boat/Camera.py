@@ -7,7 +7,7 @@ class Camera:
         self.screen_size = screen_size
         self.level_size = level_size
         self.min_scale = max(screen_size[0] / level_size[0], screen_size[1]/level_size[1])
-        self.scalingUpdate = DelayedUpdate()
+        self.scalingUpdate = DelayedUpdate(k = 0.01)
         self.cameraXUpdate = DelayedUpdate(initial=0, k=0.1)
         self.cameraYUpdate = DelayedUpdate(initial=0, k=0.1)
         self.max_speed = 300

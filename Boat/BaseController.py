@@ -61,7 +61,7 @@ class BaseController:
                 self.min_distance = self.dxy.length
                 self.move_time = time.time()
             else:
-                if self.min_distance < self.dxy.length:
+                if self.min_distance > self.dxy.length:
                     self.min_distance = self.dxy.length
                     self.move_time = time.time()
                 else:

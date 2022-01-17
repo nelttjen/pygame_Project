@@ -33,7 +33,9 @@ class BaseBoat:
         self.width = 73
         self.length = 100
 
-        self.car_shape = pymunk.Poly.create_box(None, size=(self.length, self.width))
+        #self.car_shape = pymunk.Poly(None,  [(-self.length/2, -self.width/2), (self.length/2, -self.width/2), (self.length/2, self.width/2), (-self.length/2, self.width/2)])
+        self.car_shape = pymunk.Poly(None,  [(-self.length/2, -self.width/3), (0, -self.width/2), (self.length/2, -self.width/5), (self.length/2, self.width/5), (0, self.width/2), (-self.length/2, self.width/3)])
+
 
         self.car_shape.filter = ShapeFilter(group = BOAT_ID)
         BOAT_ID +=1
