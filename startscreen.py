@@ -275,9 +275,9 @@ class Startscreen:
         pygame.key.set_repeat(0, 0)
         font_menu = pygame.font.Font('fonts/8289.otf', 50)
         select = 0
+        fon = pygame.transform.scale(load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
+                                     (self.WIDTH, self.HEIGHT))
         while running:
-            fon = pygame.transform.scale(load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
-                                         (self.WIDTH, self.HEIGHT))
             screen.blit(fon, (0, 0))
             screen.fill((45, 45, 45), special_flags=8)
             mp = pygame.mouse.get_pos()
@@ -323,6 +323,9 @@ class Startscreen:
                                     numtrack = i[1].split()[1]
                                     if int(numtrack) > 1:
                                         i[1] = f'{i[1].split()[0]} {int(numtrack) - 1}'
+                                        fon = pygame.transform.scale(
+                                            load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
+                                            (self.WIDTH, self.HEIGHT))
                         if select == 1:
                             for i in self.mn:
                                 if select == i[4]:
@@ -336,6 +339,9 @@ class Startscreen:
                                     numtrack = i[1].split()[1]
                                     if int(numtrack) < self.max_map:
                                         i[1] = f'{i[1].split()[0]} {int(numtrack) + 1}'
+                                        fon = pygame.transform.scale(
+                                            load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
+                                            (self.WIDTH, self.HEIGHT))
                         if select == 1:
                             for i in self.mn:
                                 if select == i[4]:
