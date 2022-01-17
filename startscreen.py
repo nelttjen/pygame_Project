@@ -361,10 +361,16 @@ class Startscreen:
                         numtrack = self.mn[0][1].split()[1]
                         if int(numtrack) < self.max_map:
                             self.mn[0][1] = f'{self.mn[0][1].split()[0]} {int(numtrack) + 1}'
+                            fon = pygame.transform.scale(
+                                load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
+                                (self.WIDTH, self.HEIGHT))
                     if 221 < mp[0] < 221 + 29 and 55 < mp[1] < 55 + 51:
                         numtrack = self.mn[0][1].split()[1]
                         if int(numtrack) > 1:
                             self.mn[0][1] = f'{self.mn[0][1].split()[0]} {int(numtrack) - 1}'
+                            fon = pygame.transform.scale(
+                                load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
+                                (self.WIDTH, self.HEIGHT))
                     if 661 < mp[0] < 661 + 29 and 185 < mp[1] < 185 + 51:
                         numyacht = self.mn[1][1].split("_")[1][:-4]
                         if int(numyacht) < self.max_boat:
