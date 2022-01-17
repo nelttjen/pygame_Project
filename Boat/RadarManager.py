@@ -16,12 +16,12 @@ class Radar:
 class RadarManager:
     pi = 3.14
     RADARS = [
-        (Radar.LEFT, -pi/4, [0, 0], 50, 3), 
-        (Radar.FRONT, 0, [0, 1], 50, 5), 
-        (Radar.RIGTH, pi/4, [1, 1], 50, 3),
-        (Radar.BACKRIGTH, pi - pi/4, [2, 2], 25, 3),
-        (Radar.BACK, pi, [2, 3], 25, 5),
-        (Radar.BACKLEFT, pi + pi/4, [3, 3], 25, 3)
+        (Radar.LEFT, -pi/4, [2, 2], 50, 1), 
+        (Radar.FRONT, 0, [2, 3], 50, 1), 
+        (Radar.RIGTH, pi/4, [3, 3], 50, 1),
+        (Radar.BACKRIGTH, pi - pi/4, [5, 5], 25, 1),
+        (Radar.BACK, pi, [0, 5], 25, 1),
+        (Radar.BACKLEFT, pi + pi/4, [0, 0], 25, 1)
         ]
     class RadarSensor:
         originalShape: pymunk.Shape
@@ -44,6 +44,7 @@ class RadarManager:
             start_point = (0, 0)
             self.shape = pymunk.Segment(self.body, start_point, start_point, 0.0)
             self.shape.collision_type = collisionType
+            self.shape.filter = originalShape.filter
             self.shape.color = THECOLORS["white"]
             self.shape.sensor = True
 

@@ -1,7 +1,10 @@
 import pygame as pg
 
+from Boat.BaseController import BaseController
+
 class KeyboardController:
-    def __init__(self, boat, left, right, up, down):
+    def __init__(self, boat, level, left, right, up, down):
+#        super().__init__(boat, level)
         self.left, self.right, self.up, self.down = left, right, up, down
         self.turn = 0
         self.move = 0

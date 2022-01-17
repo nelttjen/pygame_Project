@@ -66,7 +66,10 @@ class Dqn():
         self.learn_score = 0
     
     def select_action(self, state):
-        probs = F.softmax(self.model(Variable(state, volatile = True))*100) # T=100
+        out = self.model(Variable(state, volatile = True))
+        out[torch.isnan(out)] = 0
+        out[torch.isinf(out)] = 0
+        probs = F.softmax(out*100) # T=100
         action = probs.multinomial(self.model.nb_action)
         return action.data[0,0]
     

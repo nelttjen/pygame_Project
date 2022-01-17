@@ -1,5 +1,5 @@
 from collections import defaultdict
-from config import Collisiontypes
+from Config import Collisiontypes
 from pygame.colordict import THECOLORS
 import pymunk
 
@@ -35,16 +35,17 @@ class SandBox:
         self.x, self.y = size
 
         self.space = space
-        WIDTH, HEIGHT = self.x * 42, self.y * 30
-        self.draw_wall(0, 0, WIDTH, HEIGHT)
+        self.size = self.x * 42, self.y * 30
+        width, heigth = self.size
+        self.draw_wall(0, 0, width, heigth)
         self.draw_wall(self.x * 5, self.x * 5,
-                       self.x * 11, HEIGHT - self.x * 5)
+                       self.x * 11, heigth - self.x * 5)
         self.draw_wall(self.x * 14, 0, self.x * 28, self.y * 12)
-        self.draw_wall(self.x * 14, HEIGHT - self.y * 12, self.x * 28, HEIGHT)
-        self.draw_wall(WIDTH - self.x * 11, self.x * 5,
-                       WIDTH - self.x * 5, HEIGHT - self.x * 5)
+        self.draw_wall(self.x * 14, heigth - self.y * 12, self.x * 28, heigth)
+        self.draw_wall(width - self.x * 11, self.x * 5,
+                       width - self.x * 5, heigth - self.x * 5)
         self.draw_wall(self.x * 11, self.y * 15,
-                       WIDTH - self.x * 11, self.y * 15)
+                       width - self.x * 11, self.y * 15)
 
         self.draw_checkpoint(
             0, self.x * 5, self.x * 5,
@@ -62,26 +63,26 @@ class SandBox:
             self.x * 28, self.x * 5,
             self.x * 31, self.x * 5, 5)
         self.draw_checkpoint(
-            WIDTH - self.x * 5, 0,
-            WIDTH - self.x * 5, self.x * 5, 6)
+            width - self.x * 5, 0,
+            width - self.x * 5, self.x * 5, 6)
         self.draw_checkpoint(
-            WIDTH - self.x * 5, HEIGHT - self.x * 5,
-            WIDTH, HEIGHT - self.x * 5, 7)
+            width - self.x * 5, heigth - self.x * 5,
+            width, heigth - self.x * 5, 7)
         self.draw_checkpoint(
-            self.x * 31, HEIGHT - self.x * 5,
-            self.x * 31, HEIGHT, 8)
+            self.x * 31, heigth - self.x * 5,
+            self.x * 31, heigth, 8)
         self.draw_checkpoint(
-            self.x * 28, HEIGHT - self.y * 12,
-            self.x * 31, HEIGHT - self.y * 12, 9)
+            self.x * 28, heigth - self.y * 12,
+            self.x * 31, heigth - self.y * 12, 9)
         self.draw_checkpoint(
             self.x * 14, self.y * 15,
             self.x * 14, self.y * 18, 10)
         self.draw_checkpoint(
-            self.x * 11, HEIGHT - self.x * 5,
-            self.x * 14, HEIGHT - self.x * 5, 11)
+            self.x * 11, heigth - self.x * 5,
+            self.x * 14, heigth - self.x * 5, 11)
         self.draw_checkpoint(
-            self.x * 5, HEIGHT - self.x * 5,
-            self.x * 5, HEIGHT, 12)
+            self.x * 5, heigth - self.x * 5,
+            self.x * 5, heigth, 12)
         # стартовый
         self.draw_checkpoint(
             0, self.y * 15, self.x * 5,
