@@ -276,11 +276,10 @@ class Startscreen:
         font_menu = pygame.font.Font('fonts/8289.otf', 50)
         select = 0
         while running:
-            # fon = pygame.transform.scale(load_image(self.mn[0][1]),
-            #                              (self.WIDTH, self.HEIGHT))
-            # screen.blit(fon, (0, 0))
-            screen.fill((0, 100, 200))
-
+            fon = pygame.transform.scale(load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
+                                         (self.WIDTH, self.HEIGHT))
+            screen.blit(fon, (0, 0))
+            screen.fill((45, 45, 45), special_flags=8)
             mp = pygame.mouse.get_pos()
             for i in self.mn:
                 if int(i[5]) < mp[0] < int(i[5]) + int(i[7]) and int(i[6]) < mp[1] < int(i[6]) + int(i[8]):
@@ -378,6 +377,6 @@ mn = [[80, 'Track 1', (250, 250, 30), (250, 30, 250), 0, 0, 0, 0, 0],
       [510, 'Таблица рекордов', (250, 250, 30), (250, 30, 250), 3, 0, 0, 0, 0],
       [610, 'Выход', (250, 250, 30), (250, 30, 250), 4, 0, 0, 0, 0]]
 boats = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2]]
-game = Startscreen(mn, 3, boats)
+game = Startscreen(mn, 1, boats)
 game.start()
 print(mn)
