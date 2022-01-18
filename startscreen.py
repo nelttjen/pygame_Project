@@ -6,7 +6,10 @@ from Utills.utils import load_image
 class Startscreen:
     def __init__(self, mn=None,
                  max_map=3,
-                 boat=None):
+                 boat=None,
+                 res=None):
+        if res is None:
+            res = ['Track 1', 'yacht_1.png']
         if boat is None:
             boat = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2]]
         if mn is None:
@@ -23,6 +26,7 @@ class Startscreen:
                               f'Устойчивость: {i[4]}'
         self.WIDTH = 900
         self.HEIGHT = 720
+        self.res = res
         self.mn = mn
         self.max_map = max_map
         self.max_boat = len(self.boat)
@@ -306,6 +310,12 @@ class Startscreen:
                     if e.key == pygame.K_RETURN:
                         if select == 2:
                             running = False
+                            self.res[0] = self.mn[0][1]
+                            self.res[1] = self.mn[1][1]
+                        if select == 3:
+                            running = False
+                            self.res[0] = 'records'
+                            self.res[1] = 'records'
                         if select == 4:
                             sys.exit()
                     if e.key == pygame.K_ESCAPE:
@@ -354,6 +364,12 @@ class Startscreen:
                         if int(i[5]) < mp[0] < int(i[5]) + int(i[7]) and int(i[6]) < mp[1] < int(i[6]) + int(i[8]):
                             if select == 2:
                                 running = False
+                                self.res[0] = self.mn[0][1]
+                                self.res[1] = self.mn[1][1]
+                            if select == 3:
+                                running = False
+                                self.res[0] = 'records'
+                                self.res[1] = 'records'
                             if select == 4:
                                 sys.exit()
                     mp = pygame.mouse.get_pos()
@@ -389,6 +405,7 @@ mn = [[80, 'Track 1', (250, 250, 30), (250, 30, 250), 0, 0, 0, 0, 0],
       [510, 'Таблица рекордов', (250, 250, 30), (250, 30, 250), 3, 0, 0, 0, 0],
       [610, 'Выход', (250, 250, 30), (250, 30, 250), 4, 0, 0, 0, 0]]
 boats = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2]]
-game = Startscreen(mn, 1, boats)
+res = ['Track 1', 'yacht_1.png']
+game = Startscreen(mn, 1, boats, res)
 game.start()
-print(mn)
+print(res)
