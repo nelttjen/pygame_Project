@@ -1,3 +1,4 @@
+import math
 import sys
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
@@ -35,7 +36,10 @@ class Game:
         return screen, clock
 
     def run(self):
+        self.time_delta = math.nan
         while True:
+            if self.time_delta == 0.0:
+                return 0
             self.time_delta = self.clock.tick(self.FPS) / 1000.0
             events = pg.event.get()
             if not self.events(events):
