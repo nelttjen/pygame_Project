@@ -9,7 +9,7 @@ class SandBox2:
     def __init__(self):
         self.tag = 0
         self.dict_checkpoint = defaultdict()
-        self.dx, self.dy = 70, 70
+        self.dx, self.dy = 20, 20
         self.level = FiledGenerator(self.dx, self.dy, 8, 16)
         self.tile = Tile.TILE
 
@@ -142,6 +142,8 @@ class SandBox2:
         self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, 'down', checkp))
         checkp += 1
 
+        print(self.checkpoints[0].get_center())
+
     def draw_and_add_checkpoint(self, dx, dy, dx2, dy2, cell, cp):
         self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, cp, 30)
         self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, cell[2], cp))
@@ -167,14 +169,13 @@ class SandBox2:
         self.draw_wall((x3 + 2) * self.tile, y3 * self.tile, (x3 + 2) * self.tile, (y3 - 2) * self.tile)
 
     def get_coords(self, checkpoint):
-        c = [(self.x * 8.75, self.x * 7.5), (self.x * 2.5, self.x * 1.25)]
-        return c[checkpoint]
+        return self.checkpoints[checkpoint].get_center()
     
     def get_checkpoint_info(self, shape):
-        return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 2
+        return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % len(self.checkpoints)
 
     def arrangeBoats(self, boats):
-        x, y = -20, -10
+        x, y = -2, -4
         for i in range(len(boats)):
             boats[i].set_position((x + i) * self.tile, y * self.tile)
 
