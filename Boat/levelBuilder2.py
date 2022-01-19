@@ -24,11 +24,11 @@ class SandBox2:
             segment_shape.elasticity = 0.8
             segment_shape.friction = 1.0
 
-    def draw_checkpoint(self, x, y, x2, y2, tag):
+    def draw_checkpoint(self, x, y, x2, y2, tag, width=0.0):
         self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 
         segment_shape = pymunk.Segment(
-            self.body, (x, y), (x2, y2), 0.0
+            self.body, (x, y), (x2, y2), width
         )
         segment_shape.collision_type = Collisiontypes.CHECKPOINT
         segment_shape.sensor = True
@@ -59,6 +59,7 @@ class SandBox2:
     #     self.draw_left_corner()
     #     self.draw_right_corner(x4, y4, x3, y3)
     def build(self, space, size):
+        self.checkpoints = []
         self.space = space
         self.x, self.y = size
         self.level.generate_new()
@@ -67,7 +68,7 @@ class SandBox2:
         schematic = self.level.get_field()
         schematic2 = self.level.get_back_field()
         for i, cell in enumerate(schematic):
-            self.draw_2_walls_down(x, y, x2, y2, cell)
+            self.draw_2_walls(x, y, x2, y2, cell)
             x += cell[0]
             y += cell[1]
             x2 += cell[0]
@@ -84,20 +85,46 @@ class SandBox2:
         x2 += 8
         y2 -= 8
         for i, cell in enumerate(schematic2):
-            self.draw_2_walls_up(x, y, x2, y2, cell)
+            self.draw_2_walls(x, y, x2, y2, cell)
             x -= cell[0]
             y -= cell[1]
             x2 -= cell[0]
             y2 -= cell[1]
+        checkp = 0
+        print(schematic)
+        x, y = -3, 3
+        temp = []
+        if schematic[-1][2] == 'right':
+            temp = schematic[-1]
+            schematic.pop(-1)
+        for i, cell in enumerate(schematic):
+            if cell[2] == 'right':
+                x += cell[0]
+                dx, dy = x, y
+                dx2, dy2 = x, y - 3
+            else:
+                y += cell[1]
+                dx, dy = x, y - 3
+                dx2, dy2 = x + 3, y - 3
+            self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, checkp, 30)
+            self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, cell[2], checkp))
+            checkp += 1
+        if temp:
+            x += temp[0]
+            dx, dy = x + temp[0] + 5, y
+            dx2, dy2 = x + temp[0] + 5, y - 3
+        else:
+            dx, dy = x + 5, y
+            dx2, dy2 = x + 5, y - 3
+        self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, checkp, 30)
+        self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, 'right', checkp))
 
-
-    def draw_2_walls_up(self, x1, y1, x2, y2, cell):
-        self.draw_wall(x1 * self.tile, y1 * self.tile, (x1 - cell[0]) * self.tile, (y1 - cell[1]) * self.tile)
-        self.draw_wall(x2 * self.tile, y2 * self.tile, (x2 - cell[0]) * self.tile, (y2 - cell[1]) * self.tile)
-
-    def draw_2_walls_down(self, x1, y1, x2, y2, cell):
-        self.draw_wall(x1 * self.tile, y1 * self.tile, (x1 + cell[0]) * self.tile, (y1 + cell[1]) * self.tile)
-        self.draw_wall(x2 * self.tile, y2 * self.tile, (x2 + cell[0]) * self.tile, (y2 + cell[1]) * self.tile)
+    def draw_2_walls(self, x1, y1, x2, y2, cell):
+        direction = 1
+        if cell[2] in ['left', 'up']:
+            direction *= -1
+        self.draw_wall(x1 * self.tile, y1 * self.tile, (x1 + cell[0] * direction) * self.tile, (y1 + cell[1] * direction) * self.tile)
+        self.draw_wall(x2 * self.tile, y2 * self.tile, (x2 + cell[0] * direction) * self.tile, (y2 + cell[1] * direction) * self.tile)
 
     def draw_left_corner(self, dv):
         self.draw_wall(-3 * self.tile, 3 * self.tile, -3 * self.tile, (-5 - dv) * self.tile)
@@ -123,3 +150,23 @@ class SandBox2:
         for i in range(len(boats)):
             boats[i].set_position((x + i) * self.tile, y * self.tile)
 
+
+class Checkpoint:
+    def __init__(self, x, y, x2, y2, tile, direction, c_id):
+        self.x, self.y, self.x2, self.y2 = x, y, x2, y2
+        self.tile = tile
+        self.c_id = c_id
+        self.direction = direction
+        if self.direction in ['left', 'right']:
+            self.center = x * self.tile, (y + (y2 - y) / 2) * self.tile
+        else:
+            self.center = (x + (x2 - x) / 2) * self.tile, y * self.tile
+
+    def get_center(self):
+        return self.center
+
+    def get_id(self):
+        return self.c_id
+
+    def get_info(self):
+        return self.x, self.y, self.x2, self.y2, self.center, self.direction, self.c_id

@@ -1,5 +1,5 @@
 import sys
-from Boat.AIController import AIController
+# from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 from Boat.SimpleController import SimpleController
