@@ -106,18 +106,46 @@ class SandBox2:
                 y += cell[1]
                 dx, dy = x, y - 3
                 dx2, dy2 = x + 3, y - 3
-            self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, checkp, 30)
-            self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, cell[2], checkp))
-            checkp += 1
+            checkp = self.draw_and_add_checkpoint(dx, dy, dx2, dy2, cell, checkp)
         if temp:
             x += temp[0]
-            dx, dy = x + temp[0] + 5, y
-            dx2, dy2 = x + temp[0] + 5, y - 3
-        else:
-            dx, dy = x + 5, y
-            dx2, dy2 = x + 5, y - 3
+        dx, dy = x + 5, y
+        dx2, dy2 = x + 5, y - 3
         self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, checkp, 30)
         self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, 'right', checkp))
+        checkp += 1
+        x += 5
+        y -= 5
+        temp = []
+        if schematic2[-1][2] == 'left':
+            temp = schematic2[-1]
+            schematic2.pop(-1)
+        for i, cell in enumerate(schematic2):
+            if cell[2] == 'left':
+                x -= cell[0]
+                dx, dy = x + 3, y
+                dx2, dy2 = x + 3, y - 3
+            else:
+                y -= cell[1]
+                dx, dy = x + 3, y
+                dx2, dy2 = x, y
+            checkp = self.draw_and_add_checkpoint(dx, dy, dx2, dy2, cell, checkp)
+        if temp:
+            x -= temp[0]
+        dx, dy = x - 2 - dv, y
+        dx2, dy2 = x - 2 - dv, y - 3
+        self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, checkp, 30)
+        self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, 'left', checkp))
+        checkp += 1
+        dx, dy, dx2, dy2 = -3, 0, 0, 0
+        self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, checkp, 30)
+        self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, 'down', checkp))
+        checkp += 1
+
+    def draw_and_add_checkpoint(self, dx, dy, dx2, dy2, cell, cp):
+        self.draw_checkpoint(dx * self.tile, dy * self.tile, dx2 * self.tile, dy2 * self.tile, cp, 30)
+        self.checkpoints.append(Checkpoint(dx, dy, dx2, dy2, self.tile, cell[2], cp))
+        return cp + 1
 
     def draw_2_walls(self, x1, y1, x2, y2, cell):
         direction = 1
@@ -146,7 +174,7 @@ class SandBox2:
         return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 2
 
     def arrangeBoats(self, boats):
-        x, y = -2, 2
+        x, y = -20, -10
         for i in range(len(boats)):
             boats[i].set_position((x + i) * self.tile, y * self.tile)
 

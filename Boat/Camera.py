@@ -12,5 +12,5 @@ class Camera:
         (cx, _) = self.cameraXUpdate.update(x)
         (cy, _) = self.cameraYUpdate.update(y)
         # зум камеры
-        (scaling, _) = self.scalingUpdate.update(0.05) # 1 - (abs(v) / 250)
+        (scaling, _) = self.scalingUpdate.update(0.05) # max(1 - (abs(v) / 250), 0.5)
         return -cx, -cy, scaling
