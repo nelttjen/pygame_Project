@@ -9,7 +9,7 @@ import pygame
 from Utills.utils import load_image
 from Boat.test_map_generator import Test_MapGenerator
 from random import randrange
-
+from math import pi
 
 class SandBox3:
     size: tuple[int, int]
@@ -48,16 +48,17 @@ class SandBox3:
         self.dict_checkpoint[segment_shape] = tag
         segment_shape.color = THECOLORS["red"]
 
-    def build(self, space, size):
+    def build(self, space, size, place):
         self.x, self.y = size
         self.m = 150
         self.load_images()
-        e = Test_MapGenerator()
-        level2, cp, lp = e.test_deformations()
+        place.add_deformations(2)
+        cp, lp = place.add_decorations()      
         numx = (lp[0] + lp[1]) // 2
-        level = level2.map
-        track = level2.track
+        level = place.map
+        track = place.track
         self.lp = lp[1]
+        self.cp = cp[0][1]
         self.track = track
         self.space = space
         self.draw_walls(level, cp, track)
@@ -174,9 +175,10 @@ class SandBox3:
 
     def generate_image(self, level, x, y):
         self.size = self.m * len(level), self.m * len(level[0])
+        #self.size = 920, 700
         count = 0
         print(x, y)
-        self.merged_image = pygame.display.set_mode(self.size)
+        self.merged_image = pygame.Surface(self.size)
         for i in range(len(level)):
             for j in range(len(level[i])):
                 if level[i][j] == '>':
@@ -228,8 +230,14 @@ class SandBox3:
                     else:
                         self.merged_image.blit(
                             self.imageK, (j * self.m, i * self.m))
-        self.merged_image.blit(self.imageS, (x * self.m, (y+1) * self.m))
+        if self.cp[1] == 1 or self.cp[1] == 1:
+            self.merged_image.blit(self.imageS, (x * self.m, (y+1) * self.m))
+        else:
+            self.merged_image.blit(self.imageS, ((x+1) * self.m, y * self.m))
         pygame.image.save(self.merged_image, 'data\\temp.png')
+    
+    def get_image(self):
+        return self.merged_image
 
     def get_level(self):
         return self.merged_image
@@ -243,9 +251,31 @@ class SandBox3:
 
     def arrangeBoats(self, boats):
         print(self.track[self.lp][0])
-        c = [
-            [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m],
-            [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m + 100],
-            [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m + 200]]
-        for i in range(len(boats)):
-            boats[i].set_position(c[i][0], c[i][1])
+        if self.cp[1] == 1:
+            c = [
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m - 100],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m - 200]]
+            for i in range(len(boats)):
+                boats[i].set_position(c[i][0], c[i][1], 0.5)
+        if self.cp[1] == -1:
+            c = [
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m + 100],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m + 200]]
+            for i in range(len(boats)):
+                boats[i].set_position(c[i][0], c[i][1], 1.5)
+        if self.cp[0] == -1:
+            c = [
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]) * self.m],
+                [self.track[self.lp][0] * self.m + 100, (self.track[self.lp][1]) * self.m + 120],
+                [self.track[self.lp][0] * self.m + 200, (self.track[self.lp][1]) * self.m]]
+            for i in range(len(boats)):
+                boats[i].set_position(c[i][0], c[i][1], 1)
+        if self.cp[0] == 1:
+            c = [
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]) * self.m],
+                [self.track[self.lp][0] * self.m - 100, (self.track[self.lp][1]) * self.m + 120],
+                [self.track[self.lp][0] * self.m - 200, (self.track[self.lp][1]) * self.m]]
+            for i in range(len(boats)):
+                boats[i].set_position(c[i][0], c[i][1], 0)

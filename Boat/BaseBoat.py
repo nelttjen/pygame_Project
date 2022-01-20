@@ -28,10 +28,10 @@ class BaseBoat:
         self.level = level
         self.next_checkpoint = 0
         self.lap = 0
-        self.logo_img = load_image(im)
+        self.logo_img = pg.transform.scale(load_image(im), (150, 50))
         
-        self.width = 73
-        self.length = 100
+        self.width = 50
+        self.length = 150
 
         #self.car_shape = pymunk.Poly(None,  [(-self.length/2, -self.width/2), (self.length/2, -self.width/2), (self.length/2, self.width/2), (-self.length/2, self.width/2)])
         self.car_shape = pymunk.Poly(None,  [(-self.length/2, -self.width/3), (0, -self.width/2), (self.length/2, -self.width/5), (self.length/2, self.width/5), (0, self.width/2), (-self.length/2, self.width/3)])
@@ -69,9 +69,9 @@ class BaseBoat:
             print(self.next_checkpoint, self.get_position(), self.next_checkpoint_x, self.next_checkpoint_y)
         self.next_checkpoint_x, self.next_checkpoint_y = self.level.get_coords(self.next_checkpoint)        
 
-    def set_position(self, x, y):
+    def set_position(self, x, y, k):
         self.car_shape.body.position = (x, y)
-        self.car_shape.body.angle = 11
+        self.car_shape.body.angle = math.pi*k
     
     def update(self, move, turn):
         R = self.length / 2
@@ -102,8 +102,10 @@ class BaseBoat:
         x, y = self.get_position()
         dx, dy = self.next_checkpoint_x - x, self.next_checkpoint_y - y
         dxy = Vec2d(dx,dy)
-
-        return (self.lap, self.next_checkpoint, dxy.length)
+        if self.next_checkpoint == 0:
+            return (self.lap, 78, dxy.length)
+        else:
+            return (self.lap, self.next_checkpoint, dxy.length)
 
     def updateImage(self, surface, tx, ty, scaling):
         angle_degrees = math.degrees(self.car_shape.body.angle)
