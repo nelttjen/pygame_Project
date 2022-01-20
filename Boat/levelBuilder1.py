@@ -2,7 +2,7 @@ from collections import defaultdict
 import sys
 
 from pymunk import space
-from Config import Collisiontypes
+import Config
 from pygame.colordict import THECOLORS
 import pymunk
 import pygame
@@ -11,18 +11,35 @@ from Boat.test_map_generator import Test_MapGenerator
 from random import randrange
 from math import pi
 
-class SandBox3:
+class LevelBuilder1:
     size: tuple[int, int]
 
-    def __init__(self):
+    def __init__(self, size, map_generator):
         self.coords = []
         self.dict_checkpoint = defaultdict()
+        self.x, self.y = size
+        self.m = 150
+        self.load_images()
+        
+        cps, lp = map_generator.add_decorations()      
+        self.map = map_generator.map
+        self.track = map_generator.track
+        self.lp = lp[1]
+        self.cps = cps
+        self.cp = self.cps[0][1]
+        
+        self.generate_image(self.map, self.track[self.lp][0], self.track[self.lp][1])
+    
+    def build(self, space):   
+        self.space = space
+        self.generate_pymunk_objects(self.map, self.cps, self.track)
+
 
     def draw_wall(self, x, y, x2, y2):
         segment_shape = pymunk.Segment(
             self.space.static_body, (x, y), (x2, y2), 4
         )
-        segment_shape.collision_type = Collisiontypes.SHORE
+        segment_shape.collision_type = Config.Collisiontypes.SHORE
         self.space.add(segment_shape)
         segment_shape.elasticity = 0.8
         segment_shape.friction = 1.0
@@ -42,29 +59,13 @@ class SandBox3:
         segment_shape = pymunk.Segment(
             body, (x, y), (x2, y2), 14.0
         )
-        segment_shape.collision_type = Collisiontypes.CHECKPOINT
+        segment_shape.collision_type = Config.Collisiontypes.CHECKPOINT
         segment_shape.sensor = True
         self.space.add(body, segment_shape)
         self.dict_checkpoint[segment_shape] = tag
         segment_shape.color = THECOLORS["red"]
 
-    def build(self, space, size, place):
-        self.x, self.y = size
-        self.m = 150
-        self.load_images()
-        place.add_deformations(2)
-        cp, lp = place.add_decorations()      
-        numx = (lp[0] + lp[1]) // 2
-        level = place.map
-        track = place.track
-        self.lp = lp[1]
-        self.cp = cp[0][1]
-        self.track = track
-        self.space = space
-        self.draw_walls(level, cp, track)
-        self.generate_image(level, track[lp[1]][0], track[lp[1]][1])
-
-    def draw_walls(self, level, cp, track):
+    def generate_pymunk_objects(self, level, cp, track):
         for i in range(len(level)):
             for j in range(len(level[i])):
                 if level[i][j] == '>' or level[i][j] == '<':
@@ -234,7 +235,6 @@ class SandBox3:
             self.merged_image.blit(self.imageS, (x * self.m, (y+1) * self.m))
         else:
             self.merged_image.blit(self.imageS, ((x+1) * self.m, y * self.m))
-        pygame.image.save(self.merged_image, 'data\\temp.png')
     
     def get_image(self):
         return self.merged_image

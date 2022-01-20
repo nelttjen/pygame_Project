@@ -8,12 +8,11 @@ import pymunk
 from Boat.Camera import Camera
 import pymunk.pygame_util
 import Config
-from Boat.levelBuilder3 import SandBox3
+
 
 from Utills.utils import load_image
 
 class Game:
-    level : SandBox3
     camera: Camera
     boats: list[BaseBoat]
     def __init__(self,  space, surface, radarManager, boats, controllers, FPS, level, debug=False):
@@ -37,7 +36,7 @@ class Game:
         self.level = level
         level.arrangeBoats(self.boats)
 
-        self.a = load_image("temp.png")
+        self.a = level.get_image()
 
     def init_window(self):
         screen = pg.display.set_mode((Config.Screen.WIDTH, Config.Screen.HEIGHT))

@@ -6,9 +6,7 @@ from Boat.SimpleController import SimpleController
 from Game import Game
 import pygame as pg
 import pymunk
-from Boat.levelBuilder import SandBox
-from Boat.levelBuilder2 import SandBox2
-from Boat.levelBuilder3 import SandBox3
+
 from Boat.RadarManager import RadarManager
 from Config import Collisiontypes
 from Config import Specifications
@@ -38,12 +36,10 @@ class Main:
         space = pymunk.Space()
         radarManager = RadarManager(space, Collisiontypes.SENSOR)
         surface = pg.display.set_mode((self.w, self.h))
-        level = SandBox3()
-        #level.build(space, (100, 73), MapGenerator(23, 23, 27, 27, 14))  
-        #level.build(space, (100, 73), MapGenerator(14, 14, 18, 18, 12))
 
-        #print(Tracks.TRACKS[start.res[0] - 1][1])
-        level.build(space, (100, 73), MapGenerator(*Tracks.TRACKS[start.res[0] - 1][1]))#MapGenerator(30, 30, 35, 35, 22))
+        level = Tracks.get_track(start.res[0] - 1)
+
+        level.build(space)#MapGenerator(30, 30, 35, 35, 22))
         #level.build(space, (100, 73), MapGenerator(24, 24, 29, 29, 18))
         #level.build(space, (100, 73), MapGenerator(25, 25, 30, 30, 36))
         #level.build(space, (100, 73), MapGenerator(15, 15, 19, 19, 3))

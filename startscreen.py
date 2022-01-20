@@ -1,5 +1,6 @@
 import pygame
 import sys
+import Config
 from Utills.utils import load_image
 
 
@@ -276,8 +277,8 @@ class Startscreen:
         pygame.key.set_repeat(0, 0)
         font_menu = pygame.font.Font('fonts/8289.otf', 50)
         select = 0
-        fon = pygame.transform.scale(load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
-                                     (self.WIDTH, self.HEIGHT))
+        img = Config.Tracks.get_track(self.mn[0][1].split()[1]).get_image()
+        fon = pygame.transform.scale(img,  (self.WIDTH, self.HEIGHT))
         while running:
             screen.blit(fon, (0, 0))
             screen.fill((45, 45, 45), special_flags=8)
