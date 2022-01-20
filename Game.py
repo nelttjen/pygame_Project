@@ -40,7 +40,7 @@ class Game:
         self.a = load_image("temp.png")
 
     def init_window(self):
-        screen = pg.display.set_mode((920, 700))
+        screen = pg.display.set_mode((Config.Screen.WIDTH, Config.Screen.HEIGHT))
         clock = pg.time.Clock()
         return screen, clock
 

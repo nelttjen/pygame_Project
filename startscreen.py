@@ -4,20 +4,17 @@ from Utills.utils import load_image
 
 
 class Startscreen:
-    def __init__(self, mn=None,
-                 max_map=3,
-                 boat=None,
-                 res=None):
-        if res is None:
-            res = ['Track 1', 'yacht_1.png']
+    def __init__(self,
+                 max_map=4,
+                 boat=None):
+        res = ['Track 1', 'yacht_1.png']
         if boat is None:
-            boat = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2]]
-        if mn is None:
-            mn = [[80, 'Track 1', (250, 250, 30), (250, 30, 250), 0, 0, 0, 0, 0],
-                  [210, 'yacht_1.png', (250, 250, 30), (250, 30, 250), 1, 0, 0, 0, 0],
-                  [410, 'Новая игра', (250, 250, 30), (250, 30, 250), 2, 0, 0, 0, 0],
-                  [510, 'Таблица рекордов', (250, 250, 30), (250, 30, 250), 3, 0, 0, 0, 0],
-                  [610, 'Выход', (250, 250, 30), (250, 30, 250), 4, 0, 0, 0, 0]]
+            boat = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2], ['yacht_4.png', 10, 1, 5, 0.2], ['yacht_5.png', 10, 1, 5, 0.2], ['yacht_6.png', 10, 1, 5, 0.2]]
+        mn = [[80, 'Track 1', (250, 250, 30), (250, 30, 250), 0, 0, 0, 0, 0],
+              [210, 'yacht_1.png', (250, 250, 30), (250, 30, 250), 1, 0, 0, 0, 0],
+              [410, 'Новая игра', (250, 250, 30), (250, 30, 250), 2, 0, 0, 0, 0],
+              [510, 'Таблица рекордов', (250, 250, 30), (250, 30, 250), 3, 0, 0, 0, 0],
+              [610, 'Выход', (250, 250, 30), (250, 30, 250), 4, 0, 0, 0, 0]]
         self.boat = {}
         for i in boat:
             self.boat[i[0]] = f'Масса: {i[1]}    ' \
@@ -152,7 +149,7 @@ class Startscreen:
                 if num_select == i[4]:
                     font_infoboat = pygame.font.Font('fonts/8289.otf', 18)
                     yacht = pygame.image.load(f'data/{i[1]}')
-                    yacht = pygame.transform.scale(yacht, (yacht.get_width() * 3, yacht.get_height() * 3))
+                    yacht = pygame.transform.scale(yacht, (300, 100))
                     yacht_rect = yacht.get_rect(center=(self.WIDTH / 2, int(i[0])))
                     screen.blit(yacht, yacht_rect)
                     if self.max_boat == 1:
@@ -211,7 +208,7 @@ class Startscreen:
                 else:
                     font_infoboat = pygame.font.Font('fonts/8289.otf', 18)
                     yacht = pygame.image.load(f'data/{i[1]}')
-                    yacht = pygame.transform.scale(yacht, (yacht.get_width() * 3, yacht.get_height() * 3))
+                    yacht = pygame.transform.scale(yacht, (300, 100))
                     yacht_rect = yacht.get_rect(center=(self.WIDTH / 2, int(i[0])))
                     screen.blit(yacht, yacht_rect)
                     if self.max_boat == 1:
@@ -310,12 +307,14 @@ class Startscreen:
                     if e.key == pygame.K_RETURN:
                         if select == 2:
                             running = False
-                            self.res[0] = self.mn[0][1]
-                            self.res[1] = self.mn[1][1]
+                            self.res[0] = int(self.mn[0][1][6:])
+                            self.res[1] = int(self.mn[1][1][6:-4])
+                            break
                         if select == 3:
                             running = False
                             self.res[0] = 'records'
                             self.res[1] = 'records'
+                            break
                         if select == 4:
                             sys.exit()
                     if e.key == pygame.K_ESCAPE:
@@ -364,8 +363,8 @@ class Startscreen:
                         if int(i[5]) < mp[0] < int(i[5]) + int(i[7]) and int(i[6]) < mp[1] < int(i[6]) + int(i[8]):
                             if select == 2:
                                 running = False
-                                self.res[0] = self.mn[0][1]
-                                self.res[1] = self.mn[1][1]
+                                self.res[0] = int(self.mn[0][1][6:])
+                                self.res[1] = int(self.mn[1][1][6:-4])
                             if select == 3:
                                 running = False
                                 self.res[0] = 'records'
@@ -397,15 +396,5 @@ class Startscreen:
                             self.mn[1][1] = f'{self.mn[1][1].split("_")[0]}_{int(numyacht) - 1}.png'
             window.blit(screen, (0, 0))
             pygame.display.update()
-
-
-mn = [[80, 'Track 1', (250, 250, 30), (250, 30, 250), 0, 0, 0, 0, 0],
-      [210, 'yacht_1.png', (250, 250, 30), (250, 30, 250), 1, 0, 0, 0, 0],
-      [410, 'Новая игра', (250, 250, 30), (250, 30, 250), 2, 0, 0, 0, 0],
-      [510, 'Таблица рекордов', (250, 250, 30), (250, 30, 250), 3, 0, 0, 0, 0],
-      [610, 'Выход', (250, 250, 30), (250, 30, 250), 4, 0, 0, 0, 0]]
-boats = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2]]
-res = ['Track 1', 'yacht_1.png']
-game = Startscreen(mn, 1, boats, res)
-game.start()
-print(res)
+        pygame.quit()
+        return self.res

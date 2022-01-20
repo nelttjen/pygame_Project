@@ -47,7 +47,7 @@ if __name__ == '__main__':
     FPS = 60
     DEBUG = False
 
-    SIZE = WIGHT, HEIGHT = 900, 720
+    SIZE = WIGHT, HEIGHT = 920, 700
     app = Main(WIGHT, HEIGHT, FPS)
 
     code = app.run_game(DEBUG)
