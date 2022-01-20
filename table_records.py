@@ -10,8 +10,6 @@ from peewee import *
 
 from database import Records
 
-from Config import Levels
-
 number = 0
 number_yacht = 0
 class Back(Exception):
