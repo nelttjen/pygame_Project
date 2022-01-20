@@ -12,6 +12,8 @@ from database import Records
 
 number = 0
 number_yacht = 0
+
+
 class Back(Exception):
     pass
 
@@ -26,7 +28,7 @@ class Arrow(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.tag = tag
-    
+
     def update_image(self, number):
         if self.tag == 1:
             if number != len(Specifications.BOATS):
@@ -123,9 +125,10 @@ class Table_records:
         Cross("cross.png", width - 50, 0, all_sprites)
         Back("arrow.png", all_sprites)
         for i in range(count_yacht - 1):
-            Yacht(boat[i][1], width / count_yacht * (i + 1), height / 15 * 2, width / count_yacht, width / count_yacht / 3, i + 1, all_sprites)
+            Yacht(boat[i][1], width / count_yacht * (i + 1), height / 15 * 2, width / count_yacht,
+                  width / count_yacht / 3, i + 1, all_sprites)
         Yacht("nothing.png", 0, height / 15 * 2, width / count_yacht, width / count_yacht / 3, 0, all_sprites)
-        
+
         rast = height / 15
 
         images_yacht = {'yacht_1.png': (pygame.transform.scale(load_image("yacht_1.png"), (width / 5, height / 15)), 1),
@@ -133,23 +136,26 @@ class Table_records:
                         'yacht_3.png': (pygame.transform.scale(load_image("yacht_3.png"), (width / 5, height / 15)), 3),
                         'yacht_4.png': (pygame.transform.scale(load_image("yacht_4.png"), (width / 5, height / 15)), 4),
                         'yacht_5.png': (pygame.transform.scale(load_image("yacht_5.png"), (width / 5, height / 15)), 5),
-                        'yacht_6.png': (pygame.transform.scale(load_image("yacht_6.png"), (width / 5, height / 15)), 6),}
+                        'yacht_6.png': (
+                        pygame.transform.scale(load_image("yacht_6.png"), (width / 5, height / 15)), 6), }
         while running:
-            #screen.fill((50, 80, 200))
-            fon = pygame.transform.scale(load_image(Tracks.TRACKS[number-1][0]), (width, height))
+            # screen.fill((50, 80, 200))
+            fon = pygame.transform.scale(load_image(Tracks.TRACKS[number - 1][0]), (width, height))
             screen.blit(fon, (0, 0))
             screen.fill((45, 45, 45), special_flags=8)
             all_sprites.draw(screen)
-            
+
             for event in pygame.event.get():
                 all_sprites.update(event)
                 if event.type == pygame.QUIT:
                     running = False
             for i in range(count_yacht + 1):
-                pygame.draw.rect(screen, rect_color, (width / count_yacht * i, height / 15 * 2, width / count_yacht, width / count_yacht / 3), 4)
+                pygame.draw.rect(screen, rect_color, (
+                width / count_yacht * i, height / 15 * 2, width / count_yacht, width / count_yacht / 3), 4)
             for i in range(10):
                 for j in range(3):
-                    pygame.draw.rect(screen, rect_color, ((width / 5) * (j + 1), rast * (i + 4), width / 5, height / 15), 4)
+                    pygame.draw.rect(screen, rect_color,
+                                     ((width / 5) * (j + 1), rast * (i + 4), width / 5, height / 15), 4)
             count = 5
             text1, text2, text3 = 'Имя', 'Яхта', 'Очки'
             screen.blit(f1.render(text1, True, (30, 250, 250)), ((width / 5) * 1, rast * 4))
@@ -170,4 +176,4 @@ class Table_records:
             pygame.display.flip()
         pygame.quit()
 
-#w = Table_records().start()
+# w = Table_records().start()

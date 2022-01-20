@@ -1,5 +1,6 @@
 from collections import defaultdict
 import sys
+from typing import Tuple
 
 from pymunk import space
 import Config
@@ -12,7 +13,7 @@ from random import randrange
 from math import pi
 
 class LevelBuilder1:
-    size: tuple[int, int]
+    size: Tuple[int, int]
 
     def __init__(self, size, map_generator):
         self.coords = []

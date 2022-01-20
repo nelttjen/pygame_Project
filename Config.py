@@ -27,7 +27,7 @@ class Tracks:
 
     def get_track(level_no:int):
         if not Tracks.tracks.get(level_no):
-            func, argument = Tracks.TRACKS[0]
+            func, argument = Tracks.TRACKS[level_no]
             Tracks.tracks[level_no] = func(argument)
         return Tracks.tracks[level_no]
 

@@ -10,7 +10,8 @@ class Startscreen:
                  boat=None):
         res = ['Track 1', 'yacht_1.png']
         if boat is None:
-            boat = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2], ['yacht_4.png', 10, 1, 5, 0.2], ['yacht_5.png', 10, 1, 5, 0.2], ['yacht_6.png', 10, 1, 5, 0.2]]
+            boat = [['yacht_1.png', 23, 2, 3, 0.1], ['yacht_2.png', 30, 0.5, 17, 0.1], ['yacht_3.png', 10, 1, 5, 0.2],
+                    ['yacht_4.png', 10, 1, 5, 0.2], ['yacht_5.png', 10, 1, 5, 0.2], ['yacht_6.png', 10, 1, 5, 0.2]]
         mn = [[80, 'Track 1', (250, 250, 30), (250, 30, 250), 0, 0, 0, 0, 0],
               [210, 'yacht_1.png', (250, 250, 30), (250, 30, 250), 1, 0, 0, 0, 0],
               [410, 'Новая игра', (250, 250, 30), (250, 30, 250), 2, 0, 0, 0, 0],
@@ -277,7 +278,7 @@ class Startscreen:
         pygame.key.set_repeat(0, 0)
         font_menu = pygame.font.Font('fonts/8289.otf', 50)
         select = 0
-        img = Config.Tracks.get_track(self.mn[0][1].split()[1]).get_image()
+        img = Config.Tracks.get_track(int(self.mn[0][1].split()[1])-1).get_image()
         fon = pygame.transform.scale(img,  (self.WIDTH, self.HEIGHT))
         while running:
             screen.blit(fon, (0, 0))
@@ -377,16 +378,14 @@ class Startscreen:
                         numtrack = self.mn[0][1].split()[1]
                         if int(numtrack) < self.max_map:
                             self.mn[0][1] = f'{self.mn[0][1].split()[0]} {int(numtrack) + 1}'
-                            fon = pygame.transform.scale(
-                                load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
-                                (self.WIDTH, self.HEIGHT))
+                            img = Config.Tracks.get_track(int(self.mn[0][1].split()[1])-1).get_image()
+                            fon = pygame.transform.scale(img,  (self.WIDTH, self.HEIGHT))                            
                     if 221 < mp[0] < 221 + 29 and 55 < mp[1] < 55 + 51:
                         numtrack = self.mn[0][1].split()[1]
                         if int(numtrack) > 1:
                             self.mn[0][1] = f'{self.mn[0][1].split()[0]} {int(numtrack) - 1}'
-                            fon = pygame.transform.scale(
-                                load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
-                                (self.WIDTH, self.HEIGHT))
+                            img = Config.Tracks.get_track(int(self.mn[0][1].split()[1])-1).get_image()
+                            fon = pygame.transform.scale(img,  (self.WIDTH, self.HEIGHT)) 
                     if 661 < mp[0] < 661 + 29 and 185 < mp[1] < 185 + 51:
                         numyacht = self.mn[1][1].split("_")[1][:-4]
                         if int(numyacht) < self.max_boat:

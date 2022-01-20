@@ -1,5 +1,5 @@
 import sys
-#from Boat.AIController import AIController
+# from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 from Boat.SimpleController import SimpleController
@@ -46,13 +46,13 @@ class Main:
         boats = [
             BaseBoat(space, radarManager, (Specifications.BOATS[start.res[1] - 1]), level),
             BaseBoat(space, radarManager, (Specifications.BOATS[3]), level),
-            #BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level)
+            # BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level)
         ]
         controllers = [
-            #SimpleController(boats[0], level),
+            # SimpleController(boats[0], level),
             SimpleController(boats[1], level),
             KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-            #KeyboardController(boats[1], level, "a", "d", "w", "s")
+            # KeyboardController(boats[1], level, "a", "d", "w", "s")
         ]
 
         radarManager.registerCollisionType(Collisiontypes.BOAT)
@@ -61,12 +61,12 @@ class Main:
 
         game = Game(space, surface, radarManager, boats, controllers, self.FPS, level, is_debug)
         exit_code = game.run()
-        pg.quit()  
+        pg.quit()
         return exit_code
 
 
 if __name__ == '__main__':
-    FPS = 60  
+    FPS = 60
     DEBUG = False
 
     SIZE = WIGHT, HEIGHT = 920, 700
