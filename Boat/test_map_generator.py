@@ -44,10 +44,10 @@ class Test_MapGenerator(TestCase):
     def test_deformations(self):
         map = MapGenerator(23, 23, 27, 27, 14)
         map.add_deformations(2)
-        #map = self.create_map()
-        #map.add_deformations(2)
+        # map = self.create_map()
+        # map.add_deformations(2)
 
-        cp, lp = map.add_decorations()      
+        cp, lp = map.add_decorations()
         print(map)
         self.validate_track(map)
         return map, cp, lp
@@ -56,9 +56,9 @@ class Test_MapGenerator(TestCase):
         first_point = map.track.pop()
         last_point = first_point
         for point in map.track:
-            delta = abs(point[0]-last_point[0]) + abs(point[1]-last_point[1])
+            delta = abs(point[0] - last_point[0]) + abs(point[1] - last_point[1])
             self.assertEqual(delta < 1 or delta > 2, False)
-            self.assertEqual(map.map[point[1]][point[0]] in[1, 'c', 'x'], True)
+            self.assertEqual(map.map[point[1]][point[0]] in [1, 'c', 'x'], True)
             last_point = point
         map.track.append(first_point)
 

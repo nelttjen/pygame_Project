@@ -2,6 +2,8 @@ from collections import defaultdict
 import sys
 
 from pymunk import space
+from typing import Tuple
+
 from Config import Collisiontypes
 from pygame.colordict import THECOLORS
 import pymunk
@@ -12,7 +14,7 @@ from random import randrange
 from math import pi
 
 class SandBox3:
-    size: tuple[int, int]
+    size: Tuple[int, int]
 
     def __init__(self):
         self.coords = []

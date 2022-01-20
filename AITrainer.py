@@ -1,5 +1,5 @@
 import sys
-#from Boat.AIController import AIController
+# from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 from Boat.SimpleController import SimpleController
@@ -39,24 +39,25 @@ class Main:
         radarManager = RadarManager(space, Collisiontypes.SENSOR)
         surface = pg.display.set_mode((self.w, self.h))
         level = SandBox3()
-        #level.build(space, (100, 73), MapGenerator(23, 23, 27, 27, 14))  
-        #level.build(space, (100, 73), MapGenerator(14, 14, 18, 18, 12))
+        # level.build(space, (100, 73), MapGenerator(23, 23, 27, 27, 14))
+        # level.build(space, (100, 73), MapGenerator(14, 14, 18, 18, 12))
 
-        #print(Tracks.TRACKS[start.res[0] - 1][1])
-        level.build(space, (100, 73), MapGenerator(*Tracks.TRACKS[start.res[0] - 1][1]))#MapGenerator(30, 30, 35, 35, 22))
-        #level.build(space, (100, 73), MapGenerator(24, 24, 29, 29, 18))
-        #level.build(space, (100, 73), MapGenerator(25, 25, 30, 30, 36))
-        #level.build(space, (100, 73), MapGenerator(15, 15, 19, 19, 3))
+        # print(Tracks.TRACKS[start.res[0] - 1][1])
+        level.build(space, (100, 73),
+                    MapGenerator(*Tracks.TRACKS[start.res[0] - 1][1]))  # MapGenerator(30, 30, 35, 35, 22))
+        # level.build(space, (100, 73), MapGenerator(24, 24, 29, 29, 18))
+        # level.build(space, (100, 73), MapGenerator(25, 25, 30, 30, 36))
+        # level.build(space, (100, 73), MapGenerator(15, 15, 19, 19, 3))
         boats = [
             BaseBoat(space, radarManager, (Specifications.BOATS[start.res[1] - 1]), level),
             BaseBoat(space, radarManager, (Specifications.BOATS[3]), level),
-            #BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level)
+            # BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level)
         ]
         controllers = [
-            #SimpleController(boats[0], level),
+            # SimpleController(boats[0], level),
             SimpleController(boats[1], level),
             KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-            #KeyboardController(boats[1], level, "a", "d", "w", "s")
+            # KeyboardController(boats[1], level, "a", "d", "w", "s")
         ]
 
         radarManager.registerCollisionType(Collisiontypes.BOAT)
@@ -65,12 +66,12 @@ class Main:
 
         game = Game(space, surface, radarManager, boats, controllers, self.FPS, level, is_debug)
         exit_code = game.run()
-        pg.quit()  
+        pg.quit()
         return exit_code
 
 
 if __name__ == '__main__':
-    FPS = 60  
+    FPS = 60
     DEBUG = False
 
     SIZE = WIGHT, HEIGHT = 920, 700

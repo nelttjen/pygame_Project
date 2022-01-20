@@ -1,6 +1,8 @@
 import sys
 
 from pygame.image import load
+from typing import List
+
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 import pygame as pg
@@ -12,18 +14,20 @@ from Boat.levelBuilder3 import SandBox3
 
 from Utills.utils import load_image
 
+
 class Game:
-    level : SandBox3
+    level: SandBox3
     camera: Camera
-    boats: list[BaseBoat]
-    def __init__(self,  space, surface, radarManager, boats, controllers, FPS, level, debug=False):
+    boats: List[BaseBoat]
+
+    def __init__(self, space, surface, radarManager, boats, controllers, FPS, level, debug=False):
         self.space = space
         self.surface = surface
         self.boats = boats
         self.controllers = controllers
         self.radarManager = radarManager
 
-        self.FPS =FPS        
+        self.FPS = FPS
         self.debug_mode = debug
         self.screen, self.clock = self.init_window()
 
@@ -62,17 +66,17 @@ class Game:
         for boat in self.boats:
             infoboat.append(boat.get_info())
         lap = infoboat[0][0]
-        infoboat[0] = infoboat[0] + ('Яхта игрока', )
+        infoboat[0] = infoboat[0] + ('Яхта игрока',)
         for i in range(1, len(infoboat)):
-            infoboat[i] = infoboat[i] + ('Бот', )
+            infoboat[i] = infoboat[i] + ('Бот',)
         if lap == 78:
             sys.exit()
         self.radarManager.updateSensors()
 
         playerX, playerY = self.boats[0].get_position()
         cxy, wxy, scaling = self.camera.update(playerX, playerY, self.boats[0].get_velocity())
- 
-        self.space.step(1 /self.FPS)
+
+        self.space.step(1 / self.FPS)
         # self.draw_options.transform = (
         #     pymunk.Transform.scaling(scaling)
         #     @ pymunk.Transform(tx=-cxy[0], ty=-cxy[1])
@@ -81,7 +85,7 @@ class Game:
         cropped_image = self.a.subsurface(cxy[0], cxy[1], wxy[0], wxy[1])
         cropped_image = pg.transform.scale(cropped_image, self.camera.screen_size)
         self.screen.blit(cropped_image, (0, 0))
-        #self.space.debug_draw(self.draw_options)
+        # self.space.debug_draw(self.draw_options)
 
         for boat in self.boats:
             boat.updateImage(self.surface, cxy[0], cxy[1], scaling)
@@ -98,24 +102,24 @@ class Game:
             if event.type == pg.QUIT:
                 return False
             for controller in self.controllers:
-                controller.processEvent(event)   
+                controller.processEvent(event)
         return True
 
     def render_fps(self, text, pos):
         font = pg.font.Font(None, 30)
         render_text = font.render(text + ' FPS', True, pg.Color('green'))
         self.screen.blit(render_text, pos)
-    
+
     def render_lap(self, lap, pos):
         font = pg.font.Font(None, 30)
         render_text = font.render('Lap' + lap + '/4', True, pg.Color('red'))
         self.screen.blit(render_text, pos)
-    
+
     def render_speed(self, speed, pos):
         font = pg.font.Font(None, 30)
         render_text = font.render('Speed' + speed, True, pg.Color('red'))
         self.screen.blit(render_text, pos)
-    
+
     def render_place(self, infoboat, pos):
         font = pg.font.Font(None, 30)
         infoboat.sort(key=lambda x: (-x[0], -x[1], x[2]))

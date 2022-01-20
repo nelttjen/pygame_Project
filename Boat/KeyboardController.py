@@ -2,14 +2,15 @@ import pygame as pg
 
 from Boat.BaseController import BaseController
 
+
 class KeyboardController:
     def __init__(self, boat, level, left, right, up, down):
-#        super().__init__(boat, level)
+        #        super().__init__(boat, level)
         self.left, self.right, self.up, self.down = left, right, up, down
         self.turn = 0
         self.move = 0
         self.boat = boat
-    
+
     def update(self):
         self.boat.update(self.move, self.turn)
 
@@ -33,7 +34,7 @@ class KeyboardController:
             elif event.text == self.down:
                 self.move = -1
         if event.type == pg.KEYUP:
-            if event.key in [self.left, self.right] or event.unicode in [   
+            if event.key in [self.left, self.right] or event.unicode in [
                 self.left,
                 self.right,
             ]:
@@ -43,4 +44,3 @@ class KeyboardController:
                 self.down,
             ]:
                 self.move = 0
-

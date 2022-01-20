@@ -49,7 +49,7 @@ class SandBox:
 
         self.draw_checkpoint(
             0, self.x * 5, self.x * 5,
-            self.x * 5, 1)
+               self.x * 5, 1)
         self.draw_checkpoint(
             self.x * 11, 0, self.x * 11,
             self.x * 5, 2)
@@ -86,18 +86,19 @@ class SandBox:
         # стартовый
         self.draw_checkpoint(
             0, self.y * 15, self.x * 5,
-            self.y * 15, 0)
-    
+               self.y * 15, 0)
+
     def get_coords(self, checkpoint):
         c = [(self.x * 2.5, self.x * 2.5), (self.x * 12.5, self.x * 2.5), (self.x * 12.5, self.y * 13.5),
              (self.x * 29.5, self.y * 13.5), (self.x * 29.5, self.x * 2.5), (self.x * 39.5, self.x * 2.5),
              (self.x * 39.5, self.y * 30 - self.x * 2.5), (self.x * 29.5, self.y * 30 - self.x * 2.5),
-             (self.x * 29.5, self.y * 16.5), (self.x * 12.5, self.y * 16.5), (self.x * 12.5, self.y * 30 - self.x * 2.5),
+             (self.x * 29.5, self.y * 16.5), (self.x * 12.5, self.y * 16.5),
+             (self.x * 12.5, self.y * 30 - self.x * 2.5),
              (self.x * 2.5, self.y * 30 - self.x * 2.5), (self.x * 2.5, self.y * 15)]
         if checkpoint == 0:
             return c[checkpoint]
         return c[checkpoint - 1]
-    
+
     def get_checkpoint_info(self, shape):
         return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 13
 

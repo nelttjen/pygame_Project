@@ -2,6 +2,7 @@ from peewee import *
 
 db = SqliteDatabase('yacht.db')
 
+
 class Records(Model):
     name = CharField()
     yacht = CharField()
