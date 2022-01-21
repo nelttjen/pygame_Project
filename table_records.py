@@ -140,7 +140,8 @@ class Table_records:
                         pygame.transform.scale(load_image("yacht_6.png"), (width / 5, height / 15)), 6), }
         while running:
             # screen.fill((50, 80, 200))
-            fon = pygame.transform.scale(load_image(Tracks.TRACKS[number - 1][0]), (width, height))
+            img = Tracks.get_track(int(number-1)).get_image()
+            fon = pygame.transform.scale(img, (width, height))
             screen.blit(fon, (0, 0))
             screen.fill((45, 45, 45), special_flags=8)
             all_sprites.draw(screen)

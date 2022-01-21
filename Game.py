@@ -1,4 +1,6 @@
+from platform import python_branch
 import sys
+from turtle import speed
 
 from pygame.image import load
 from typing import List
@@ -13,6 +15,25 @@ import Config
 
 
 from Utills.utils import load_image
+
+
+
+class MenuError(Exception):
+    pass
+
+
+class Menu(pg.sprite.Sprite):
+    def __init__(self, image, x, y, group):
+        super().__init__(group)
+        self.image = pg.transform.scale(load_image(image), (80, 80))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self, *args):
+        if args and args[0].type == pg.MOUSEBUTTONDOWN and \
+                self.rect.collidepoint(args[0].pos) and args[0].button == 1:
+            raise MenuError
 
 
 class Game:
@@ -42,6 +63,11 @@ class Game:
 
         self.a = level.get_image()
 
+        self.max_speed = 0
+
+        self.all_sprites = pg.sprite.Group()
+        Menu("menu.png", self.screen.get_width() // 2 - 80, self.screen.get_height() // 2 + 70, self.all_sprites)
+
     def init_window(self):
         screen = pg.display.set_mode((Config.Screen.WIDTH, Config.Screen.HEIGHT))
         clock = pg.time.Clock()
@@ -68,8 +94,6 @@ class Game:
         infoboat[0] = infoboat[0] + ('Яхта игрока',)
         for i in range(1, len(infoboat)):
             infoboat[i] = infoboat[i] + ('Бот',)
-        if lap == 78:
-            sys.exit()
         self.radarManager.updateSensors()
 
         playerX, playerY = self.boats[0].get_position()
@@ -94,6 +118,10 @@ class Game:
         self.render_lap(str(lap), (100, 0))
         self.render_speed(str(int(self.boats[0].get_velocity())), (300, 0))
         self.render_place(infoboat, (600, 0))
+        if lap == 2:
+            self.finish(self.place)
+        if self.boats[0].get_velocity() > self.max_speed:
+            self.max_speed = self.boats[0].get_velocity()
         pg.display.flip()
 
         return True
@@ -126,5 +154,36 @@ class Game:
         infoboat.sort(key=lambda x: (-x[0], -x[1], x[2]))
         for i in range(len(infoboat)):
             if infoboat[i][3] == 'Яхта игрока':
+                self.place = i + 1
                 render_text = font.render('Место' + str(i + 1), True, pg.Color('red'))
                 self.screen.blit(render_text, pos)
+    
+    def finish(self, place):
+        points = {1: 16000, 2: 12000, 3: 8000, 4: 4000}
+        a = pg.transform.scale(load_image("finish.png"), (800, 400))
+        running = True
+        self.name = ''
+        self.points = int(self.max_speed) * 6 + points[place]
+        font = pg.font.Font(None, 40)
+        while running:
+            events = pg.event.get()
+            self.screen.blit(a, (self.screen.get_width() // 2 - 400, self.screen.get_height() // 2 - 200))
+            self.all_sprites.draw(self.screen)
+            render_text = font.render('За место: ' + str(points[place]), True, (60, 80, 200))
+            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2 - 90))
+            render_text = font.render('За скорость: ' + str(int(self.max_speed) * 6), True, (60, 80, 200))
+            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2 - 45))
+            render_text = font.render('Итого: ' + str(self.points), True, (60, 80, 200))
+            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2))
+            render_text = font.render('Ваше имя: ' + self.name, True, (60, 80, 200))
+            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2 + 45))
+            for event in events:
+                self.all_sprites.update(event)
+                if event.type == pg.QUIT:
+                    sys.exit()
+                if event.type == pg.KEYDOWN:
+                    if event.unicode == '\x08':
+                        self.name = self.name[:-1]
+                    elif len(self.name) < 8:
+                        self.name += event.unicode
+            pg.display.flip()

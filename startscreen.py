@@ -333,9 +333,8 @@ class Startscreen:
                                     numtrack = i[1].split()[1]
                                     if int(numtrack) > 1:
                                         i[1] = f'{i[1].split()[0]} {int(numtrack) - 1}'
-                                        fon = pygame.transform.scale(
-                                            load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
-                                            (self.WIDTH, self.HEIGHT))
+                                        img = Config.Tracks.get_track(int(self.mn[0][1].split()[1])-1).get_image()
+                                        fon = pygame.transform.scale(img,  (self.WIDTH, self.HEIGHT)) 
                         if select == 1:
                             for i in self.mn:
                                 if select == i[4]:
@@ -349,9 +348,8 @@ class Startscreen:
                                     numtrack = i[1].split()[1]
                                     if int(numtrack) < self.max_map:
                                         i[1] = f'{i[1].split()[0]} {int(numtrack) + 1}'
-                                        fon = pygame.transform.scale(
-                                            load_image(f'{self.mn[0][1].split()[0]}_{self.mn[0][1].split()[1]}.jpg'),
-                                            (self.WIDTH, self.HEIGHT))
+                                        img = Config.Tracks.get_track(int(self.mn[0][1].split()[1])-1).get_image()
+                                        fon = pygame.transform.scale(img,  (self.WIDTH, self.HEIGHT)) 
                         if select == 1:
                             for i in self.mn:
                                 if select == i[4]:
