@@ -1,11 +1,6 @@
-import math
-from random import randint
 from Boat.BaseController import BaseController
 from Boat.RadarManager import Radar
 from Boat.ai import Dqn, Network
-from Config import Collisiontypes
-from pymunk.vec2d import Vec2d
-import curses
 
 ACTION2COMMAND = [1, -1]
 MODEL = Network(14, len(ACTION2COMMAND), 150)
@@ -21,9 +16,10 @@ class AIController(BaseController):
     def __init__(self, boat, level):
         super().__init__(boat, level)
         self.brain = Dqn(0.9, 100, MODEL)
+        self.action = None
 
-    def updateChild(self):
-        if (self.dxy.length < self.lastDistance):
+    def update_child(self):
+        if self.dxy.length < self.lastDistance:
             reward = 0.1
         #        if (abs(orientationA)< 1):
         #            reward = abs(orientationA)
@@ -36,12 +32,13 @@ class AIController(BaseController):
             reward = -0.3
 
         velocity = [self.boat.velocity.x, self.boat.velocity.y]
-        axeleration = [velocity[0] - self.velocity[0], velocity[1] - self.velocity[1]]
+        # axeleration = [velocity[0] - self.velocity[0], velocity[1] - self.velocity[1]]
         self.velocity = velocity
-        angular_axeleration = self.body.angular_velocity - self.angular_velocity
+        # angular_axeleration = self.body.angular_velocity - self.angular_velocity
         self.angular_velocity = self.body.angular_velocity
 
-        # state = [orientationA/3.14, body.angular_velocity/10, angular_axeleration, self.move, self.turn] + [*self.shoreSensors.values()] +  [*self.boatsSensors.values()]
+        # state = [orientationA/3.14, body.angular_velocity/10, angular_axeleration, self.move, self.turn] + [
+        # *self.shoreSensors.values()] +  [*self.boatsSensors.values()]
 
         if self.shoreSensors[Radar.FRONT] < 0.5 or self.boatsSensors[Radar.FRONT] < 0.5:
             self.move = -1
@@ -57,11 +54,11 @@ class AIController(BaseController):
         self.turn = min(max(self.turn, -1), 1)
         self.STDSCR.addstr(self.scrline + 4, 0, f'Reward:{reward:.2f} Learn score:{self.brain.learn_score:.2f}')
 
-    def printSensors(self, label, line, sensors):
-        str = ""
+    def print_sensors(self, label, line, sensors):
+        string = ""
         for key, distance in sensors.items():
-            str += f'{label}{key}: {distance:2f} '
-        self.STDSCR.addstr(line, 0, str)
+            string += f'{label}{key}: {distance:2f} '
+        self.STDSCR.addstr(line, 0, string)
 
-    def processEvent(self, event):
+    def process_event(self, event):
         pass

@@ -1,7 +1,5 @@
-from pygame import Vector2, Vector3
 import pymunk
 from pygame.colordict import THECOLORS
-from pymunk import vec2d
 from pymunk.vec2d import Vec2d
 from collections import defaultdict
 
@@ -52,17 +50,20 @@ class RadarManager:
             self.shape.color = THECOLORS["white"]
             self.shape.sensor = True
 
+            self.temp1, self.temp2 = None, None
+
             space.add(self.body, self.shape)
             self.update()
 
-        def getVertices(self, shape):
+        def get_vertices(self, shape):
+            self.temp1 = 0
             vertices = []
             for v in shape.get_vertices():
                 vertex = v.rotated(shape.body.angle) + shape.body.position
                 vertices.append(vertex)
             return vertices
 
-        def runCallback(self, collisionType, distance, collideShape):
+        def run_callback(self, collisionType, distance, collideShape):
             if distance > 0.3:
                 self.shape.color = THECOLORS["white"]
             else:
@@ -70,7 +71,7 @@ class RadarManager:
             self.callback(collisionType, distance, self.tag, collideShape)
 
         def update(self):
-            vertices = self.getVertices(self.originalShape)
+            vertices = self.get_vertices(self.originalShape)
             self.body.position = ((vertices[self.vertices[1]] + vertices[self.vertices[0]]) / 2)
             direction = Vec2d(1, 0).rotated(self.originalShape.body.angle + self.angle)
             self.shape.unsafe_set_endpoints(self.offset * direction, (self.distance + self.offset) * direction)
@@ -81,15 +82,19 @@ class RadarManager:
         self.collisionType = sensorCollisionType
         self.radars = defaultdict()
 
-    def registerCollisionType(self, collisionType):
+        self.temp1, self.temp2 = None, None
+
+    def register_collision_type(self, collisionType):
         self.collisionTypes.append(collisionType)
         collision_handler = self.space.add_collision_handler(self.collisionType, collisionType)
-        collision_handler.pre_solve = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
-        collision_handler.separate = lambda arbiter, space, data: self.onCollision(arbiter, space, data, collisionType)
+        collision_handler.pre_solve = lambda arbiter, space, data: \
+            self.on_collision(arbiter, space, data, collisionType)
+        collision_handler.separate = lambda arbiter, space, data: self.on_collision(arbiter, space, data, collisionType)
         for radar in self.radars.values():
-            radar.runCallback(collisionType, 1, None)
+            radar.run_callback(collisionType, 1, None)
 
-    def onCollision(self, arbiter, space, data, collisionType):
+    def on_collision(self, arbiter, space, data, collisionType):
+        self.temp1, self.temp2 = space, data
         radar = self.radars[arbiter.shapes[0]]
         if not radar:
             radar = self.radars[arbiter.shapes[1]]
@@ -105,19 +110,19 @@ class RadarManager:
             for point in [cp.point_a, cp.point_b]:
                 v = radar.body.position - point
                 length = min(length, v.length)
-        radar.runCallback(collisionType, length / radar.distance, collideShape)
+        radar.run_callback(collisionType, length / radar.distance, collideShape)
 
         return False
 
-    def createRadar(self, shape, callback):
+    def create_radar(self, shape, callback):
         for tag, angle, vertices, distance, offset in RadarManager.RADARS:
             radar = self.RadarSensor(space=self.space, originalShape=shape, angle=angle, vertices=vertices,
                                      distance=distance, offset=offset, collisionType=self.collisionType,
                                      callback=callback, tag=tag)
             for collisionType in self.collisionTypes:
-                radar.runCallback(collisionType, 1, None)
+                radar.run_callback(collisionType, 1, None)
             self.radars[radar.shape] = radar
 
-    def updateSensors(self):
+    def update_sensors(self):
         for sensor in self.radars.values():
             sensor.update()

@@ -14,7 +14,7 @@ class KeyboardController:
     def update(self):
         self.boat.update(self.move, self.turn)
 
-    def processEvent(self, event):
+    def process_event(self, event):
         if event.type == pg.KEYDOWN:
             if event.key == self.left:
                 self.turn = -1

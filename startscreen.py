@@ -1,7 +1,6 @@
 import pygame
 import sys
 import Config
-from Utills.utils import load_image
 
 
 class Startscreen:

@@ -4,10 +4,10 @@ from Boat.RadarManager import Radar
 
 class SimpleController(BaseController):
 
-    def updateChild(self):
+    def update_child(self):
 
         self.turn = -self.orientationA
-        if (abs(self.orientationA) < 1.5):
+        if abs(self.orientationA) < 1.5:
             self.move = 1
         else:
             self.move = 0
@@ -24,5 +24,5 @@ class SimpleController(BaseController):
             self.move += kshore * (1 - self.shoreSensors[Radar.BACK])
             self.move += kshore * (1 - self.boatsSensors[Radar.BACK])
 
-    def processEvent(self, event):
+    def process_event(self, event):
         pass
