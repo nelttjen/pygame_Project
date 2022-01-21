@@ -6,7 +6,7 @@ from Boat.mapGenerator import MapGenerator
 class Test_MapGenerator(TestCase):
 
     def create_map(self):
-        return MapGenerator(11, 11, 15, 15, 10)
+        return MapGenerator(11, 11, 15, 15, 0, 10)
 
     def test_corners(self):
         map = self.create_map()
@@ -42,10 +42,8 @@ class Test_MapGenerator(TestCase):
                 self.validate_track(map)
 
     def test_deformations(self):
-        map = MapGenerator(23, 23, 27, 27, 14)
+        map = MapGenerator(23, 23, 27, 27, 0, 14)
         map.add_deformations(2)
-        # map = self.create_map()
-        # map.add_deformations(2)
 
         cp, lp = map.add_decorations()
         print(map)

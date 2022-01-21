@@ -11,8 +11,8 @@ class SimpleController(BaseController):
             self.move = 1
         else:
             self.move = 0
-        kshore = 10
-        kboat = 5
+        kshore = 3
+        kboat = 1
         if self.move > 0:
             self.turn += kshore * (1 - self.shoreSensors[Radar.RIGTH])
             self.turn -= kshore * (1 - self.shoreSensors[Radar.LEFT])

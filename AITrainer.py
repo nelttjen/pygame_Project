@@ -1,5 +1,7 @@
 import sys
-# from Boat.AIController import AIController
+
+from pymunk import pygame_util
+from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 from Boat.SimpleController import SimpleController
@@ -8,13 +10,7 @@ import pygame as pg
 import pymunk
 
 from Boat.RadarManager import RadarManager
-from Config import Collisiontypes
-from Config import Specifications
-from Boat.mapGenerator import MapGenerator
-from Config import Tracks
-from startscreen import Startscreen
-from table_records import Table_records
-
+import Config
 
 class Main:
     def __init__(self, w, h, GAME_FPS):
@@ -22,42 +18,29 @@ class Main:
         self.size = self.w, self.h
 
     def run_game(self, is_debug=False):
-        start = Startscreen()
-        start.start()
-        while start.res[0] == 'records':
-            try:
-                table = Table_records()
-                table.start()
-            except Exception:
-                pass
-            start.start()
-        pg.init()
+        pg.font.init()
+        Config.Screen.DEBUG = True
         pymunk.pygame_util.positive_y_is_up = False
         space = pymunk.Space()
-        radarManager = RadarManager(space, Collisiontypes.SENSOR)
+        radarManager = RadarManager(space, Config.Collisiontypes.SENSOR)
         surface = pg.display.set_mode((self.w, self.h))
 
-        level = Tracks.get_track(start.res[0] - 1)
+        level = Config.Tracks.get_track(-1)
 
-        level.build(space)#MapGenerator(30, 30, 35, 35, 22))
-        #level.build(space, (100, 73), MapGenerator(24, 24, 29, 29, 18))
-        #level.build(space, (100, 73), MapGenerator(25, 25, 30, 30, 36))
-        #level.build(space, (100, 73), MapGenerator(15, 15, 19, 19, 3))
+        level.build(space)
         boats = [
-            BaseBoat(space, radarManager, (Specifications.BOATS[start.res[1] - 1]), level),
-            BaseBoat(space, radarManager, (Specifications.BOATS[3]), level),
-            # BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level)
+            BaseBoat(space, radarManager, (Config.Specifications.BOATS[0]), level),
+            BaseBoat(space, radarManager, (Config.Specifications.BOATS[3]), level),
         ]
         controllers = [
             # SimpleController(boats[0], level),
             SimpleController(boats[1], level),
             KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-            # KeyboardController(boats[1], level, "a", "d", "w", "s")
         ]
 
-        radarManager.registerCollisionType(Collisiontypes.BOAT)
-        radarManager.registerCollisionType(Collisiontypes.SHORE)
-        radarManager.registerCollisionType(Collisiontypes.CHECKPOINT)
+        radarManager.registerCollisionType(Config.Collisiontypes.BOAT)
+        radarManager.registerCollisionType(Config.Collisiontypes.SHORE)
+        radarManager.registerCollisionType(Config.Collisiontypes.CHECKPOINT)
 
         game = Game(space, surface, radarManager, boats, controllers, self.FPS, level, is_debug)
         exit_code = game.run()

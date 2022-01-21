@@ -2,3 +2,4 @@ pygame==2.1.1
 pymunk==6.2.1
 torch==1.7.1
 windows-curses==2.3.0
+peewee==3.14.8

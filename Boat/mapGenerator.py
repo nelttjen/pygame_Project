@@ -3,7 +3,7 @@ import operator
 
 
 class MapGenerator:
-    def __init__(self, track_width, track_height, map_width, map_height, seed):
+    def __init__(self, track_width, track_height, map_width, map_height, deformations, seed):
         random.seed(seed)
         self.track_width = track_width
         self.track_height = track_height
@@ -38,6 +38,7 @@ class MapGenerator:
 
         for x, y in self.track:
             self.map[y][x] = 1
+        self.add_deformations(deformations)
 
     def is_corner(self, point):
         return self.map[point[1] - 1][point[0]] != self.map[point[1] + 1][point[0]]

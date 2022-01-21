@@ -272,7 +272,6 @@ class Startscreen:
         window = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption('Startscreen')
         screen = pygame.Surface((self.WIDTH, self.HEIGHT))
-        pygame.font.init()
         running = True
         pygame.mouse.set_visible(True)
         pygame.key.set_repeat(0, 0)

@@ -26,6 +26,7 @@ class BaseController:
 
         self.boat.stability *= 2
         self.boat.power *= 1.5
+        self.boat.FF = -1
         self.boat.streamlining /= 2
 
         boat.radarCallbacks[Collisiontypes.BOAT].append(self.updateBoatSensors)
@@ -55,8 +56,8 @@ class BaseController:
 
         self.updateChild()
         if self.move_back_time > time.time():
-            self.next_checkpoint = -1
-            self.boat.update(-self.move, -self.turn)
+            #self.next_checkpoint = -1
+            self.boat.update(-self.move, self.turn)
         else:
             if self.boat.next_checkpoint != self.next_checkpoint:
                 self.next_checkpoint = self.boat.next_checkpoint

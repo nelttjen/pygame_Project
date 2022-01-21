@@ -26,6 +26,7 @@ class BaseBoat:
         self.radarCallbacks = defaultdict(list)
 
         self.turn, self.move = 0, 0
+        self.FF = 1
         self.level = level
         self.next_checkpoint = 0
         self.lap = 0
@@ -87,10 +88,10 @@ class BaseBoat:
         # естественное торможение
         self.car_shape.body.apply_force_at_local_point((self.streamlining * self.width * -self.velocity.x, 0))
         # мотор
-        motor_power = Vec2d(move * self.power, turn * self.power)
+        motor_power = Vec2d(move * self.power, self.FF*turn * self.power)
         K = max(1, motor_power.length / self.power)
         self.car_shape.body.apply_force_at_local_point(
-            (motor_power.x / K, motor_power.y / K), (-50, 0)
+            (motor_power.x / K, motor_power.y / K), (self.FF*-50, 0)
         )
 
     def get_position(self):
