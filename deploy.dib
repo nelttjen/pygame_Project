@@ -7,5 +7,5 @@ D:\Python39\python.exe -m venv python-env
 #!pwsh
 
 python-env/Scripts/Activate.ps1
-pip3 install -r requirements.txt
-pip3 freeze > requirements_.txt
+pip install -r requirements.txt
+pip freeze > requirements_.txt
