@@ -179,7 +179,6 @@ class LevelBuilder1:
         self.size = self.m * len(level), self.m * len(level[0])
         #self.size = 920, 700
         count = 0
-        print(x, y)
         self.merged_image = pygame.Surface(self.size)
         for i in range(len(level)):
             for j in range(len(level[i])):
@@ -251,32 +250,39 @@ class LevelBuilder1:
             self.dict_checkpoint[shape] + 1) % len(self.dict_checkpoint)
 
     def arrangeBoats(self, boats):
-        print(self.track[self.lp][0])
         if self.cp[1] == 1:
             c = [
                 [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m],
                 [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m - 100],
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m - 200]]
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m - 200],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m - 300],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m - 400]]
             for i in range(len(boats)):
                 boats[i].set_position(c[i][0], c[i][1], 0.5)
         if self.cp[1] == -1:
             c = [
                 [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m],
                 [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m + 100],
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m + 200]]
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m + 200],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m + 300],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m + 400]]
             for i in range(len(boats)):
                 boats[i].set_position(c[i][0], c[i][1], 1.5)
         if self.cp[0] == -1:
             c = [
                 [self.track[self.lp][0] * self.m, (self.track[self.lp][1]) * self.m],
                 [self.track[self.lp][0] * self.m + 100, (self.track[self.lp][1]) * self.m + 120],
-                [self.track[self.lp][0] * self.m + 200, (self.track[self.lp][1]) * self.m]]
+                [self.track[self.lp][0] * self.m + 200, (self.track[self.lp][1]) * self.m],
+                [self.track[self.lp][0] * self.m + 300, (self.track[self.lp][1]) * self.m + 120],
+                [self.track[self.lp][0] * self.m + 400, (self.track[self.lp][1]) * self.m]]
             for i in range(len(boats)):
                 boats[i].set_position(c[i][0], c[i][1], 1)
         if self.cp[0] == 1:
             c = [
                 [self.track[self.lp][0] * self.m, (self.track[self.lp][1]) * self.m],
                 [self.track[self.lp][0] * self.m - 100, (self.track[self.lp][1]) * self.m + 120],
-                [self.track[self.lp][0] * self.m - 200, (self.track[self.lp][1]) * self.m]]
+                [self.track[self.lp][0] * self.m - 200, (self.track[self.lp][1]) * self.m],
+                [self.track[self.lp][0] * self.m - 300, (self.track[self.lp][1]) * self.m + 120],
+                [self.track[self.lp][0] * self.m - 400, (self.track[self.lp][1]) * self.m]]
             for i in range(len(boats)):
                 boats[i].set_position(c[i][0], c[i][1], 0)

@@ -62,13 +62,11 @@ class BaseBoat:
 
     def passCheckpoint(self, distance, tag, collideShape):
         if collideShape:
-            # print(self.level.get_tag(collideShape), self.next_checkpoint)
             current, next = self.level.get_checkpoint_info(collideShape)
             if current == self.next_checkpoint:
                 self.next_checkpoint = next
                 if current == 0:
                     self.lap += 1
-            print(self.next_checkpoint, self.get_position(), self.next_checkpoint_x, self.next_checkpoint_y)
         self.next_checkpoint_x, self.next_checkpoint_y = self.level.get_coords(self.next_checkpoint)
 
     def set_position(self, x, y, k):

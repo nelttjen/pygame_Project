@@ -118,7 +118,7 @@ class Game:
         self.render_lap(str(lap), (100, 0))
         self.render_speed(str(int(self.boats[0].get_velocity())), (300, 0))
         self.render_place(infoboat, (600, 0))
-        if lap == 2:
+        if lap == 5:
             self.finish(self.place)
         if self.boats[0].get_velocity() > self.max_speed:
             self.max_speed = self.boats[0].get_velocity()

@@ -1,4 +1,4 @@
-from random import randrange
+from random import choice, randrange
 import sys
 # from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
@@ -43,20 +43,22 @@ class Main:
 
             level = Tracks.get_track(start.res[0] - 1)
 
-            level.build(space)#MapGenerator(30, 30, 35, 35, 22))
-            #level.build(space, (100, 73), MapGenerator(24, 24, 29, 29, 18))
-            #level.build(space, (100, 73), MapGenerator(25, 25, 30, 30, 36))
-            #level.build(space, (100, 73), MapGenerator(15, 15, 19, 19, 3))
+            level.build(space)
+            c = [0, 1, 2, 3, 4, 5]
+            c.remove(start.res[1] - 1)
             boats = [
                 BaseBoat(space, radarManager, (Specifications.BOATS[start.res[1] - 1]), level),
-                BaseBoat(space, radarManager, (Specifications.BOATS[3]), level),
-                # BaseBoat(space, radarManager, (0.5, "yacht.png", 150, 0.01, 0.005), level)
             ]
+            for i in range(4):
+                a = choice(c)
+                boats.append(BaseBoat(space, radarManager, (Specifications.BOATS[a]), level))
+                c.remove(a)
             controllers = [
-                # SimpleController(boats[0], level),
                 SimpleController(boats[1], level),
+                SimpleController(boats[2], level),
+                SimpleController(boats[3], level),
+                SimpleController(boats[4], level),
                 KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-                # KeyboardController(boats[1], level, "a", "d", "w", "s")   
             ]
 
             radarManager.registerCollisionType(Collisiontypes.BOAT)
