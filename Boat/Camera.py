@@ -16,7 +16,7 @@ class Camera:
         self.cameraYUpdate = DelayedUpdate(initial=0, k=0.1)
         self.max_speed = 300
 
-    def update(self, x, y, v) -> Tuple[Tuple[int, int], Tuple[int, int], float]:
+    def update(self, x, y, v) -> tuple[tuple[int, int], tuple[float, float], float]:
         (cx, _) = self.cameraXUpdate.update(x)
         (cy, _) = self.cameraYUpdate.update(y)
         if v > self.max_speed:
@@ -29,8 +29,8 @@ class Camera:
         wx = self.screen_size[0] / scaling
         wy = self.screen_size[1] / scaling
 
-        cx = max(0, min(self.level_size[0] - wx, x - wx / 2))
-        cy = max(0, min(self.level_size[1] - wy, y - wy / 2))
+        cx = max(0, min(int(self.level_size[0] - wx), x - wx / 2))
+        cy = max(0, min(int(self.level_size[1] - wy), y - wy / 2))
         # зум камеры
 
-        return ((cx, cy), (wx, wy), scaling)
+        return (cx, cy), (wx, wy), scaling

@@ -9,9 +9,6 @@ curses.use_default_colors()
 curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED)
 curses.endwin()
 
-global SCRLINE
-SCRLINE = 0
-
 
 class BaseController:
     STDSCR = STDSCR
@@ -29,22 +26,30 @@ class BaseController:
         self.boat.FF = -1
         self.boat.streamlining /= 2
 
-        boat.radarCallbacks[Config.Collisiontypes.BOAT].append(self.updateBoatSensors)
-        boat.radarCallbacks[Config.Collisiontypes.SHORE].append(self.updateShoreSensors)
+        boat.radarCallbacks[Config.Collisiontypes.BOAT].append(self.update_boat_sensors)
+        boat.radarCallbacks[Config.Collisiontypes.SHORE].append(self.update_shore_sensors)
         self.count = -1
         self.body = self.boat.car_shape.body
 
-        global SCRLINE
+        SCRLINE = 0
         self.scrline = SCRLINE
         SCRLINE += 5
 
-    def updateBoatSensors(self, distance, tag, _):
+        self.turn = 0
+        self.move = 0
+        self.dxy = None
+        self.orientationA = None
+        self.min_distance = None
+        self.move_time = None
+        self.last_distance = None
+
+    def update_boat_sensors(self, distance, tag, _):
         self.boatsSensors[tag] = distance
 
-    def updateShoreSensors(self, distance, tag, _):
+    def update_shore_sensors(self, distance, tag, _):
         self.shoreSensors[tag] = distance
 
-    def updateChild(self):
+    def update_child(self):
         pass
 
     def update(self):
@@ -54,9 +59,8 @@ class BaseController:
         self.dxy = Vec2d(dx, dy)
         self.orientationA = self.body.rotation_vector.get_angle_between(self.dxy)
 
-        self.updateChild()
+        self.update_child()
         if self.move_back_time > time.time():
-            #self.next_checkpoint = -1
             self.boat.update(-self.move, self.turn)
         else:
             if self.boat.next_checkpoint != self.next_checkpoint:
@@ -71,22 +75,26 @@ class BaseController:
                     if time.time() - self.move_time > 5:
                         self.move_back_time = time.time() + 5
         self.boat.update(self.move, self.turn)
-        self.lastDistance = self.dxy.length
+        self.last_distance = self.dxy.length
         if Config.Screen.DEBUG:
             self.STDSCR.addstr(self.scrline + 0, 0,
-                            f'X:{x:.2f} Y:{y:.2f} GoalCP: {self.next_checkpoint} GoalX:{self.boat.next_checkpoint_x:.2f} GoalY:{self.boat.next_checkpoint_y:.2f} Force:{self.move:.2f} Turn:{self.turn:.2f}',
-                            curses.color_pair(1))
+                               f'X:{x:.2f} Y:{y:.2f} GoalCP: {self.next_checkpoint} '
+                               f'GoalX:{self.boat.next_checkpoint_x:.2f} '
+                               f'GoalY:{self.boat.next_checkpoint_y:.2f} '
+                               f'Force:{self.move:.2f} Turn:{self.turn:.2f}',
+                               curses.color_pair(1))
             self.STDSCR.addstr(self.scrline + 1, 0,
-                            f'OrientationA:{self.orientationA:.2f} Angular speed:{self.body.angular_velocity:.2f}')
-            self.printSensors("Shore", self.scrline + 2, self.shoreSensors)
-            self.printSensors("Boat", self.scrline + 3, self.boatsSensors)
+                               f'OrientationA:{self.orientationA:.2f} '
+                               f'Angular speed:{self.body.angular_velocity:.2f}')
+            self.print_sensors("Shore", self.scrline + 2, self.shoreSensors)
+            self.print_sensors("Boat", self.scrline + 3, self.boatsSensors)
             self.STDSCR.refresh()
 
-    def printSensors(self, label, line, sensors):
-        str = ""
+    def print_sensors(self, label, line, sensors):
+        strng = ""
         for key, distance in sensors.items():
-            str += f'{label}{key}: {distance:2f} '
-        self.STDSCR.addstr(line, 0, str)
+            strng += f'{label}{key}: {distance:2f} '
+        self.STDSCR.addstr(line, 0, strng)
 
-    def processEvent(self, event):
+    def process_event(self, event):
         pass
