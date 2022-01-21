@@ -30,11 +30,14 @@ class Main:
         level.build(space)
         boats = [
             BaseBoat(space, radarManager, (Config.Specifications.BOATS[0]), level),
+            BaseBoat(space, radarManager, (Config.Specifications.BOATS[2]), level),
             BaseBoat(space, radarManager, (Config.Specifications.BOATS[3]), level),
         ]
         controllers = [
             # SimpleController(boats[0], level),
-            SimpleController(boats[1], level),
+            SimpleController(boats[0], level),
+            AIController(boats[1], level),
+            SimpleController(boats[2], level),
             KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
         ]
 

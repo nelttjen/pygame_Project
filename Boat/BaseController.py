@@ -1,5 +1,5 @@
 import curses
-from Config import Collisiontypes
+import Config
 from pymunk.vec2d import Vec2d
 import time
 
@@ -29,8 +29,8 @@ class BaseController:
         self.boat.FF = -1
         self.boat.streamlining /= 2
 
-        boat.radarCallbacks[Collisiontypes.BOAT].append(self.updateBoatSensors)
-        boat.radarCallbacks[Collisiontypes.SHORE].append(self.updateShoreSensors)
+        boat.radarCallbacks[Config.Collisiontypes.BOAT].append(self.updateBoatSensors)
+        boat.radarCallbacks[Config.Collisiontypes.SHORE].append(self.updateShoreSensors)
         self.count = -1
         self.body = self.boat.car_shape.body
 
@@ -72,14 +72,15 @@ class BaseController:
                         self.move_back_time = time.time() + 5
         self.boat.update(self.move, self.turn)
         self.lastDistance = self.dxy.length
-        self.STDSCR.addstr(self.scrline + 0, 0,
-                           f'X:{x:.2f} Y:{y:.2f} GoalCP: {self.next_checkpoint} GoalX:{self.boat.next_checkpoint_x:.2f} GoalY:{self.boat.next_checkpoint_y:.2f} Force:{self.move:.2f} Turn:{self.turn:.2f}',
-                           curses.color_pair(1))
-        self.STDSCR.addstr(self.scrline + 1, 0,
-                           f'OrientationA:{self.orientationA:.2f} Angular speed:{self.body.angular_velocity:.2f}')
-        self.printSensors("Shore", self.scrline + 2, self.shoreSensors)
-        self.printSensors("Boat", self.scrline + 3, self.boatsSensors)
-        self.STDSCR.refresh()
+        if Config.Screen.DEBUG:
+            self.STDSCR.addstr(self.scrline + 0, 0,
+                            f'X:{x:.2f} Y:{y:.2f} GoalCP: {self.next_checkpoint} GoalX:{self.boat.next_checkpoint_x:.2f} GoalY:{self.boat.next_checkpoint_y:.2f} Force:{self.move:.2f} Turn:{self.turn:.2f}',
+                            curses.color_pair(1))
+            self.STDSCR.addstr(self.scrline + 1, 0,
+                            f'OrientationA:{self.orientationA:.2f} Angular speed:{self.body.angular_velocity:.2f}')
+            self.printSensors("Shore", self.scrline + 2, self.shoreSensors)
+            self.printSensors("Boat", self.scrline + 3, self.boatsSensors)
+            self.STDSCR.refresh()
 
     def printSensors(self, label, line, sensors):
         str = ""
