@@ -113,25 +113,83 @@ class Table_records:
         # text = 'Track 1'
         all_sprites = pygame.sprite.Group()
 
-        checkmark = pygame.transform.scale(load_image("checkmark.png"), (width / count_yacht, width / count_yacht / 3))
-        Arrow("rightarrowopaque.png", "rightarrowtransparent.png", width / 2 + 150, 50, 1, all_sprites)
-        Arrow("leftarrowopaque.png", "leftarrowtransparent.png", width / 2 - 200, 50, -1, all_sprites)
+        checkmark = pygame.transform.scale(
+            load_image("checkmark.png"),
+            (width / count_yacht,
+             width / count_yacht / 3))
+        Arrow(
+            "rightarrowopaque.png",
+            "rightarrowtransparent.png",
+            width / 2 + 150,
+            50,
+            1,
+            all_sprites)
+        Arrow("leftarrowopaque.png", "leftarrowtransparent.png",
+              width / 2 - 200, 50, -1, all_sprites)
         Cross("cross.png", width - 50, 0, all_sprites)
         Back("arrow.png", all_sprites)
         for i in range(count_yacht - 1):
-            Yacht(boat[i][1], width / count_yacht * (i + 1), height / 15 * 2, width / count_yacht,
-                  width / count_yacht / 3, i + 1, all_sprites)
-        Yacht("nothing.png", 0, height / 15 * 2, width / count_yacht, width / count_yacht / 3, 0, all_sprites)
+            Yacht(boat[i][1],
+                  width / count_yacht * (i + 1),
+                  height / 15 * 2,
+                  width / count_yacht,
+                  width / count_yacht / 3,
+                  i + 1,
+                  all_sprites)
+        Yacht(
+            "nothing.png",
+            0,
+            height /
+            15 *
+            2,
+            width /
+            count_yacht,
+            width /
+            count_yacht /
+            3,
+            0,
+            all_sprites)
 
         rast = height / 15
 
-        images_yacht = {'yacht_1.png': (pygame.transform.scale(load_image("yacht_1.png"), (width / 5, height / 15)), 1),
-                        'yacht_2.png': (pygame.transform.scale(load_image("yacht_2.png"), (width / 5, height / 15)), 2),
-                        'yacht_3.png': (pygame.transform.scale(load_image("yacht_3.png"), (width / 5, height / 15)), 3),
-                        'yacht_4.png': (pygame.transform.scale(load_image("yacht_4.png"), (width / 5, height / 15)), 4),
-                        'yacht_5.png': (pygame.transform.scale(load_image("yacht_5.png"), (width / 5, height / 15)), 5),
-                        'yacht_6.png': (
-                            pygame.transform.scale(load_image("yacht_6.png"), (width / 5, height / 15)), 6), }
+        images_yacht = {
+            'yacht_1.png': (
+                pygame.transform.scale(
+                    load_image("yacht_1.png"),
+                    (width / 5,
+                     height / 15)),
+                1),
+            'yacht_2.png': (
+                pygame.transform.scale(
+                    load_image("yacht_2.png"),
+                    (width / 5,
+                     height / 15)),
+                2),
+            'yacht_3.png': (
+                pygame.transform.scale(
+                    load_image("yacht_3.png"),
+                    (width / 5,
+                     height / 15)),
+                3),
+            'yacht_4.png': (
+                pygame.transform.scale(
+                    load_image("yacht_4.png"),
+                    (width / 5,
+                     height / 15)),
+                4),
+            'yacht_5.png': (
+                pygame.transform.scale(
+                    load_image("yacht_5.png"),
+                    (width / 5,
+                     height / 15)),
+                5),
+            'yacht_6.png': (
+                pygame.transform.scale(
+                    load_image("yacht_6.png"),
+                    (width / 5,
+                     height / 15)),
+                6),
+        }
         while self.running:
             # screen.fill((50, 80, 200))
             img = Tracks.get_track(int(number - 1)).get_image()
@@ -145,29 +203,55 @@ class Table_records:
                 if event.type == pygame.QUIT:
                     self.running = False
             for i in range(count_yacht + 1):
-                pygame.draw.rect(screen, rect_color, (
-                    width / count_yacht * i, height / 15 * 2, width / count_yacht, width / count_yacht / 3), 4)
+                pygame.draw.rect(
+                    screen,
+                    rect_color,
+                    (width / count_yacht * i,
+                     height / 15 * 2,
+                     width / count_yacht,
+                     width / count_yacht / 3),
+                    4)
             for i in range(10):
                 for j in range(3):
-                    pygame.draw.rect(screen, rect_color,
-                                     ((width / 5) * (j + 1), rast * (i + 4), width / 5, height / 15), 4)
+                    pygame.draw.rect(screen,
+                                     rect_color,
+                                     ((width / 5) * (j + 1),
+                                      rast * (i + 4),
+                                         width / 5,
+                                         height / 15),
+                                     4)
             count = 5
             text1, text2, text3 = 'Имя', 'Яхта', 'Очки'
-            screen.blit(f1.render(text1, True, (30, 250, 250)), ((width / 5) * 1, rast * 4))
-            screen.blit(f1.render(text2, True, (30, 250, 250)), ((width / 5) * 2, rast * 4))
-            screen.blit(f1.render(text3, True, (30, 250, 250)), ((width / 5) * 3, rast * 4))
+            screen.blit(f1.render(text1, True, (30, 250, 250)),
+                        ((width / 5) * 1, rast * 4))
+            screen.blit(f1.render(text2, True, (30, 250, 250)),
+                        ((width / 5) * 2, rast * 4))
+            screen.blit(f1.render(text3, True, (30, 250, 250)),
+                        ((width / 5) * 3, rast * 4))
             for i in Records.select().order_by(Records.points.desc()):
-                if i.track == number and (number_yacht == 0 or number_yacht == images_yacht[i.yacht][1]):
-                    text1, text2, text3 = i.name, images_yacht[i.yacht][0], str(i.points)
-                    screen.blit(f1.render(text1, True, (250, 250, 30)), ((width / 5) * 1, rast * count))
+                if i.track == number and (
+                        number_yacht == 0 or number_yacht == images_yacht[i.yacht][1]):
+                    text1, text2, text3 = i.name, images_yacht[i.yacht][0], str(
+                        i.points)
+                    screen.blit(f1.render(text1, True, (250, 250, 30)),
+                                ((width / 5) * 1, rast * count))
                     screen.blit(text2, ((width / 5) * 2, rast * count))
-                    screen.blit(f1.render(text3, True, (250, 250, 30)), ((width / 5) * 3, rast * count))
+                    screen.blit(f1.render(text3, True, (250, 250, 30)),
+                                ((width / 5) * 3, rast * count))
                     count += 1
                     if count > 13:
                         break
             text = f'Track {number}'
-            screen.blit(f1.render(text, True, (250, 250, 30)), (width / 2 - 100, 50))
-            screen.blit(checkmark, (number_yacht * width / count_yacht, height / 15 * 2))
+            screen.blit(f1.render(text, True, (250, 250, 30)),
+                        (width / 2 - 100, 50))
+            screen.blit(
+                checkmark,
+                (number_yacht *
+                 width /
+                 count_yacht,
+                 height /
+                 15 *
+                 2))
             pygame.display.flip()
         pygame.quit()
 

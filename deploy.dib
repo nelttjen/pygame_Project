@@ -9,3 +9,8 @@ D:\Python39\python.exe -m venv python-env
 python-env/Scripts/Activate.ps1
 pip install -r requirements.txt
 pip freeze > requirements_.txt
+
+#!pwsh
+
+python-env/Scripts/Activate.ps1
+get-childitem *.py -recurse | where-object{$_.fullname -notlike "*python-env*"} | Foreach {autopep8 --in-place --aggressive --aggressive  $_.FullName }

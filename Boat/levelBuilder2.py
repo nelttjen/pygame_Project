@@ -51,7 +51,8 @@ class SandBox2:
         return c[checkpoint]
 
     def get_checkpoint_info(self, shape):
-        return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 2
+        return self.dict_checkpoint[shape], (
+            self.dict_checkpoint[shape] + 1) % 2
 
     def arrangeBoats(self, boats):
         c = [

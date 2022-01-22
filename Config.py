@@ -59,4 +59,5 @@ class Tracks:
 
     TRACKS2 = []
 
-    TRACKS = [(get_trackgenerator1, 0), (get_trackgenerator1, 1), (get_trackgenerator1, 2), (get_trackgenerator1, 3)]
+    TRACKS = [(get_trackgenerator1, 0), (get_trackgenerator1, 1),
+              (get_trackgenerator1, 2), (get_trackgenerator1, 3)]

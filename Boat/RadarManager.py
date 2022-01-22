@@ -31,8 +31,17 @@ class RadarManager:
         angle: float
         tag: int
 
-        def __init__(self, space: pymunk.Space, originalShape: pymunk.Shape, angle: float, distance: float,
-                     offset: float, vertices: list, collisionType: int, callback, tag: int):
+        def __init__(
+                self,
+                space: pymunk.Space,
+                originalShape: pymunk.Shape,
+                angle: float,
+                distance: float,
+                offset: float,
+                vertices: list,
+                collisionType: int,
+                callback,
+                tag: int):
             self.originalShape = originalShape
             self.angle = angle
             self.distance = distance
@@ -44,7 +53,8 @@ class RadarManager:
             self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 
             start_point = (0, 0)
-            self.shape = pymunk.Segment(self.body, start_point, start_point, 0.0)
+            self.shape = pymunk.Segment(
+                self.body, start_point, start_point, 0.0)
             self.shape.collision_type = collisionType
             self.shape.filter = originalShape.filter
             self.shape.color = THECOLORS["white"]
@@ -72,9 +82,16 @@ class RadarManager:
 
         def update(self):
             vertices = self.get_vertices(self.originalShape)
-            self.body.position = ((vertices[self.vertices[1]] + vertices[self.vertices[0]]) / 2)
-            direction = Vec2d(1, 0).rotated(self.originalShape.body.angle + self.angle)
-            self.shape.unsafe_set_endpoints(self.offset * direction, (self.distance + self.offset) * direction)
+            self.body.position = (
+                (vertices[self.vertices[1]] + vertices[self.vertices[0]]) / 2)
+            direction = Vec2d(
+                1,
+                0).rotated(
+                self.originalShape.body.angle +
+                self.angle)
+            self.shape.unsafe_set_endpoints(
+                self.offset * direction,
+                (self.distance + self.offset) * direction)
 
     def __init__(self, space, sensorCollisionType):
         self.space = space
@@ -86,10 +103,12 @@ class RadarManager:
 
     def register_collision_type(self, collisionType):
         self.collisionTypes.append(collisionType)
-        collision_handler = self.space.add_collision_handler(self.collisionType, collisionType)
+        collision_handler = self.space.add_collision_handler(
+            self.collisionType, collisionType)
         collision_handler.pre_solve = lambda arbiter, space, data: \
             self.on_collision(arbiter, space, data, collisionType)
-        collision_handler.separate = lambda arbiter, space, data: self.on_collision(arbiter, space, data, collisionType)
+        collision_handler.separate = lambda arbiter, space, data: self.on_collision(
+            arbiter, space, data, collisionType)
         for radar in self.radars.values():
             radar.run_callback(collisionType, 1, None)
 
@@ -110,15 +129,25 @@ class RadarManager:
             for point in [cp.point_a, cp.point_b]:
                 v = radar.body.position - point
                 length = min(length, v.length)
-        radar.run_callback(collisionType, length / radar.distance, collideShape)
+        radar.run_callback(
+            collisionType,
+            length / radar.distance,
+            collideShape)
 
         return False
 
     def create_radar(self, shape, callback):
         for tag, angle, vertices, distance, offset in RadarManager.RADARS:
-            radar = self.RadarSensor(space=self.space, originalShape=shape, angle=angle, vertices=vertices,
-                                     distance=distance, offset=offset, collisionType=self.collisionType,
-                                     callback=callback, tag=tag)
+            radar = self.RadarSensor(
+                space=self.space,
+                originalShape=shape,
+                angle=angle,
+                vertices=vertices,
+                distance=distance,
+                offset=offset,
+                collisionType=self.collisionType,
+                callback=callback,
+                tag=tag)
             for collisionType in self.collisionTypes:
                 radar.run_callback(collisionType, 1, None)
             self.radars[radar.shape] = radar

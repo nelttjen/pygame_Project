@@ -30,13 +30,15 @@ class Test_MapGenerator(TestCase):
         self.assertEqual(mapa.map_distance_to_corner((4, 12), (0, -1), -1), 3)
 
     def test_flat_shift(self):
-        for point_n, shift in [(5, (0, 1)), (15, (-1, 0)), (20, (0, -1)), (25, (1, 0))]:
+        for point_n, shift in [
+                (5, (0, 1)), (15, (-1, 0)), (20, (0, -1)), (25, (1, 0))]:
             mapa = create_map()
             mapa.flat_shift(point_n, shift)
             self.validate_track(mapa)
 
     def test_corner_shift(self):
-        for point_n, shifts in [(30, [(0, -1), (1, 0)]), (10, [(0, 1), (-1, 0)]), (20, [(0, -1), (-1, 0)])]:
+        for point_n, shifts in [
+                (30, [(0, -1), (1, 0)]), (10, [(0, 1), (-1, 0)]), (20, [(0, -1), (-1, 0)])]:
             for shift in shifts:
                 mapa = create_map()
                 mapa.corner_shift(point_n, shift)
@@ -55,9 +57,11 @@ class Test_MapGenerator(TestCase):
         first_point = mapa.track.pop()
         last_point = first_point
         for point in mapa.track:
-            delta = abs(point[0] - last_point[0]) + abs(point[1] - last_point[1])
+            delta = abs(point[0] - last_point[0]) + \
+                abs(point[1] - last_point[1])
             self.assertEqual(delta < 1 or delta > 2, False)
-            self.assertEqual(mapa.map[point[1]][point[0]] in [1, 'c', 'x'], True)
+            self.assertEqual(mapa.map[point[1]][point[0]] in [
+                             1, 'c', 'x'], True)
             last_point = point
         mapa.track.append(first_point)
 

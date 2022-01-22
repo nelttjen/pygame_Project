@@ -45,14 +45,18 @@ class AIController(BaseController):
         else:
             self.move += 0.1
 
-        state = [self.orientationA / 3.14, self.move] + [*self.shoreSensors.values()] + [*self.boatsSensors.values()]
+        state = [self.orientationA / 3.14, self.move] + \
+            [*self.shoreSensors.values()] + [*self.boatsSensors.values()]
         self.action = self.brain.update(reward, state)
         turn = ACTION2COMMAND[self.action]
 
         self.turn = turn
         self.move = min(max(self.move, -1), 1)
         self.turn = min(max(self.turn, -1), 1)
-        self.STDSCR.addstr(self.scrline + 4, 0, f'Reward:{reward:.2f} Learn score:{self.brain.learn_score:.2f}')
+        self.STDSCR.addstr(
+            self.scrline + 4,
+            0,
+            f'Reward:{reward:.2f} Learn score:{self.brain.learn_score:.2f}')
 
     def print_sensors(self, label, line, sensors):
         string = ""

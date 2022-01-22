@@ -39,7 +39,16 @@ class Game:
     camera: Camera
     boats: List[BaseBoat]
 
-    def __init__(self, space, surface, radarManager, boats, controllers, FPS, level, debug=False):
+    def __init__(
+            self,
+            space,
+            surface,
+            radarManager,
+            boats,
+            controllers,
+            FPS,
+            level,
+            debug=False):
         self.space = space
         self.surface = surface
         self.boats = boats
@@ -53,7 +62,8 @@ class Game:
         self.time_delta = 0
 
         self.draw_options = pymunk.pygame_util.DrawOptions(self.surface)
-        self.camera = Camera(level.size, (Config.Screen.WIDTH, Config.Screen.HEIGHT))
+        self.camera = Camera(
+            level.size, (Config.Screen.WIDTH, Config.Screen.HEIGHT))
 
         self.space.gravity = 0, 0
 
@@ -68,7 +78,11 @@ class Game:
         self.name = ''
 
         self.all_sprites = pg.sprite.Group()
-        Menu("menu.png", self.screen.get_width() // 2 - 80, self.screen.get_height() // 2 + 70, self.all_sprites)
+        Menu(
+            "menu.png",
+            self.screen.get_width() // 2 - 80,
+            self.screen.get_height() // 2 + 70,
+            self.all_sprites)
 
     def run(self):
         for boat in self.boats:
@@ -94,17 +108,19 @@ class Game:
         self.radarManager.update_sensors()
 
         playerX, playerY = self.boats[0].get_position()
-        cxy, wxy, scaling = self.camera.update(playerX, playerY, self.boats[0].get_velocity())
+        cxy, wxy, scaling = self.camera.update(
+            playerX, playerY, self.boats[0].get_velocity())
 
         self.space.step(1 / self.FPS)
         if Config.Screen.DEBUG:
             self.draw_options.transform = (
-                    pymunk.Transform.scaling(scaling)
-                    @ pymunk.Transform(tx=-cxy[0], ty=-cxy[1])
+                pymunk.Transform.scaling(scaling)
+                @ pymunk.Transform(tx=-cxy[0], ty=-cxy[1])
             )
 
         cropped_image = self.a.subsurface(cxy[0], cxy[1], wxy[0], wxy[1])
-        cropped_image = pg.transform.scale(cropped_image, self.camera.screen_size)
+        cropped_image = pg.transform.scale(
+            cropped_image, self.camera.screen_size)
         self.screen.blit(cropped_image, (0, 0))
         if Config.Screen.DEBUG:
             self.space.debug_draw(self.draw_options)
@@ -152,7 +168,8 @@ class Game:
         for i in range(len(infoboat)):
             if infoboat[i][3] == 'Яхта игрока':
                 self.place = i + 1
-                render_text = font.render('Место' + str(i + 1), True, pg.Color('red'))
+                render_text = font.render(
+                    'Место' + str(i + 1), True, pg.Color('red'))
                 self.screen.blit(render_text, pos)
 
     def finish(self, place):
@@ -164,16 +181,36 @@ class Game:
         font = pg.font.Font(None, 40)
         while running:
             events = pg.event.get()
-            self.screen.blit(a, (self.screen.get_width() // 2 - 400, self.screen.get_height() // 2 - 200))
+            self.screen.blit(
+                a,
+                (self.screen.get_width() //
+                 2 -
+                 400,
+                 self.screen.get_height() //
+                 2 -
+                 200))
             self.all_sprites.draw(self.screen)
-            render_text = font.render('За место: ' + str(points[place]), True, (60, 80, 200))
-            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2 - 90))
-            render_text = font.render('За скорость: ' + str(int(self.max_speed) * 6), True, (60, 80, 200))
-            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2 - 45))
-            render_text = font.render('Итого: ' + str(self.points), True, (60, 80, 200))
-            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2))
-            render_text = font.render('Ваше имя: ' + self.name, True, (60, 80, 200))
-            self.screen.blit(render_text, (self.screen.get_width() // 2 - 150, self.screen.get_height() // 2 + 45))
+            render_text = font.render('За место: ' +
+                                      str(points[place]), True, (60, 80, 200))
+            self.screen.blit(render_text,
+                             (self.screen.get_width() // 2 - 150,
+                              self.screen.get_height() // 2 - 90))
+            render_text = font.render(
+                'За скорость: ' + str(int(self.max_speed) * 6), True, (60, 80, 200))
+            self.screen.blit(render_text,
+                             (self.screen.get_width() // 2 - 150,
+                              self.screen.get_height() // 2 - 45))
+            render_text = font.render('Итого: ' +
+                                      str(self.points), True, (60, 80, 200))
+            self.screen.blit(
+                render_text,
+                (self.screen.get_width() // 2 - 150,
+                 self.screen.get_height() // 2))
+            render_text = font.render(
+                'Ваше имя: ' + self.name, True, (60, 80, 200))
+            self.screen.blit(render_text,
+                             (self.screen.get_width() // 2 - 150,
+                              self.screen.get_height() // 2 + 45))
             for event in events:
                 self.all_sprites.update(event)
                 if event.type == pg.QUIT:
