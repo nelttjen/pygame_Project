@@ -28,7 +28,7 @@ class Main:
             pg.font.init()
             start = Startscreen()
             start.start()
-            while start.res[0] == 'records':
+            while start.res == 'records':
                 try:
                     table = Table_records()
                     table.start()
