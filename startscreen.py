@@ -1,6 +1,4 @@
-import os
 import time
-
 import pygame
 import sys
 import Config
@@ -543,29 +541,15 @@ class Startscreen:
         pygame.time.set_timer(self.MOVE_EVENT, 0)
         time.sleep(3)
 
+
 class GameOver(pygame.sprite.Sprite):
     def __init__(self, app, *group):
         super().__init__(*group)
         self.app = app
-        img = self.load_image('Data/over.png')
+        img = load_image('over.png')
         self.image = img
         self.rect = img.get_rect()
         self.x = 0
         self.y = 0
 
         self.move = 5
-
-    def load_image(self, path, colorkey=None):
-        if not os.path.isfile(path):
-            print('Error: File not found - ', path)
-            return
-        image = pygame.image.load(path)
-        if colorkey is not None:
-            image = image.convert()
-            key = None
-            if colorkey == -1:
-                key = image.get_at((0, 0))
-            image.set_colorkey(key) if key else None
-        else:
-            image = image.convert_alpha()
-        return image
