@@ -1,3 +1,6 @@
+import os
+import time
+
 import pygame
 import sys
 import Config
@@ -377,6 +380,9 @@ class Startscreen:
         window = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption('Startscreen')
         screen = pygame.Surface((self.WIDTH, self.HEIGHT))
+        self.MOVE_EVENT = pygame.USEREVENT + 12
+        self.sprites = pygame.sprite.Group()
+        self.game_over = GameOver(self, self.sprites)
         running = True
         pygame.mouse.set_visible(True)
         pygame.key.set_repeat(0, 0)
@@ -416,6 +422,7 @@ class Startscreen:
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
+                    self.show_end_screen(window)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_RETURN:
@@ -430,8 +437,10 @@ class Startscreen:
                             self.res[1] = 'records'
                             break
                         if select == 4:
+                            self.show_end_screen(window)
                             sys.exit()
                     if e.key == pygame.K_ESCAPE:
+                        self.show_end_screen(window)
                         sys.exit()
                     if e.key == pygame.K_UP:
                         if select > 0:
@@ -487,6 +496,7 @@ class Startscreen:
                                 self.res[0] = 'records'
                                 self.res[1] = 'records'
                             if select == 4:
+                                self.show_end_screen(window)
                                 sys.exit()
                     mp = pygame.mouse.get_pos()
                     if 661 < mp[0] < 661 + 29 and 55 < mp[1] < 55 + 51:
@@ -517,3 +527,45 @@ class Startscreen:
             pygame.display.update()
         pygame.quit()
         return self.res
+
+    def show_end_screen(self, window):
+        pygame.time.set_timer(self.MOVE_EVENT, 10)
+        while self.game_over.x < Config.Screen.WIDTH:
+            window.fill('black')
+            surface = pygame.surface.Surface((self.game_over.rect.w, self.game_over.rect.h))
+            self.sprites.draw(surface)
+            window.blit(surface, (self.game_over.x - self.game_over.rect.w, self.game_over.y))
+            pygame.display.update()
+            pygame.display.flip()
+            for i in pygame.event.get():
+                if i.type == self.MOVE_EVENT:
+                    self.game_over.x += 5
+        pygame.time.set_timer(self.MOVE_EVENT, 0)
+        time.sleep(3)
+
+class GameOver(pygame.sprite.Sprite):
+    def __init__(self, app, *group):
+        super().__init__(*group)
+        self.app = app
+        img = self.load_image('Data/over.png')
+        self.image = img
+        self.rect = img.get_rect()
+        self.x = 0
+        self.y = 0
+
+        self.move = 5
+
+    def load_image(self, path, colorkey=None):
+        if not os.path.isfile(path):
+            print('Error: File not found - ', path)
+            return
+        image = pygame.image.load(path)
+        if colorkey is not None:
+            image = image.convert()
+            key = None
+            if colorkey == -1:
+                key = image.get_at((0, 0))
+            image.set_colorkey(key) if key else None
+        else:
+            image = image.convert_alpha()
+        return image
