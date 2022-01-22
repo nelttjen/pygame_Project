@@ -47,48 +47,48 @@ class Startscreen:
                         screen.blit(rnd, rnd.get_rect(center=(self.WIDTH / 2, int(i[0]))))
                         i[5], i[6], i[7], i[8] = rnd.get_rect(center=(self.WIDTH / 2, int(i[0])))
                         if self.max_map == 1:
-                            leftarrow = pygame.image.load(f'data/leftarrowtransparent.png')
+                            leftarrow = pygame.image.load("data/leftarrowtransparent.png")
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowtransparent.png')
+                            rightarrow = pygame.image.load('data/rightarrowtransparent.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
                             rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
                             screen.blit(rightarrow, rightarrow_rect)
                         elif i[1][-1] == '1':
-                            leftarrow = pygame.image.load(f'data/leftarrowtransparent.png')
+                            leftarrow = pygame.image.load('data/leftarrowtransparent.png')
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowopaque.png')
+                            rightarrow = pygame.image.load('data/rightarrowopaque.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
                             rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
                             screen.blit(rightarrow, rightarrow_rect)
                         elif i[1][-1] == str(self.max_map):
-                            leftarrow = pygame.image.load(f'data/leftarrowopaque.png')
+                            leftarrow = pygame.image.load('data/leftarrowopaque.png')
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowtransparent.png')
+                            rightarrow = pygame.image.load('data/rightarrowtransparent.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
                             rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
                             screen.blit(rightarrow, rightarrow_rect)
                         else:
-                            leftarrow = pygame.image.load(f'data/leftarrowopaque.png')
+                            leftarrow = pygame.image.load('data/leftarrowopaque.png')
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowopaque.png')
+                            rightarrow = pygame.image.load('data/rightarrowopaque.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
@@ -99,48 +99,48 @@ class Startscreen:
                         screen.blit(rnd, rnd.get_rect(center=(self.WIDTH / 2, int(i[0]))))
                         i[5], i[6], i[7], i[8] = rnd.get_rect(center=(self.WIDTH / 2, int(i[0])))
                         if self.max_map == 1:
-                            leftarrow = pygame.image.load(f'data/leftarrowtransparent.png')
+                            leftarrow = pygame.image.load('data/leftarrowtransparent.png')
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowtransparent.png')
+                            rightarrow = pygame.image.load('data/rightarrowtransparent.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
                             rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
                             screen.blit(rightarrow, rightarrow_rect)
                         elif i[1][-1] == '1':
-                            leftarrow = pygame.image.load(f'data/leftarrowtransparent.png')
+                            leftarrow = pygame.image.load('data/leftarrowtransparent.png')
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowopaque.png')
+                            rightarrow = pygame.image.load('data/rightarrowopaque.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
                             rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
                             screen.blit(rightarrow, rightarrow_rect)
                         elif i[1][-1] == str(self.max_map):
-                            leftarrow = pygame.image.load(f'data/leftarrowopaque.png')
+                            leftarrow = pygame.image.load('data/leftarrowopaque.png')
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowtransparent.png')
+                            rightarrow = pygame.image.load('data/rightarrowtransparent.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
                             rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
                             screen.blit(rightarrow, rightarrow_rect)
                         else:
-                            leftarrow = pygame.image.load(f'data/leftarrowopaque.png')
+                            leftarrow = pygame.image.load('data/leftarrowopaque.png')
                             leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                            leftarrow.get_height() // 10))
                             leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                             screen.blit(leftarrow, leftarrow_rect)
-                            rightarrow = pygame.image.load(f'data/rightarrowopaque.png')
+                            rightarrow = pygame.image.load('data/rightarrowopaque.png')
                             rightarrow = pygame.transform.scale(rightarrow,
                                                                 (rightarrow.get_width() // 10,
                                                                  rightarrow.get_height() // 10))
@@ -154,12 +154,12 @@ class Startscreen:
                     yacht_rect = yacht.get_rect(center=(self.WIDTH / 2, int(i[0])))
                     screen.blit(yacht, yacht_rect)
                     if self.max_boat == 1:
-                        leftarrow = pygame.image.load(f'data/leftarrowtransparent.png')
+                        leftarrow = pygame.image.load('data/leftarrowtransparent.png')
                         leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                        leftarrow.get_height() // 10))
                         leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                         screen.blit(leftarrow, leftarrow_rect)
-                        rightarrow = pygame.image.load(f'data/rightarrowtransparent.png')
+                        rightarrow = pygame.image.load('data/rightarrowtransparent.png')
                         rightarrow = pygame.transform.scale(rightarrow, (rightarrow.get_width() // 10,
                                                                          rightarrow.get_height() // 10))
                         rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
@@ -167,12 +167,12 @@ class Startscreen:
                         rnd = font_infoboat.render(self.boat[i[1]], True, i[3])
                         screen.blit(rnd, rnd.get_rect(center=(self.WIDTH / 2, int(i[0]) + 80)))
                     elif i[1] == 'yacht_1.png':
-                        leftarrow = pygame.image.load(f'data/leftarrowtransparent.png')
+                        leftarrow = pygame.image.load('data/leftarrowtransparent.png')
                         leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                        leftarrow.get_height() // 10))
                         leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                         screen.blit(leftarrow, leftarrow_rect)
-                        rightarrow = pygame.image.load(f'data/rightarrowopaque.png')
+                        rightarrow = pygame.image.load('data/rightarrowopaque.png')
                         rightarrow = pygame.transform.scale(rightarrow, (rightarrow.get_width() // 10,
                                                                          rightarrow.get_height() // 10))
                         rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
@@ -180,12 +180,12 @@ class Startscreen:
                         rnd = font_infoboat.render(self.boat[i[1]], True, i[3])
                         screen.blit(rnd, rnd.get_rect(center=(self.WIDTH / 2, int(i[0]) + 80)))
                     elif i[1] == f'yacht_{self.max_boat}.png':
-                        leftarrow = pygame.image.load(f'data/leftarrowopaque.png')
+                        leftarrow = pygame.image.load('data/leftarrowopaque.png')
                         leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                        leftarrow.get_height() // 10))
                         leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                         screen.blit(leftarrow, leftarrow_rect)
-                        rightarrow = pygame.image.load(f'data/rightarrowtransparent.png')
+                        rightarrow = pygame.image.load('data/rightarrowtransparent.png')
                         rightarrow = pygame.transform.scale(rightarrow, (rightarrow.get_width() // 10,
                                                                          rightarrow.get_height() // 10))
                         rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))
@@ -193,12 +193,12 @@ class Startscreen:
                         rnd = font_infoboat.render(self.boat[i[1]], True, i[3])
                         screen.blit(rnd, rnd.get_rect(center=(self.WIDTH / 2, int(i[0]) + 80)))
                     else:
-                        leftarrow = pygame.image.load(f'data/leftarrowopaque.png')
+                        leftarrow = pygame.image.load('data/leftarrowopaque.png')
                         leftarrow = pygame.transform.scale(leftarrow, (leftarrow.get_width() // 10,
                                                                        leftarrow.get_height() // 10))
                         leftarrow_rect = leftarrow.get_rect(center=(self.WIDTH / 4, int(i[0])))
                         screen.blit(leftarrow, leftarrow_rect)
-                        rightarrow = pygame.image.load(f'data/rightarrowopaque.png')
+                        rightarrow = pygame.image.load('data/rightarrowopaque.png')
                         rightarrow = pygame.transform.scale(rightarrow, (rightarrow.get_width() // 10,
                                                                          rightarrow.get_height() // 10))
                         rightarrow_rect = rightarrow.get_rect(center=(self.WIDTH / 4 * 3, int(i[0])))

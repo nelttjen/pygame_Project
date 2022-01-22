@@ -1,6 +1,5 @@
 from collections import defaultdict
 from Config import Collisiontypes
-from pygame.colordict import THECOLORS
 import pymunk
 
 
@@ -42,7 +41,7 @@ class SandBox2:
 
         self.draw_checkpoint(
             0, self.x * 2.5, self.x * 5,
-               self.x * 2.5, 1)
+            self.x * 2.5, 1)
         self.draw_checkpoint(
             self.x * 7.5, self.x * 5, self.x * 7.5,
             HEIGHT, 0)

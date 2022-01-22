@@ -1,16 +1,13 @@
 from collections import defaultdict
-import sys
 from typing import Tuple
 
-from pymunk import space
 import Config
 from pygame.colordict import THECOLORS
 import pymunk
 import pygame
 from Utills.utils import load_image
-from Boat.test_map_generator import Test_MapGenerator
 from random import randrange
-from math import pi
+
 
 class LevelBuilder1:
     size: Tuple[int, int]
@@ -21,17 +18,17 @@ class LevelBuilder1:
         self.x, self.y = size
         self.m = 150
         self.load_images()
-        
-        cps, lp = map_generator.add_decorations()      
+
+        cps, lp = map_generator.add_decorations()
         self.map = map_generator.map
         self.track = map_generator.track
         self.lp = lp[1]
         self.cps = cps
         self.cp = self.cps[0][1]
-        
+
         self.generate_image(self.map, self.track[self.lp][0], self.track[self.lp][1])
-    
-    def build(self, space):   
+
+    def build(self, space):
         self.space = space
         self.generate_pymunk_objects(self.map, self.cps, self.track)
 
@@ -46,10 +43,11 @@ class LevelBuilder1:
         segment_shape.color = THECOLORS["white"]
 
     colors = [THECOLORS["red"], THECOLORS["yellow"], THECOLORS["green"], THECOLORS["white"], THECOLORS["red"], THECOLORS["yellow"], THECOLORS["green"], THECOLORS["white"]]
+
     def draw_coord(self, xy, color):
         body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         shape = pymunk.Circle(body, 20, xy)
-        shape.sensor=True
+        shape.sensor = True
         shape.color = color
         self.space.add(body, shape)
 
@@ -176,8 +174,7 @@ class LevelBuilder1:
 
     def generate_image(self, level, x, y):
         self.size = self.m * len(level), self.m * len(level[0])
-        #self.size = 920, 700
-        count = 0
+        # self.size = 920, 700
         self.merged_image = pygame.Surface(self.size)
         for i in range(len(level)):
             for j in range(len(level[i])):
@@ -234,7 +231,7 @@ class LevelBuilder1:
             self.merged_image.blit(self.imageS, (x * self.m, (y+1) * self.m))
         else:
             self.merged_image.blit(self.imageS, ((x+1) * self.m, y * self.m))
-    
+
     def get_image(self):
         return self.merged_image
 

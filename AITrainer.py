@@ -1,6 +1,5 @@
 import sys
 
-from pymunk import pygame_util
 from Boat.AIController import AIController
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
