@@ -3,7 +3,14 @@ import operator
 
 
 class MapGenerator:
-    def __init__(self, track_width, track_height, map_width, map_height, deformations, seed):
+    def __init__(
+            self,
+            track_width,
+            track_height,
+            map_width,
+            map_height,
+            deformations,
+            seed):
         random.seed(seed)
 
         self.temp = 0
@@ -44,7 +51,8 @@ class MapGenerator:
         self.add_deformations(deformations)
 
     def is_corner(self, point):
-        return self.map[point[1] - 1][point[0]] != self.map[point[1] + 1][point[0]]
+        return self.map[point[1] - 1][point[0]
+                                      ] != self.map[point[1] + 1][point[0]]
 
     def rotate(self, shift, direction):
         self.temp = 0
@@ -106,15 +114,16 @@ class MapGenerator:
                 self.track.insert(
                     point_n2, (point2[0] + shift[0] * o, point2[1] + shift[1] * o))
                 self.track_set(point_n2, 1)
-                self.track.insert(
-                    point_n1, (point1[0] + shift[0] * (offset - o - 1), point1[1] + shift[1] * (offset - o - 1)))
+                self.track.insert(point_n1,
+                                  (point1[0] + shift[0] * (offset - o - 1),
+                                   point1[1] + shift[1] * (offset - o - 1)))
                 self.track_set(point_n1, 1)
             else:
                 self.track_set(point_d, 0)
                 self.track.pop(point_d)
-                self.track.insert(
-                    point_i,
-                    (point2[0] + shift[0] * (o + 1) * point_i_delta, point2[1] + shift[1] * (o + 1) * point_i_delta))
+                self.track.insert(point_i,
+                                  (point2[0] + shift[0] * (o + 1) * point_i_delta,
+                                   point2[1] + shift[1] * (o + 1) * point_i_delta))
                 self.track_set(point_i, 1)
         return True
 
@@ -225,7 +234,8 @@ class MapGenerator:
                         borders = ['>', '<']
             else:
                 skip = True
-                straight_paths.append((straight_start, point_n - 1, last_direction))
+                straight_paths.append(
+                    (straight_start, point_n - 1, last_direction))
                 straight_start = point_n
                 self.map_set(
                     last_point, (-direction[0], -direction[1]), borders[int((1 + direction[1] - direction[0]) / 2)])

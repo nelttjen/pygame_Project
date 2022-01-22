@@ -7,16 +7,20 @@ class Camera:
     screen_size: Tuple[int, int]
     level_size: Tuple[int, int]
 
-    def __init__(self, level_size: Tuple[int, int], screen_size: Tuple[int, int]):
+    def __init__(
+            self, level_size: Tuple[int, int], screen_size: Tuple[int, int]):
         self.screen_size = screen_size
         self.level_size = level_size
-        self.min_scale = max(screen_size[0] / level_size[0], screen_size[1] / level_size[1])
+        self.min_scale = max(
+            screen_size[0] / level_size[0],
+            screen_size[1] / level_size[1])
         self.scalingUpdate = DelayedUpdate(k=0.01)
         self.cameraXUpdate = DelayedUpdate(initial=0, k=0.1)
         self.cameraYUpdate = DelayedUpdate(initial=0, k=0.1)
         self.max_speed = 300
 
-    def update(self, x, y, v) -> tuple[tuple[int, int], tuple[float, float], float]:
+    def update(self, x, y, v) -> tuple[tuple[int,
+                                             int], tuple[float, float], float]:
         (cx, _) = self.cameraXUpdate.update(x)
         (cy, _) = self.cameraYUpdate.update(y)
         if v > self.max_speed:

@@ -42,7 +42,7 @@ class SandBox2:
 
         self.draw_checkpoint(
             0, self.x * 2.5, self.x * 5,
-               self.x * 2.5, 1)
+            self.x * 2.5, 1)
         self.draw_checkpoint(
             self.x * 7.5, self.x * 5, self.x * 7.5,
             HEIGHT, 0)
@@ -52,7 +52,8 @@ class SandBox2:
         return c[checkpoint]
 
     def get_checkpoint_info(self, shape):
-        return self.dict_checkpoint[shape], (self.dict_checkpoint[shape] + 1) % 2
+        return self.dict_checkpoint[shape], (
+            self.dict_checkpoint[shape] + 1) % 2
 
     def arrangeBoats(self, boats):
         c = [

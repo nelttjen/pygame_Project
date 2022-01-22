@@ -12,6 +12,7 @@ from Boat.test_map_generator import Test_MapGenerator
 from random import randrange
 from math import pi
 
+
 class LevelBuilder1:
     size: Tuple[int, int]
 
@@ -21,17 +22,19 @@ class LevelBuilder1:
         self.x, self.y = size
         self.m = 150
         self.load_images()
-        
-        cps, lp = map_generator.add_decorations()      
+
+        cps, lp = map_generator.add_decorations()
         self.map = map_generator.map
         self.track = map_generator.track
         self.lp = lp[1]
         self.cps = cps
         self.cp = self.cps[0][1]
-        
-        self.generate_image(self.map, self.track[self.lp][0], self.track[self.lp][1])
-    
-    def build(self, space):   
+
+        self.generate_image(self.map,
+                            self.track[self.lp][0],
+                            self.track[self.lp][1])
+
+    def build(self, space):
         self.space = space
         self.generate_pymunk_objects(self.map, self.cps, self.track)
 
@@ -45,11 +48,20 @@ class LevelBuilder1:
         segment_shape.friction = 1.0
         segment_shape.color = THECOLORS["white"]
 
-    colors = [THECOLORS["red"], THECOLORS["yellow"], THECOLORS["green"], THECOLORS["white"], THECOLORS["red"], THECOLORS["yellow"], THECOLORS["green"], THECOLORS["white"]]
+    colors = [
+        THECOLORS["red"],
+        THECOLORS["yellow"],
+        THECOLORS["green"],
+        THECOLORS["white"],
+        THECOLORS["red"],
+        THECOLORS["yellow"],
+        THECOLORS["green"],
+        THECOLORS["white"]]
+
     def draw_coord(self, xy, color):
         body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         shape = pymunk.Circle(body, 20, xy)
-        shape.sensor=True
+        shape.sensor = True
         shape.color = color
         self.space.add(body, shape)
 
@@ -69,53 +81,82 @@ class LevelBuilder1:
         for i in range(len(level)):
             for j in range(len(level[i])):
                 if level[i][j] == '>' or level[i][j] == '<':
-                    self.draw_wall(j * self.m + self.m / 2, i * self.m,
-                                   j * self.m + self.m / 2, i * self.m + self.m)
+                    self.draw_wall(
+                        j * self.m + self.m / 2,
+                        i * self.m,
+                        j * self.m + self.m / 2,
+                        i * self.m + self.m)
                 if level[i][j] == '^' or level[i][j] == 'v':
                     self.draw_wall(
-                        j * self.m, i * self.m + self.m / 2, j * self.m + self.m,
+                        j * self.m,
+                        i * self.m + self.m / 2,
+                        j * self.m + self.m,
                         i * self.m + self.m / 2)
 
                 if level[i][j] == 'd' or level[i][j] == 'e':
                     self.draw_wall(
-                        j * self.m, i * self.m + 0.5 * self.m, j * self.m + 0.25
-                        * self.m, i * self.m + 0.6 * self.m)
+                        j * self.m,
+                        i * self.m + 0.5 * self.m,
+                        j * self.m + 0.25 * self.m,
+                        i * self.m + 0.6 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.25 * self.m, i * self.m + 0.6 * self.m, j
-                        * self.m + 0.4 * self.m, i * self.m + 0.7 * self.m)
+                        j * self.m + 0.25 * self.m,
+                        i * self.m + 0.6 * self.m,
+                        j * self.m + 0.4 * self.m,
+                        i * self.m + 0.7 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.4 * self.m, i * self.m + 0.7 * self.m, j *
-                        self.m + 0.5 * self.m, i * self.m + 1.0 * self.m)
+                        j * self.m + 0.4 * self.m,
+                        i * self.m + 0.7 * self.m,
+                        j * self.m + 0.5 * self.m,
+                        i * self.m + 1.0 * self.m)
                 if level[i][j] == 'f' or level[i][j] == 'r':
                     self.draw_wall(
-                        j * self.m + 1.0 * self.m, i * self.m + 0.5 * self.m, j *
-                        self.m + 0.75 * self.m, i * self.m + 0.6 * self.m)
+                        j * self.m + 1.0 * self.m,
+                        i * self.m + 0.5 * self.m,
+                        j * self.m + 0.75 * self.m,
+                        i * self.m + 0.6 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.75 * self.m, i * self.m + 0.6 * self.m, j
-                        * self.m + 0.6 * self.m, i * self.m + 0.7 * self.m)
+                        j * self.m + 0.75 * self.m,
+                        i * self.m + 0.6 * self.m,
+                        j * self.m + 0.6 * self.m,
+                        i * self.m + 0.7 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.6 * self.m, i * self.m + 0.7 * self.m, j *
-                        self.m + 0.5 * self.m, i * self.m + 1.0 * self.m)
+                        j * self.m + 0.6 * self.m,
+                        i * self.m + 0.7 * self.m,
+                        j * self.m + 0.5 * self.m,
+                        i * self.m + 1.0 * self.m)
                 if level[i][j] == 's' or level[i][j] == 'w':
                     self.draw_wall(
-                        j * self.m + 0.5 * self.m, i * self.m, j * self.m + 0.6 *
-                        self.m, i * self.m + 0.3 * self.m)
+                        j * self.m + 0.5 * self.m,
+                        i * self.m,
+                        j * self.m + 0.6 * self.m,
+                        i * self.m + 0.3 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.6 * self.m, i * self.m + 0.3 * self.m, j *
-                        self.m + 0.75 * self.m, i * self.m + 0.4 * self.m)
+                        j * self.m + 0.6 * self.m,
+                        i * self.m + 0.3 * self.m,
+                        j * self.m + 0.75 * self.m,
+                        i * self.m + 0.4 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.75 * self.m, i * self.m + 0.4 * self.m, j
-                        * self.m + 1.0 * self.m, i * self.m + 0.5 * self.m)
+                        j * self.m + 0.75 * self.m,
+                        i * self.m + 0.4 * self.m,
+                        j * self.m + 1.0 * self.m,
+                        i * self.m + 0.5 * self.m)
                 if level[i][j] == 'a' or level[i][j] == 'q':
                     self.draw_wall(
-                        j * self.m + 0.5 * self.m, i * self.m, j * self.m + 0.4 *
-                        self.m, i * self.m + 0.3 * self.m)
+                        j * self.m + 0.5 * self.m,
+                        i * self.m,
+                        j * self.m + 0.4 * self.m,
+                        i * self.m + 0.3 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.4 * self.m, i * self.m + 0.3 * self.m, j *
-                        self.m + 0.25 * self.m, i * self.m + 0.4 * self.m)
+                        j * self.m + 0.4 * self.m,
+                        i * self.m + 0.3 * self.m,
+                        j * self.m + 0.25 * self.m,
+                        i * self.m + 0.4 * self.m)
                     self.draw_wall(
-                        j * self.m + 0.25 * self.m, i * self.m + 0.4 * self.m, j
-                        * self.m, i * self.m + 0.5 * self.m)
+                        j * self.m + 0.25 * self.m,
+                        i * self.m + 0.4 * self.m,
+                        j * self.m,
+                        i * self.m + 0.5 * self.m)
         count = 0
         for i in cp:
             if i[1][0] == 1:
@@ -138,7 +179,8 @@ class LevelBuilder1:
                                      (track[i[0]][1] - 0.5) * self.m,
                                      (track[i[0]][0] - 1) * self.m,
                                      (track[i[0]][1] - 0.5) * self.m, count)
-            cxy = ((track[i[0]][0] + i[1][0]) * self.m + self.m // 2, (track[i[0]][1] + i[1][1]) * self.m + self.m // 2)
+            cxy = ((track[i[0]][0] + i[1][0]) * self.m + self.m //
+                   2, (track[i[0]][1] + i[1][1]) * self.m + self.m // 2)
             self.coords.append(cxy)
             self.draw_coord(cxy, self.colors[count])
             count += 1
@@ -231,10 +273,10 @@ class LevelBuilder1:
                         self.merged_image.blit(
                             self.imageK, (j * self.m, i * self.m))
         if self.cp[1] == 1 or self.cp[1] == 1:
-            self.merged_image.blit(self.imageS, (x * self.m, (y+1) * self.m))
+            self.merged_image.blit(self.imageS, (x * self.m, (y + 1) * self.m))
         else:
-            self.merged_image.blit(self.imageS, ((x+1) * self.m, y * self.m))
-    
+            self.merged_image.blit(self.imageS, ((x + 1) * self.m, y * self.m))
+
     def get_image(self):
         return self.merged_image
 
@@ -251,20 +293,20 @@ class LevelBuilder1:
     def arrangeBoats(self, boats):
         if self.cp[1] == 1:
             c = [
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m],
-                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m - 100],
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m - 200],
-                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m - 300],
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m - 400]]
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1] + 2) * self.m],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1] + 2) * self.m - 100],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1] + 2) * self.m - 200],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1] + 2) * self.m - 300],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1] + 2) * self.m - 400]]
             for i in range(len(boats)):
                 boats[i].set_position(c[i][0], c[i][1], 0.5)
         if self.cp[1] == -1:
             c = [
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m],
-                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m + 100],
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m + 200],
-                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1]+2) * self.m + 300],
-                [self.track[self.lp][0] * self.m, (self.track[self.lp][1]+2) * self.m + 400]]
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1] + 2) * self.m],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1] + 2) * self.m + 100],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1] + 2) * self.m + 200],
+                [self.track[self.lp][0] * self.m + 120, (self.track[self.lp][1] + 2) * self.m + 300],
+                [self.track[self.lp][0] * self.m, (self.track[self.lp][1] + 2) * self.m + 400]]
             for i in range(len(boats)):
                 boats[i].set_position(c[i][0], c[i][1], 1.5)
         if self.cp[0] == -1:

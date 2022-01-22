@@ -45,26 +45,41 @@ class Main:
             level.build(space)
             c = [0, 1, 2, 3, 4, 5]
             c.remove(start.res[1] - 1)
-            boats = [
-                BaseBoat(space, radarManager, (Specifications.BOATS[start.res[1] - 1]), level),
-            ]
+            boats = [BaseBoat(space,
+                              radarManager,
+                              (Specifications.BOATS[start.res[1] - 1]),
+                              level),
+                     ]
             for i in range(4):
                 a = choice(c)
-                boats.append(BaseBoat(space, radarManager, (Specifications.BOATS[a]), level))
+                boats.append(
+                    BaseBoat(
+                        space,
+                        radarManager,
+                        (Specifications.BOATS[a]),
+                        level))
                 c.remove(a)
             controllers = [
-                SimpleController(boats[1], level),
-                SimpleController(boats[2], level),
-                SimpleController(boats[3], level),
-                SimpleController(boats[4], level),
-                KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
-            ]
+                SimpleController(
+                    boats[1], level), SimpleController(
+                    boats[2], level), SimpleController(
+                    boats[3], level), SimpleController(
+                    boats[4], level), KeyboardController(
+                        boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN), ]
 
             radarManager.register_collision_type(Collisiontypes.BOAT)
             radarManager.register_collision_type(Collisiontypes.SHORE)
             radarManager.register_collision_type(Collisiontypes.CHECKPOINT)
             try:
-                game = Game(space, surface, radarManager, boats, controllers, self.FPS, level, is_debug)
+                game = Game(
+                    space,
+                    surface,
+                    radarManager,
+                    boats,
+                    controllers,
+                    self.FPS,
+                    level,
+                    is_debug)
                 exit_code = game.run()
             except Exception as e:
                 print(e.__str__())
@@ -77,8 +92,10 @@ class Main:
                                            points=game.points, track=start.res[0])
                     yacht.save()
                 else:
-                    yacht = Records.create(name=game.name, yacht=Specifications.BOATS[start.res[1] - 1][1],
-                                           points=game.points, track=start.res[0])
+                    yacht = Records.create(name=game.name,
+                                           yacht=Specifications.BOATS[start.res[1] - 1][1],
+                                           points=game.points,
+                                           track=start.res[0])
                     yacht.save()
             return exit_code
 
