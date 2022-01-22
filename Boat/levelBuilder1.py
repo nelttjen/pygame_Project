@@ -54,7 +54,6 @@ class LevelBuilder1:
         THECOLORS["green"],
         THECOLORS["white"]]
 
-
     def draw_coord(self, xy, color):
         body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         shape = pymunk.Circle(body, 20, xy)

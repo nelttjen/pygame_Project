@@ -8,7 +8,7 @@ from Boat.RadarManager import RadarManager
 from Boat.BaseBoat import BaseBoat
 from Boat.KeyboardController import KeyboardController
 from Boat.SimpleController import SimpleController
-from Game import Game
+from Game import Game, MenuError
 from Config import Collisiontypes
 from Config import Specifications
 from Config import Tracks
@@ -81,10 +81,12 @@ class Main:
                     level,
                     is_debug)
                 exit_code = game.run()
+            except MenuError:
+                pass
             except Exception as e:
                 print(e.__str__())
                 game = None
-                exit_code = -1
+                return -1
             if game:
                 if not game.name:
                     yacht = Records.create(name='Гость' + str(randrange(99)),
@@ -97,7 +99,6 @@ class Main:
                                            points=game.points,
                                            track=start.res[0])
                     yacht.save()
-            return exit_code
 
 
 if __name__ == '__main__':
