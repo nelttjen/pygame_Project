@@ -309,14 +309,10 @@ class Startscreen:
                         if select == 2:
                             running = False
                             self.res = [int(self.mn[0][1][6:]), int(self.mn[1][1][6:-4])]
-                            # self.res[0] = int(self.mn[0][1][6:])
-                            # self.res[1] = int(self.mn[1][1][6:-4])
                             break
                         if select == 3:
                             running = False
                             self.res = 'records'
-                            # self.res[0] = 'records'
-                            # self.res[1] = 'records'
                             break
                         if select == 4:
                             sys.exit()
@@ -365,13 +361,9 @@ class Startscreen:
                             if select == 2:
                                 running = False
                                 self.res = [int(self.mn[0][1][6:]), int(self.mn[1][1][6:-4])]
-                                # self.res[0] = int(self.mn[0][1][6:])
-                                # self.res[1] = int(self.mn[1][1][6:-4])
                             if select == 3:
                                 running = False
                                 self.res = 'records'
-                                # self.res[0] = 'records'
-                                # self.res[1] = 'records'
                             if select == 4:
                                 sys.exit()
                     mp = pygame.mouse.get_pos()
