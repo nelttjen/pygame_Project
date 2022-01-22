@@ -1,21 +1,13 @@
 import pygame
-from pygame.draw import rect
-from pygame.image import load
-from Config import Specifications
-from Utills.utils import load_image
 import sys
 
 from Config import Tracks
-from peewee import *
-
+from Config import Specifications
+from Utills.utils import load_image
 from database import Records
 
 number = 0
 number_yacht = 0
-
-
-class Back(Exception):
-    pass
 
 
 class Arrow(pygame.sprite.Sprite):
@@ -29,14 +21,14 @@ class Arrow(pygame.sprite.Sprite):
         self.rect.y = y
         self.tag = tag
 
-    def update_image(self, number):
+    def update_image(self, i_number):
         if self.tag == 1:
-            if number != len(Specifications.BOATS):
+            if i_number != len(Specifications.BOATS):
                 self.image = self.image1
             else:
                 self.image = self.image2
         elif self.tag == -1:
-            if number != 1:
+            if i_number != 1:
                 self.image = self.image1
             else:
                 self.image = self.image2
@@ -101,22 +93,24 @@ class Yacht(pygame.sprite.Sprite):
 
 
 class Table_records:
+    def __init__(self):
+        self.running = True
+
     def start(self):
         global number
         global number_yacht
         boat = Specifications.BOATS
 
-        db = SqliteDatabase('yacht.db')
+        # db = SqliteDatabase('yacht.db')
 
         pygame.init()
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         width, height = screen.get_size()
-        running = True
         rect_color = pygame.Color('green')
         count_yacht = len(boat) + 1
         f1 = pygame.font.Font('fonts/8289.otf', 50)
         number = 1
-        text = 'Track 1'
+        # text = 'Track 1'
         all_sprites = pygame.sprite.Group()
 
         checkmark = pygame.transform.scale(load_image("checkmark.png"), (width / count_yacht, width / count_yacht / 3))
@@ -137,10 +131,10 @@ class Table_records:
                         'yacht_4.png': (pygame.transform.scale(load_image("yacht_4.png"), (width / 5, height / 15)), 4),
                         'yacht_5.png': (pygame.transform.scale(load_image("yacht_5.png"), (width / 5, height / 15)), 5),
                         'yacht_6.png': (
-                        pygame.transform.scale(load_image("yacht_6.png"), (width / 5, height / 15)), 6), }
-        while running:
+                            pygame.transform.scale(load_image("yacht_6.png"), (width / 5, height / 15)), 6), }
+        while self.running:
             # screen.fill((50, 80, 200))
-            img = Tracks.get_track(int(number-1)).get_image()
+            img = Tracks.get_track(int(number - 1)).get_image()
             fon = pygame.transform.scale(img, (width, height))
             screen.blit(fon, (0, 0))
             screen.fill((45, 45, 45), special_flags=8)
@@ -149,10 +143,10 @@ class Table_records:
             for event in pygame.event.get():
                 all_sprites.update(event)
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.running = False
             for i in range(count_yacht + 1):
                 pygame.draw.rect(screen, rect_color, (
-                width / count_yacht * i, height / 15 * 2, width / count_yacht, width / count_yacht / 3), 4)
+                    width / count_yacht * i, height / 15 * 2, width / count_yacht, width / count_yacht / 3), 4)
             for i in range(10):
                 for j in range(3):
                     pygame.draw.rect(screen, rect_color,

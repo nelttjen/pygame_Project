@@ -6,9 +6,8 @@ import random
 import os
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as f
 import torch.optim as optim
-import torch.autograd as autograd
 from torch.autograd import Variable
 
 
@@ -25,8 +24,8 @@ class Network(nn.Module):
         self.output = nn.Linear(internal_size, nb_action)
 
     def forward(self, state):
-        x = F.relu(self.input(state))
-        x = F.relu(self.hidden1(x))
+        x = f.relu(self.input(state))
+        x = f.relu(self.hidden1(x))
         q_values = self.output(x)
         return q_values
 
@@ -51,7 +50,7 @@ class ReplayMemory(object):
 
 # Implementing Deep Q Learning
 
-class Dqn():
+class Dqn:
     loss_func = nn.MSELoss()
 
     # loss_func = F.smooth_l1_loss
@@ -72,7 +71,7 @@ class Dqn():
         out = self.model(Variable(state, volatile=True))
         out[torch.isnan(out)] = 0
         out[torch.isinf(out)] = 0
-        probs = F.softmax(out * 100)  # T=100
+        probs = f.softmax(out * 100)  # T=100
         action = probs.multinomial(self.model.nb_action)
         return action.data[0, 0]
 

@@ -1,21 +1,14 @@
-from platform import python_branch
 import sys
-from turtle import speed
+import pymunk
+import pymunk.pygame_util
+import pygame as pg
 
-from pygame.image import load
 from typing import List
 
-from Boat.BaseBoat import BaseBoat
-from Boat.KeyboardController import KeyboardController
-import pygame as pg
-import pymunk
-from Boat.Camera import Camera
-import pymunk.pygame_util
 import Config
-
-
+from Boat.Camera import Camera
+from Boat.BaseBoat import BaseBoat
 from Utills.utils import load_image
-
 
 
 class MenuError(Exception):
@@ -36,6 +29,12 @@ class Menu(pg.sprite.Sprite):
             raise MenuError
 
 
+def init_window():
+    screen = pg.display.set_mode((Config.Screen.WIDTH, Config.Screen.HEIGHT))
+    clock = pg.time.Clock()
+    return screen, clock
+
+
 class Game:
     camera: Camera
     boats: List[BaseBoat]
@@ -49,7 +48,7 @@ class Game:
 
         self.FPS = FPS
         self.debug_mode = debug
-        self.screen, self.clock = self.init_window()
+        self.screen, self.clock = init_window()
 
         self.time_delta = 0
 
@@ -64,14 +63,12 @@ class Game:
         self.a = level.get_image()
 
         self.max_speed = 0
+        self.place = 0
+        self.points = 0
+        self.name = ''
 
         self.all_sprites = pg.sprite.Group()
         Menu("menu.png", self.screen.get_width() // 2 - 80, self.screen.get_height() // 2 + 70, self.all_sprites)
-
-    def init_window(self):
-        screen = pg.display.set_mode((Config.Screen.WIDTH, Config.Screen.HEIGHT))
-        clock = pg.time.Clock()
-        return screen, clock
 
     def run(self):
         for boat in self.boats:
@@ -94,7 +91,7 @@ class Game:
         infoboat[0] = infoboat[0] + ('Яхта игрока',)
         for i in range(1, len(infoboat)):
             infoboat[i] = infoboat[i] + ('Бот',)
-        self.radarManager.updateSensors()
+        self.radarManager.update_sensors()
 
         playerX, playerY = self.boats[0].get_position()
         cxy, wxy, scaling = self.camera.update(playerX, playerY, self.boats[0].get_velocity())
@@ -102,18 +99,18 @@ class Game:
         self.space.step(1 / self.FPS)
         if Config.Screen.DEBUG:
             self.draw_options.transform = (
-                pymunk.Transform.scaling(scaling)
-                @ pymunk.Transform(tx=-cxy[0], ty=-cxy[1])
+                    pymunk.Transform.scaling(scaling)
+                    @ pymunk.Transform(tx=-cxy[0], ty=-cxy[1])
             )
 
         cropped_image = self.a.subsurface(cxy[0], cxy[1], wxy[0], wxy[1])
         cropped_image = pg.transform.scale(cropped_image, self.camera.screen_size)
         self.screen.blit(cropped_image, (0, 0))
-        if Config.Screen.DEBUG:       
+        if Config.Screen.DEBUG:
             self.space.debug_draw(self.draw_options)
 
         for boat in self.boats:
-            boat.updateImage(self.surface, cxy[0], cxy[1], scaling)
+            boat.update_image(self.surface, cxy[0], cxy[1], scaling)
         self.render_fps(str(int(self.clock.get_fps())), (0, 0))
         self.render_lap(str(lap), (100, 0))
         self.render_speed(str(int(self.boats[0].get_velocity())), (300, 0))
@@ -131,7 +128,7 @@ class Game:
             if event.type == pg.QUIT:
                 return False
             for controller in self.controllers:
-                controller.processEvent(event)
+                controller.process_event(event)
         return True
 
     def render_fps(self, text, pos):
@@ -157,7 +154,7 @@ class Game:
                 self.place = i + 1
                 render_text = font.render('Место' + str(i + 1), True, pg.Color('red'))
                 self.screen.blit(render_text, pos)
-    
+
     def finish(self, place):
         points = {1: 16000, 2: 12000, 3: 8000, 4: 4000}
         a = pg.transform.scale(load_image("finish.png"), (800, 400))

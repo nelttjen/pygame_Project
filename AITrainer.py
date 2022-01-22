@@ -12,6 +12,7 @@ import pymunk
 from Boat.RadarManager import RadarManager
 import Config
 
+
 class Main:
     def __init__(self, w, h, GAME_FPS):
         self.w, self.h, self.FPS = w, h, GAME_FPS
@@ -34,16 +35,15 @@ class Main:
             BaseBoat(space, radarManager, (Config.Specifications.BOATS[3]), level),
         ]
         controllers = [
-            # SimpleController(boats[0], level),
             SimpleController(boats[0], level),
             AIController(boats[1], level),
             SimpleController(boats[2], level),
             KeyboardController(boats[0], level, pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN),
         ]
 
-        radarManager.registerCollisionType(Config.Collisiontypes.BOAT)
-        radarManager.registerCollisionType(Config.Collisiontypes.SHORE)
-        radarManager.registerCollisionType(Config.Collisiontypes.CHECKPOINT)
+        radarManager.register_collision_type(Config.Collisiontypes.BOAT)
+        radarManager.register_collision_type(Config.Collisiontypes.SHORE)
+        radarManager.register_collision_type(Config.Collisiontypes.CHECKPOINT)
 
         game = Game(space, surface, radarManager, boats, controllers, self.FPS, level, is_debug)
         exit_code = game.run()

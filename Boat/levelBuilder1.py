@@ -35,7 +35,6 @@ class LevelBuilder1:
         self.space = space
         self.generate_pymunk_objects(self.map, self.cps, self.track)
 
-
     def draw_wall(self, x, y, x2, y2):
         segment_shape = pymunk.Segment(
             self.space.static_body, (x, y), (x2, y2), 4

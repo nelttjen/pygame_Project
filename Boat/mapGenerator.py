@@ -5,6 +5,9 @@ import operator
 class MapGenerator:
     def __init__(self, track_width, track_height, map_width, map_height, deformations, seed):
         random.seed(seed)
+
+        self.temp = 0
+
         self.track_width = track_width
         self.track_height = track_height
         self.map_width = map_width
@@ -44,7 +47,8 @@ class MapGenerator:
         return self.map[point[1] - 1][point[0]] != self.map[point[1] + 1][point[0]]
 
     def rotate(self, shift, direction):
-        return (-shift[1] * direction, shift[0] * direction)
+        self.temp = 0
+        return -shift[1] * direction, shift[0] * direction
 
     def map_distance_to_corner(self, point, shift, direction):
         return self.map_distance_to(point, self.rotate(shift, direction), 0)
@@ -93,24 +97,25 @@ class MapGenerator:
             point_d, point_i, point_i_delta = {
                 -1: (point_n1 - offset, point_n2, -1), 1: (point_n2 + 2, point_n1, -1)}[corner]
             point2 = self.track[point_i]
+        else:
+            point_d, point_i, point_i_delta = 0, 0, 0
 
         for o in range(offset):
             if corner == 0:
                 point_n2 += 1
                 self.track.insert(
-                    point_n2, ((point2[0] + shift[0] * o, point2[1] + shift[1] * o)))
+                    point_n2, (point2[0] + shift[0] * o, point2[1] + shift[1] * o))
                 self.track_set(point_n2, 1)
                 self.track.insert(
-                    point_n1, ((point1[0] + shift[0] * (offset - o - 1), point1[1] + shift[1] * (offset - o - 1))))
+                    point_n1, (point1[0] + shift[0] * (offset - o - 1), point1[1] + shift[1] * (offset - o - 1)))
                 self.track_set(point_n1, 1)
             else:
                 self.track_set(point_d, 0)
                 self.track.pop(point_d)
                 self.track.insert(
                     point_i,
-                    ((point2[0] + shift[0] * (o + 1) * point_i_delta, point2[1] + shift[1] * (o + 1) * point_i_delta)))
+                    (point2[0] + shift[0] * (o + 1) * point_i_delta, point2[1] + shift[1] * (o + 1) * point_i_delta))
                 self.track_set(point_i, 1)
-
         return True
 
     def corner_shift(self, point_n, shift):
@@ -144,14 +149,14 @@ class MapGenerator:
             while True:
                 point_n = random.randint(1, len(self.track) - 1)
                 point = self.track[point_n]
-                if (self.is_corner(point)):
+                if self.is_corner(point):
                     if random.randint(0, 1) == 0:
-                        if (self.map_get(point, [1, 0]) == 1):
+                        if self.map_get(point, [1, 0]) == 1:
                             shift = (1, 0)
                         else:
                             shift = (-1, 0)
                     else:
-                        if (self.map_get(point, (0, 1)) == 1):
+                        if self.map_get(point, (0, 1)) == 1:
                             shift = (0, 1)
                         else:
                             shift = (0, -1)
@@ -206,7 +211,7 @@ class MapGenerator:
                 check_points.append((point_n, direction))
                 (cpx, cpy) = direction
 
-            if (direction == last_direction):
+            if direction == last_direction:
                 if not skip:
                     self.map_set(last_point, self.rotate(
                         direction, 1), borders[int((1 - direction[0] - direction[1]) / 2)])
@@ -249,7 +254,7 @@ class MapGenerator:
         longest_path = None
         for path in straight_paths:
             length = path[1] - path[0]
-            if (length > max_length):
+            if length > max_length:
                 max_length = length
                 longest_path = path
         cp = check_points.pop()
@@ -264,7 +269,6 @@ class MapGenerator:
             check_points.append((cp[0], cp[1]))
 
         check_points.insert(0, (mp, longest_path[2]))
-        check_points.append
         return check_points, (longest_path[0], mp)
 
     def __repr__(self):
